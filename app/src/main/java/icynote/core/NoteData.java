@@ -7,46 +7,46 @@ import java.util.Date;
  * provided by the storage
  */
 public class NoteData {
-    private final int m_id;
-    private final Date m_creation;
-    private final Date m_lastModification;
-    private String m_title = new String();
-    private String m_content = new String();
+    private final int mId;
+    private final Date mCreation;
+    private final Date mLastModification;
+    private String mTitle = new String();
+    private String mContent = new String();
     
     public NoteData(int id, 
             Date creation, 
             Date last) {
-        m_id = id;
-        m_creation = creation;
-        m_lastModification = last;
+        mId = id;
+        mCreation = creation;
+        mLastModification = last;
 
     }
 
     public int getId() {
-        return m_id;
+        return mId;
     }
 
     public Date getCreation() {
-        return (Date) m_creation.clone();
+        return (Date) mCreation.clone();
     }
 
     public Date getLastModification() {
-        return (Date) m_lastModification.clone();
+        return (Date) mLastModification.clone();
     }
 
     public String getTitle() {
-        return m_title;
+        return mTitle;
     }
 
     public String getContent() {
-        return m_content;
+        return mContent;
     }
 
     public void setTitle(String title) {
-        this.m_title = title;
+        this.mTitle = title;
     }
 
     public void setContent(String content) {
-        this.m_content = content;
+        this.mContent = content;
     }
 }

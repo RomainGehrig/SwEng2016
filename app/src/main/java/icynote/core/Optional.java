@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  */
 public abstract class Optional<T> {
 
-    private static final Optional<?> EMPTY = new Empty<>();
+    private static final Optional<?> sEMPTY = new Empty<>();
 
     public static<A> Optional<A> of(A contained) {
         return new Container<>(contained);
@@ -16,7 +16,7 @@ public abstract class Optional<T> {
 
     public static<A> Optional<A> empty() {
         @SuppressWarnings("unchecked")
-        Optional<A> opt = (Optional<A>) EMPTY;
+        Optional<A> opt = (Optional<A>) sEMPTY;
         return opt;
     }
 
@@ -37,11 +37,11 @@ public abstract class Optional<T> {
     }
 
     private static class Container<T> extends Optional<T>{
-        private T m_contained = null;
+        private T mContained = null;
 
         public Container(T contained) {
             if (contained != null) {
-                m_contained = contained;
+                mContained = contained;
             } else {
                 throw new java.lang.NullPointerException("Optional may not contain null argument");
             }
@@ -54,7 +54,7 @@ public abstract class Optional<T> {
 
         @Override
         public T get() {
-            return m_contained;
+            return mContained;
         }
     }
 

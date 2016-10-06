@@ -10,51 +10,51 @@ import java.util.Date;
  * part of the note were edited.
  */
 public class EditableNoteItr implements EditableNoteBdr {
-    private NoteData m_data;
-    private NoteStorageBdr m_storage;
-    private boolean m_hasTitleChanged = false;
-    private boolean m_hasContentChanged = false;
+    private NoteData mData;
+    private NoteStorageBdr mStorage;
+    private boolean mHasTitleChanged = false;
+    private boolean mHasContentChanged = false;
     
     public EditableNoteItr(NoteData data, NoteStorageBdr storage) {
-        m_data = data;
-        m_storage = storage;
+        mData = data;
+        mStorage = storage;
     }
     
     /* ---------------------------------------- */
     
     @Override
     public int getId() {
-        return m_data.getId();
+        return mData.getId();
     }
     @Override
     public Date getDateOfCreation() {
-        return m_data.getCreation();
+        return mData.getCreation();
     }
     @Override
     public Date getDateOfLastModification() {
-        return m_data.getLastModification();
+        return mData.getLastModification();
     }
     @Override
     public String getTitle() {
-        return m_data.getTitle();
+        return mData.getTitle();
     }
     @Override
     public String getContent() {
-        return m_data.getContent();
+        return mData.getContent();
     }
     
     /* ---------------------------------------- */
     
     @Override
     public boolean setTitle(String newTitle) {
-        m_hasTitleChanged = true;
-        m_data.setTitle(newTitle);
+        mHasTitleChanged = true;
+        mData.setTitle(newTitle);
         return true;
     }
     @Override
     public boolean setContent(String newContent) {
-        m_hasContentChanged = true;
-        m_data.setContent(newContent);
+        mHasContentChanged = true;
+        mData.setContent(newContent);
         return true;
     }
 
@@ -62,10 +62,10 @@ public class EditableNoteItr implements EditableNoteBdr {
     
     @Override
     public boolean save() {
-        if(m_hasTitleChanged && m_hasContentChanged) {
-            return m_storage.saveNote(m_data);
-        } else if (m_hasTitleChanged) {
-            return m_storage.updateTitle(m_data.getId(), m_data.getTitle());
+        if(mHasTitleChanged && mHasContentChanged) {
+            return mStorage.saveNote(mData);
+        } else if (mHasTitleChanged) {
+            return mStorage.updateTitle(mData.getId(), mData.getTitle());
         } else {
             return true;
         }
@@ -73,6 +73,6 @@ public class EditableNoteItr implements EditableNoteBdr {
     
     @Override
     public boolean delete() {
-        return m_storage.deleteNote(m_data.getId());
+        return mStorage.deleteNote(mData.getId());
     }
 }

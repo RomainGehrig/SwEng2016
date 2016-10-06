@@ -6,25 +6,25 @@ import java.util.List;
  * Interactor
  */
 public class NoteProviderItr implements NoteProviderBdr{
-    private NoteStorageBdr m_storage;
+    private NoteStorageBdr mStorage;
     
     /* ---------------------------------------- */
     
     public NoteProviderItr(NoteStorageBdr storage) {
-        this.m_storage = storage;
+        this.mStorage = storage;
     }
     /* ---------------------------------------- */
     
     @Override
     public List<NotePreviewData> previewAllNotes() {
-        return m_storage.previewAllNotes();
+        return mStorage.previewAllNotes();
     }
     
     @Override
     public Optional<EditableNoteBdr> getEditableNote(int id) {
-        Optional<NoteData> data = m_storage.getNote(id);
+        Optional<NoteData> data = mStorage.getNote(id);
         if (data.isPresent()) {
-            EditableNoteBdr bdr = new EditableNoteItr(data.get(), m_storage);
+            EditableNoteBdr bdr = new EditableNoteItr(data.get(), mStorage);
             return Optional.of(bdr);
         } else {
             return Optional.empty();
