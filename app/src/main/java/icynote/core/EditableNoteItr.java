@@ -2,6 +2,10 @@ package icynote.core;
 
 import java.util.Date;
 
+import icynote.core.NoteStorageBdr.DeleteNoteResponse;
+import icynote.core.NoteStorageBdr.SaveNoteResponse;
+import icynote.core.NoteStorageBdr.UpdateTitleResponse;
+
 /**
  * Interactor
  * - records editions
@@ -46,33 +50,69 @@ public class EditableNoteItr implements EditableNoteBdr {
     /* ---------------------------------------- */
     
     @Override
-    public boolean setTitle(String newTitle) {
+    public SetTitleResponse setTitle(String newTitle) {
         mHasTitleChanged = true;
         mData.setTitle(newTitle);
-        return true;
+        return SetTitleResponse.OK;
     }
     @Override
-    public boolean setContent(String newContent) {
+    public SetContentResponse setContent(String newContent) {
         mHasContentChanged = true;
         mData.setContent(newContent);
-        return true;
+        return SetContentResponse.OK;
     }
 
     /* ---------------------------------------- */
     
     @Override
-    public boolean save() {
+    public SaveResponse save() {
         if(mHasTitleChanged && mHasContentChanged) {
-            return mStorage.saveNote(mData);
+            SaveNoteResponse r = mStorage.saveNote(mData);
+            return translateStorageResp(r);
         } else if (mHasTitleChanged) {
-            return mStorage.updateTitle(mData.getId(), mData.getTitle());
+            UpdateTitleResponse r = mStorage.updateTitle(mData.getId(), mData.getTitle());
+            return translateStorageResp(r);
         } else {
-            return true;
+            return SaveResponse.OK;
         }
     }
     
     @Override
-    public boolean delete() {
-        return mStorage.deleteNote(mData.getId());
+    public DeleteResponse delete() {
+        DeleteNoteResponse r = mStorage.deleteNote(mData.getId());
+        return translateStorageResp(r);
     }
+
+    /* ---------------------------------------- */
+
+    private SaveResponse translateStorageResp(SaveNoteResponse resp) {
+        switch (resp) {
+            case OK:
+                return SaveResponse.OK;
+            case REFUSED:
+                return SaveResponse.REFUSED;
+        }
+        return SaveResponse.REFUSED;
+    }
+
+    private SaveResponse translateStorageResp(UpdateTitleResponse resp) {
+        switch (resp) {
+            case OK:
+                return SaveResponse.OK;
+            case REFUSED:
+                return SaveResponse.REFUSED;
+        }
+        return SaveResponse.REFUSED;
+    }
+
+    private DeleteResponse translateStorageResp(DeleteNoteResponse resp) {
+        switch (resp) {
+            case OK:
+                return DeleteResponse.OK;
+            case REFUSED:
+                return DeleteResponse.REFUSED;
+        }
+        return DeleteResponse.REFUSED;
+    }
+
 }

@@ -12,10 +12,20 @@ public interface EditableNoteBdr {
     Date getDateOfLastModification();
     String getTitle();
     String getContent();
+
     /* ---------------------------------------- */
-    boolean setTitle(String newTitle);
-    boolean setContent(String newContent);
+
+    enum SetTitleResponse {OK, REFUSED}
+    SetTitleResponse setTitle(String newTitle);
+
+    enum SetContentResponse {OK, REFUSED}
+    SetContentResponse setContent(String newContent);
+
     /* ---------------------------------------- */
-    boolean save();
-    boolean delete();
+
+    enum SaveResponse {OK, REFUSED}
+    SaveResponse save();
+
+    enum DeleteResponse {OK, REFUSED}
+    DeleteResponse delete();
 }

@@ -8,5 +8,5 @@ import java.util.List;
  */
 public interface NoteProviderBdr {
     List<NotePreviewData> previewAllNotes();
-    icynote.core.Optional<EditableNoteBdr> getEditableNote(int id);
+    Optional<EditableNoteBdr> getEditableNote(int id);
 }

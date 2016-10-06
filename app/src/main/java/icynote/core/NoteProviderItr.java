@@ -11,8 +11,9 @@ public class NoteProviderItr implements NoteProviderBdr{
     /* ---------------------------------------- */
     
     public NoteProviderItr(NoteStorageBdr storage) {
-        this.mStorage = storage;
+        mStorage = storage;
     }
+
     /* ---------------------------------------- */
     
     @Override

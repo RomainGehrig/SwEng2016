@@ -10,8 +10,8 @@ public class NoteData {
     private final int mId;
     private final Date mCreation;
     private final Date mLastModification;
-    private String mTitle = new String();
-    private String mContent = new String();
+    private String mTitle = "";
+    private String mContent = "";
     
     public NoteData(int id, 
             Date creation, 
@@ -43,10 +43,10 @@ public class NoteData {
     }
 
     public void setTitle(String title) {
-        this.mTitle = title;
+        mTitle = title;
     }
 
     public void setContent(String content) {
-        this.mContent = content;
+        mContent = content;
     }
 }
