@@ -5,5 +5,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="titleText">Test Title Text</string>
+    <string name="titleText">to be removed</string>
+    <string name="noteDisplayTitleHint">enter title ...</string>
+    <string name="noteDisplayTextHint">enter text ...</string>
+    <string name="noteDisplayTagHint">enter tags ...</string>
 </resources>
