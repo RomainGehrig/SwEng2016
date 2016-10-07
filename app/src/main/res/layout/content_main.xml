@@ -9,14 +9,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/backgroundColor"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="lol.navigationtest.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <!-- WITH TITLE TEXT BAR -->
     <!--
-
-    WITH TITLE TEXT BAR
-
     <Button
         android:text=""
         android:layout_width="50dp"
@@ -80,7 +79,7 @@
         android:layout_alignParentEnd="true"
         android:hint="Text"
         android:textColor="@color/textColor"
-        android:textColorHint="#808080"
+        android:textColorHint="@color/hintColor"
         android:layout_above="@+id/tags"
         android:layout_alignParentTop="true" />
 
