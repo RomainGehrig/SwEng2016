@@ -7,4 +7,6 @@
     <color name="backgroundColor">#ffffff</color>
     <color name="textColor">#000000</color>
     <color name="hintColor">#808080</color>
+
+    <color name="backgroundColorSpinner">#dddddd</color>
 </resources>

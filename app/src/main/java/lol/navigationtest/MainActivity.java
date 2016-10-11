@@ -1,18 +1,15 @@
 package lol.navigationtest;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
 public class MainActivity extends AppCompatActivity
@@ -23,11 +20,32 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        setUpNavDrawer();
+
+
+        // Set the launching main content
+        Fragment  fragment = null;
+        try {
+            fragment = (Fragment) EditNote.class.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
     }
 
-    public void onBackPressed(View view) {
-        Log.d("sidebar", "display");
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    private void setUpNavDrawer() {
+        NavigationView view = (NavigationView) findViewById(R.id.menu);
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.menu_layout);
+        view.setNavigationItemSelectedListener(this);
+    }
+
+    public void toggleMenu(View view) {
+        Log.i("sidebar", "display");
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -35,28 +53,44 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // CURRENTLY DOES NOT SEEM TO WORK
+    // Handles click events related to the menu
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Log.d("sidebar","camera");
-        } else if (id == R.id.nav_gallery) {
-            Log.d("sidebar","gallery");
-        } else if (id == R.id.nav_slideshow) {
-            Log.d("sidebar","slideshow");
-        } else if (id == R.id.nav_manage) {
-            Log.d("sidebar","manage");
-        } else if (id == R.id.nav_share) {
-            Log.d("sidebar","share");
-        } else if (id == R.id.nav_send) {
-            Log.d("sidebar","send");
+        Class fragmentClass = null;
+        Fragment fragment = null;
+
+        if (id == R.id.allNotes) {
+            fragmentClass = NotesList.class;
+
+        } else if (id == R.id.tagEdition) {
+            fragmentClass = EditTags.class;
+
+        } else if (id == R.id.trash) { // TODO: kind of notes list ?
+            fragmentClass = EditNote.class;
+
+        } else if (id == R.id.settings) {
+            fragmentClass = Settings.class;
+
+        } else if (id == R.id.logout) { // TODO
+            fragmentClass = EditNote.class;
+
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

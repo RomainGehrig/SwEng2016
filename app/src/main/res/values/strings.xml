@@ -9,4 +9,11 @@
     <string name="noteDisplayTitleHint">enter title ...</string>
     <string name="noteDisplayTextHint">enter text ...</string>
     <string name="noteDisplayTagHint">enter tags ...</string>
+
+    <string-array name="styles_list">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+
 </resources>

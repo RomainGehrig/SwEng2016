@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="lol.navigationtest.EditNote">
+
+
+    <Button
+        android:id="@+id/noteDisplaySidebarButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:drawable/ic_menu_slideshow"
+        android:onClick="toggleMenu" />
+
+    <EditText
+        android:id="@+id/noteDisplayTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:textAlignment="center"
+        android:layout_gravity="end"
+        android:textStyle="normal|bold"
+        android:textSize="24sp"
+        android:hint="@string/noteDisplayTitleHint"
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/hintColor"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/noteDisplaySidebarButton"
+        android:layout_toEndOf="@+id/noteDisplaySidebarButton"
+        android:layout_toStartOf="@+id/noteDisplaySettingsButton"
+        android:layout_toLeftOf="@+id/noteDisplaySettingsButton"/>
+
+    <Button
+        android:id="@+id/noteDisplaySettingsButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:drawable/ic_menu_sort_by_size"
+        android:onClick="openSettings"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/noteDisplayBodyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:lines="99"
+        android:gravity="top|start"
+        android:scrollbars="vertical"
+        android:layout_below="@+id/noteDisplaySidebarButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="@string/noteDisplayTextHint"
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/hintColor"
+        android:layout_above="@+id/noteDisplayTagsText" />
+
+    <EditText
+        android:id="@+id/noteDisplayTagsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:layout_alignParentBottom="true"
+        android:hint="@string/noteDisplayTagHint"
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/hintColor"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="12sp" />
+
+
+
+</RelativeLayout>
