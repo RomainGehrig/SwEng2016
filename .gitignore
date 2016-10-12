@@ -4,7 +4,7 @@
 
 # Android Studio
 *.iml
-local.properties
-.idea/*
 /local.properties
-/.idea/*
+/.idea/gradle.xml
+/.idea/workspace.xml
+/.idea/libraries
