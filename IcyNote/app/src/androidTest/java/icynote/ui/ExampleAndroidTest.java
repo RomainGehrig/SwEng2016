@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package icynote.ui;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -7,8 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Unit tests!
