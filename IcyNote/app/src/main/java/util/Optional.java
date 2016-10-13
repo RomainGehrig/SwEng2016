@@ -3,9 +3,11 @@ package util;
 import java.util.NoSuchElementException;
 
 /**
- * Handcrafted version of java 8's optional for compatibility purpose
+ * Handcrafted version of java 8's optional for compatibility purpose.
  *
  * @param <T> type of the contained object
+ * @author Julien Harbulot
+ * @version 1.0
  */
 public abstract class Optional<T> {
 
