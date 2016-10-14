@@ -1,8 +1,8 @@
 package icynote.coreImpl;
 
 /**
- * Provides method(s) to check whether an argument is {@code null}
- * and to throw the appropriate {@code Exception}.
+ * Used by the core to check input at the boundaries.
+ * This class factors the types of the exceptions.
  *
  * @author Julien Harbulot
  * @version 1.0
