@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Icy Note</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="navigation_drawer_close">Navigationsbalken schliessen</string>
+    <string name="navigation_drawer_open">Navigationsbalken öffnen</string>
+    <string name="noteDisplayTagHint">tags eingeben ...</string>
+    <string name="noteDisplayTextHint">text eingeben ...</string>
+    <string name="noteDisplayTitleHint">titel eingeben ...</string>
+</resources>

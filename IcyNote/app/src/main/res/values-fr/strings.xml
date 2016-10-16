@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Icy Note</string>
+    <string name="action_settings">Options</string>
+    <string name="noteDisplayTagHint">entrer tags ...</string>
+    <string name="noteDisplayTextHint">entrer texte ...</string>
+    <string name="noteDisplayTitleHint">entrer titre ...</string>
+</resources>
