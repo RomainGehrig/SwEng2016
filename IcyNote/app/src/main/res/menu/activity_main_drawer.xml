@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/allNotes"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="List all Notes" />
+        <item
+            android:id="@+id/tagEdition"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Edit tags" />
+        <item
+            android:id="@+id/trash"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Delete Note" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Settings" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Log out" />
+    </group>
+
+</menu>
