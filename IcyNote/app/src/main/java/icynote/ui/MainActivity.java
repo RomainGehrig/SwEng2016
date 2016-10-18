@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity
 
 
         // Set the launching main content
+        /*
         Fragment  fragment = null;
         try {
             fragment = (Fragment) EditNote.class.newInstance();
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        */
+        
+        openFragment(EditNote.class);
 
     }
 
@@ -61,39 +65,25 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        Class fragmentClass = null;
-        Fragment fragment = null;
 
         if (id == R.id.allNotes) {
-            fragmentClass = NotesList.class;
+            openFragment(NotesList.class);
 
         } else if (id == R.id.tagEdition) {
-            fragmentClass = EditTags.class;
+            openFragment(EditTags.class);
 
         } else if (id == R.id.trash) { // TODO: kind of notes list ?
-            fragmentClass = EditNote.class;
+            openFragment(EditNote.class);
 
         } else if (id == R.id.settings) {
-            fragmentClass = Settings.class;
+            openFragment(Settings.class);
 
         } else if (id == R.id.logout) { // TODO
-            fragmentClass = EditNote.class;
+            openFragment(EditNote.class);
 
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -103,32 +93,17 @@ public class MainActivity extends AppCompatActivity
 
     public void openSettings(View view) {
         // open settings panel
-        Class fragmentClass = null;
-        Fragment fragment = null;
+        openFragment(MetadataNote.class);
 
-        fragmentClass = MetadataNote.class;
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_layout);
-        drawer.closeDrawer(GravityCompat.START);
-
-        Log.d("settings", "open");
     }
 
     public void backToNote(View view) {
-        Class fragmentClass = null;
-        Fragment fragment = null;
+        openFragment(EditNote.class);
+    }
 
-        fragmentClass = EditNote.class;
+    private void openFragment(Class fragmentClass) {
+        Log.d("open fragment", fragmentClass.toString());
+        Fragment fragment = null;
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
