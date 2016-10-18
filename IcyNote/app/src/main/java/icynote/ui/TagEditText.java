@@ -26,21 +26,22 @@ import ch.epfl.sweng.project.R;
 public class TagEditText extends EditText {
 
     TextWatcher textWatcher;
-
     String lastString;
-
     String separator = " ";
+    // whether a tag was just deleted
+    Boolean wasDeleted;
 
     public TagEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Log.d("_", "TagEditText");
         init();
+        addTextChangedListener(textWatcher);
     }
 
 
     private void init() {
-        Log.d("_", "init");
         setMovementMethod(LinkMovementMethod.getInstance());
+
+        wasDeleted = false;
 
         textWatcher = new TextWatcher() {
             @Override
@@ -56,69 +57,68 @@ public class TagEditText extends EditText {
             @Override
             public void afterTextChanged(Editable s) {
                 String thisString = s.toString();
+                // check whether it is equal to lastString to avoid loop (since format re-sets text)
                 if (thisString.length() > 0 && !thisString.equals(lastString)) {
                     format();
-
                 }
+
             }
         };
-
-        addTextChangedListener(textWatcher);
     }
 
 
     private void format() {
-        try {
-            Log.d("_", "format");
 
-            SpannableStringBuilder sb = new SpannableStringBuilder();
-            String fullString = getText().toString();
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        String fullString = getText().toString();
 
-            String[] strings = fullString.split(separator);
+        String[] strings = fullString.split(separator);
 
+        for (int i = 0; i < strings.length; i++) {
+            String string = strings[i];
+            sb.append(string);
 
-            for (int i = 0; i < strings.length; i++) {
-                String string = strings[i];
-                sb.append(string);
-
-                if (fullString.charAt(fullString.length() - 1) != separator.charAt(0) && i == strings.length - 1) {
-                    break;
-                }
-
-                BitmapDrawable bd = (BitmapDrawable) convertViewToDrawable(createTokenView(string));
-                bd.setBounds(0, 0, bd.getIntrinsicWidth(), bd.getIntrinsicHeight());
-
-                int startIdx = sb.length() - (string.length());
-                int endIdx = sb.length();
-                Log.d("_", "--a "+ startIdx +" "+ endIdx);
-                sb.setSpan(new ImageSpan(bd), startIdx, endIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                MyClickableSpan myClickableSpan = new MyClickableSpan(startIdx, endIdx);
-                Log.d("_", "--b "+ Math.max(endIdx - 2, startIdx) +" "+ endIdx);
-                sb.setSpan(myClickableSpan, Math.max(endIdx - 2, startIdx), endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                if (i < strings.length - 1) {
-                    sb.append(separator);
-                } else if (fullString.charAt(fullString.length() - 1) == separator.charAt(0)) {
-                    sb.append(separator);
-                }
-
+            // do not format the last string if we still write it (the future tag)
+            if (fullString.charAt(fullString.length() - 1) != separator.charAt(0) && i == strings.length - 1) {
+                break;
             }
 
-            lastString = sb.toString();
+            int startIdx = sb.length() - (string.length());
+            int endIdx = sb.length();
 
-            setText(sb);
-            setSelection(sb.length());
-        } catch (Exception e){
+            BitmapDrawable bd = (BitmapDrawable) convertViewToDrawable(createTokenView(string));
+            bd.setBounds(0, 0, bd.getIntrinsicWidth(), bd.getIntrinsicHeight());
+            sb.setSpan(new ImageSpan(bd), startIdx, endIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            MyClickableSpan myClickableSpan = new MyClickableSpan(startIdx, endIdx);
+            sb.setSpan(myClickableSpan, Math.max(endIdx - 1, startIdx), endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            if (i < strings.length - 1) {
+                sb.append(separator);
+            } else if (fullString.charAt(fullString.length() - 1) == separator.charAt(0)) {
+                sb.append(separator);
+            }
 
         }
 
+        setText(sb);
+
+        // writing process continues at the end of the tags
+        if(!wasDeleted) {
+            setSelection(sb.length());
+        }
+        else {
+            wasDeleted = false;
+        }
+
+        //setSelection(sb.length()+fullString.length()); DO NOT CRASH but write right to left
+        //setSelection(sb.length()); CRASH THE APP but write left to right
+        //setSelection(sb.length()+1); DO NOT CRASH but write right to left
+
+        lastString = sb.toString();
     }
 
     public View createTokenView(String text) {
-        Log.d("_", "createTokenView");
-
-
         LinearLayout l = new LinearLayout(getContext());
         l.setOrientation(LinearLayout.HORIZONTAL);
         l.setBackgroundResource(R.drawable.bordered_rectangle_rounded_corners);
@@ -137,7 +137,6 @@ public class TagEditText extends EditText {
     }
 
     public Object convertViewToDrawable(View view) {
-        Log.d("_", "convertViewToDrawable");
 
         int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         view.measure(spec, spec);
@@ -165,20 +164,17 @@ public class TagEditText extends EditText {
             super();
             this.startIdx = startIdx;
             this.endIdx = endIdx;
-            Log.d("_", "MyClickableSpan");
         }
 
         @Override
         public void onClick(View widget) {
 
-            // CRASHES ON MULTIPLE TAGS
-            /*
             String s = getText().toString();
-
             String s1 = s.substring(0, startIdx);
-            String s2 = s.substring(Math.min(endIdx+1, s.length()-1), s.length() );
-            TagEditText.this.setText(s1 + s2);
-            */
+            String s2 = s.substring(Math.min(endIdx+1, s.length()-1), s.length());
+            wasDeleted = true;
+            setText(s1 + s2);
+
         }
 
     }
