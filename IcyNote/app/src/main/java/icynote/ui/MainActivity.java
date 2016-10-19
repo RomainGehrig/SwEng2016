@@ -1,5 +1,6 @@
 package icynote.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import ch.epfl.sweng.project.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
         */
-        
+
         openFragment(EditNote.class);
 
     }
@@ -101,6 +103,33 @@ public class MainActivity extends AppCompatActivity
         openFragment(EditNote.class);
     }
 
+    // ----- COLOR SETTINGS DEV BLOCK
+    public enum ColorSetting {
+        DARK, BRIGHT
+    }
+
+    int backgroundColor = Color.WHITE;
+    int textColor = Color.BLACK;
+    int hintColor = Color.GRAY;
+
+
+    private void setColors(ColorSetting c){
+        switch (c) {
+            case DARK:
+                backgroundColor = Color.BLACK;
+                textColor = Color.WHITE;
+                hintColor = Color.GRAY;
+                break;
+
+            default:
+                backgroundColor = Color.WHITE;
+                textColor = Color.BLACK;
+                hintColor = Color.GRAY;
+                break;
+        }
+
+    }
+
     private void openFragment(Class fragmentClass) {
         Log.d("open fragment", fragmentClass.toString());
         Fragment fragment = null;
@@ -112,10 +141,19 @@ public class MainActivity extends AppCompatActivity
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
+        // set colors, doesn't work
+        View view = fragment.getView();
+        if(view != null){
+            view.setBackgroundColor(backgroundColor);
+        }
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_layout);
         drawer.closeDrawer(GravityCompat.START);
+
     }
 }

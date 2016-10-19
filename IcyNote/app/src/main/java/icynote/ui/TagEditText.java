@@ -101,6 +101,8 @@ public class TagEditText extends EditText {
 
         }
 
+        lastString = sb.toString();
+
         setText(sb);
 
         // writing process continues at the end of the tags
@@ -114,8 +116,6 @@ public class TagEditText extends EditText {
         //setSelection(sb.length()+fullString.length()); DO NOT CRASH but write right to left
         //setSelection(sb.length()); CRASH THE APP but write left to right
         //setSelection(sb.length()+1); DO NOT CRASH but write right to left
-
-        lastString = sb.toString();
     }
 
     public View createTokenView(String text) {

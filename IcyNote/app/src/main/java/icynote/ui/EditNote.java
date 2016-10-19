@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import ch.epfl.sweng.project.R;
 
+import static android.R.attr.fragment;
+
 public class EditNote extends Fragment {
 
     public EditNote() {
@@ -26,6 +28,7 @@ public class EditNote extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
+
 
 
     /**
