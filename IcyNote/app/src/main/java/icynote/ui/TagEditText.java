@@ -100,7 +100,6 @@ public class TagEditText extends EditText {
         }
 
         lastString = sb.toString();
-
         setText(sb);
 
         // writing process continues at the end of the tags
@@ -136,6 +135,7 @@ public class TagEditText extends EditText {
         return l;
     }
 
+
     public Object convertViewToDrawable(View view) {
 
         int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -156,6 +156,7 @@ public class TagEditText extends EditText {
     }
 
     private final class MyClickableSpan extends ClickableSpan{
+
 
         private int startIdx;
         private int endIdx;
