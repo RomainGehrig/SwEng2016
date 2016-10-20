@@ -9,7 +9,7 @@
         android:id="@+id/noteDisplaySidebarButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/open_sidebar"
+        android:background="@drawable/open_drawer"
         android:alpha="0.5"
         android:onClick="toggleMenu" />
 
@@ -36,7 +36,8 @@
         android:id="@+id/noteDisplaySettingsButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/open_metadata"
+        android:background="@drawable/note_open_metadata"
+        android:alpha="0.5"
         android:onClick="openSettings"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"

@@ -73,7 +73,8 @@
         android:id="@+id/backButton"
         android:layout_alignParentTop="true"
         android:onClick="backToNote"
-        android:background="@android:drawable/ic_menu_revert" />
+        android:background="@drawable/meta_back"
+        android:alpha="0.5"/>
 
 
 </RelativeLayout>

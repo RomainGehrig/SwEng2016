@@ -4,23 +4,28 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/allNotes"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/drawer_list"
+            android:alpha="0.5"
             android:title="List all Notes" />
         <item
             android:id="@+id/tagEdition"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/drawer_tags"
+            android:alpha="0.5"
             android:title="Edit tags" />
         <item
             android:id="@+id/trash"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/drawer_delete"
+            android:alpha="0.5"
             android:title="Delete Note" />
         <item
             android:id="@+id/settings"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/drawer_settings"
+            android:alpha="0.5"
             android:title="Settings" />
         <item
             android:id="@+id/logout"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/drawer_logout"
+            android:alpha="0.5"
             android:title="Log out" />
     </group>
 
