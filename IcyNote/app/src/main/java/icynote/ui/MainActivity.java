@@ -1,5 +1,6 @@
 package icynote.ui;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 
 import ch.epfl.sweng.project.R;
 
@@ -25,7 +27,6 @@ public class MainActivity extends AppCompatActivity
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
-
 
         // Set the launching main content
         /*
@@ -45,21 +46,31 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
+
+
     private void setUpNavDrawer() {
         NavigationView view = (NavigationView) findViewById(R.id.menu);
-        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.menu_layout);
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
         view.setNavigationItemSelectedListener(this);
     }
 
+
     public void toggleMenu(View view) {
+
         Log.i("sidebar", "display");
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             drawer.openDrawer(GravityCompat.START);
         }
     }
+
 
     // Handles click events related to the menu
     @SuppressWarnings("StatementWithEmptyBody")
@@ -68,30 +79,30 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
 
-        if (id == R.id.allNotes) {
+        if (id == R.id.menuAllNotes) {
             openFragment(NotesList.class);
 
-        } else if (id == R.id.tagEdition) {
+        } else if (id == R.id.menuTagEdition) {
             openFragment(EditTags.class);
 
-        } else if (id == R.id.trash) { // TODO: kind of notes list ?
+        } else if (id == R.id.menuTrash) { // TODO: kind of notes list ?
             openFragment(EditNote.class);
 
-        } else if (id == R.id.settings) {
+        } else if (id == R.id.menuSettings) {
             openFragment(Settings.class);
 
-        } else if (id == R.id.logout) { // TODO
-            openFragment(EditNote.class);
-
+        } else if (id == R.id.menuLogout) {
+            openFragment(Logout.class);
         }
-
 
         return true;
     }
 
+
     public void blank(View view) {
         // blank handler for avoiding crashes for not yet implemented buttons
     }
+
 
     public void openSettings(View view) {
         // open settings panel
@@ -99,9 +110,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     public void backToNote(View view) {
         openFragment(EditNote.class);
     }
+
 
     // ----- COLOR SETTINGS DEV BLOCK
     public enum ColorSetting {
@@ -130,6 +143,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     private void openFragment(Class fragmentClass) {
         Log.d("open fragment", fragmentClass.toString());
         Fragment fragment = null;
@@ -151,8 +165,7 @@ public class MainActivity extends AppCompatActivity
             view.setBackgroundColor(backgroundColor);
         }
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
 
     }

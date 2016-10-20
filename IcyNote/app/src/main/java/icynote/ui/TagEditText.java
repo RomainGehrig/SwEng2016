@@ -102,7 +102,6 @@ public class TagEditText extends EditText {
         }
 
         lastString = sb.toString();
-
         setText(sb);
 
         // writing process continues at the end of the tags
@@ -117,6 +116,7 @@ public class TagEditText extends EditText {
         //setSelection(sb.length()); CRASH THE APP but write left to right
         //setSelection(sb.length()+1); DO NOT CRASH but write right to left
     }
+
 
     public View createTokenView(String text) {
         LinearLayout l = new LinearLayout(getContext());
@@ -136,6 +136,7 @@ public class TagEditText extends EditText {
         return l;
     }
 
+
     public Object convertViewToDrawable(View view) {
 
         int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -154,6 +155,7 @@ public class TagEditText extends EditText {
         view.destroyDrawingCache();
         return new BitmapDrawable(getContext().getResources(), viewBmp);
     }
+
 
     private class MyClickableSpan extends ClickableSpan{
 

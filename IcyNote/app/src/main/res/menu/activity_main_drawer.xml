@@ -3,30 +3,30 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/allNotes"
+            android:id="@+id/menuAllNotes"
             android:icon="@drawable/drawer_list"
             android:alpha="0.5"
-            android:title="List all Notes" />
+            android:title="@string/listAllNotes" />
         <item
-            android:id="@+id/tagEdition"
+            android:id="@+id/menuTagEdition"
             android:icon="@drawable/drawer_tags"
             android:alpha="0.5"
-            android:title="Edit tags" />
+            android:title="@string/editTags" />
         <item
-            android:id="@+id/trash"
+            android:id="@+id/menuTrash"
             android:icon="@drawable/drawer_delete"
             android:alpha="0.5"
-            android:title="Delete Note" />
+            android:title="@string/trash" />
         <item
-            android:id="@+id/settings"
+            android:id="@+id/menuSettings"
             android:icon="@drawable/drawer_settings"
             android:alpha="0.5"
-            android:title="Settings" />
+            android:title="@string/settings" />
         <item
-            android:id="@+id/logout"
+            android:id="@+id/menuLogout"
             android:icon="@drawable/drawer_logout"
             android:alpha="0.5"
-            android:title="Log out" />
+            android:title="@string/logout" />
     </group>
 
 </menu>

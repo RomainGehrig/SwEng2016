@@ -9,25 +9,24 @@ import android.view.ViewGroup;
 
 import ch.epfl.sweng.project.R;
 
-public class EditNote extends Fragment {
+public class Logout extends Fragment {
 
-    public EditNote() {
+    public Logout() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_note, container, false);
+        return inflater.inflate(R.layout.fragment_logout, container, false);
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this
