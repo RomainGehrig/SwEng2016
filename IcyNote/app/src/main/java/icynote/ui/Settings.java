@@ -1,5 +1,6 @@
 package icynote.ui;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,8 @@ public class Settings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Settings.ColorSetting curr = Settings.getStyle();
+        container.setBackgroundColor(curr.getBackgroundColor());
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         setSpinnerStyles(view);
@@ -63,4 +66,38 @@ public class Settings extends Fragment {
         void onFragmentInteraction(Uri uri);
 
     }
+
+    // ----- COLOR SETTINGS DEV BLOCK
+    public enum ColorSetting {
+        DARK {
+            @Override
+            public int getBackgroundColor(){
+                return Color.BLACK;
+            }
+            @Override
+            public int getTextColor(){
+                return Color.WHITE;
+            }
+        },
+        BRIGHT {
+            @Override
+            public int getBackgroundColor(){
+                return Color.WHITE;
+            }
+            @Override
+            public int getTextColor(){
+                return Color.BLACK;
+            }
+        };
+
+        public abstract int getBackgroundColor();
+        public abstract int getTextColor();
+    }
+
+    public static ColorSetting getStyle(){
+        return MainActivity.STYLE;
+    }
+
+    public static void setStyle(ColorSetting newStyle){ MainActivity.STYLE = newStyle; }
+
 }

@@ -3,6 +3,7 @@ package icynote.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.Editable;
 import android.text.Spannable;
@@ -13,7 +14,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
@@ -25,11 +25,11 @@ import ch.epfl.sweng.project.R;
 
 public class TagEditText extends EditText {
 
-    TextWatcher textWatcher;
-    String lastString;
-    String separator = " ";
+    private TextWatcher textWatcher;
+    private String lastString;
+    private final String separator = " ";
     // whether a tag was just deleted
-    Boolean wasDeleted;
+    private Boolean wasDeleted;
 
     public TagEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,6 +40,8 @@ public class TagEditText extends EditText {
 
     private void init() {
         setMovementMethod(LinkMovementMethod.getInstance());
+
+        lastString = "";
 
         wasDeleted = false;
 
@@ -58,7 +60,7 @@ public class TagEditText extends EditText {
             public void afterTextChanged(Editable s) {
                 String thisString = s.toString();
                 // check whether it is equal to lastString to avoid loop (since format re-sets text)
-                if (thisString.length() > 0 && !thisString.equals(lastString)) {
+                if (!thisString.isEmpty() && !thisString.equals(lastString)) {
                     format();
                 }
 
@@ -66,9 +68,7 @@ public class TagEditText extends EditText {
         };
     }
 
-
     private void format() {
-
         SpannableStringBuilder sb = new SpannableStringBuilder();
         String fullString = getText().toString();
 
@@ -93,9 +93,7 @@ public class TagEditText extends EditText {
             MyClickableSpan myClickableSpan = new MyClickableSpan(startIdx, endIdx);
             sb.setSpan(myClickableSpan, Math.max(endIdx - 1, startIdx), endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            if (i < strings.length - 1) {
-                sb.append(separator);
-            } else if (fullString.charAt(fullString.length() - 1) == separator.charAt(0)) {
+            if ( (i < strings.length - 1) || (fullString.charAt(fullString.length() - 1) == separator.charAt(0)) ) {
                 sb.append(separator);
             }
 
@@ -118,7 +116,7 @@ public class TagEditText extends EditText {
         //setSelection(sb.length()+1); DO NOT CRASH but write right to left
     }
 
-    public View createTokenView(String text) {
+    public View createTokenView(CharSequence text) {
         LinearLayout l = new LinearLayout(getContext());
         l.setOrientation(LinearLayout.HORIZONTAL);
         l.setBackgroundResource(R.drawable.bordered_rectangle_rounded_corners);
@@ -127,10 +125,12 @@ public class TagEditText extends EditText {
         l.addView(tv);
         tv.setText(text);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        tv.setTextColor(Color.BLACK);
 
         ImageView im = new ImageView(getContext());
         l.addView(im);
         im.setImageResource(R.drawable.close_cross);
+        im.setAlpha(0.5f);
         im.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         return l;
@@ -155,15 +155,14 @@ public class TagEditText extends EditText {
         return new BitmapDrawable(getContext().getResources(), viewBmp);
     }
 
-    private class MyClickableSpan extends ClickableSpan{
+    private final class MyClickableSpan extends ClickableSpan{
 
-        int startIdx;
-        int endIdx;
+        private int startIdx;
+        private int endIdx;
 
-        public MyClickableSpan(int startIdx, int endIdx) {
-            super();
-            this.startIdx = startIdx;
-            this.endIdx = endIdx;
+        private MyClickableSpan(int start, int end) {
+            startIdx = start;
+            endIdx = end;
         }
 
         @Override
@@ -173,7 +172,8 @@ public class TagEditText extends EditText {
             String s1 = s.substring(0, startIdx);
             String s2 = s.substring(Math.min(endIdx+1, s.length()-1), s.length());
             wasDeleted = true;
-            setText(s1 + s2);
+            String newText = s1 + s2;
+            setText(newText);
 
         }
 

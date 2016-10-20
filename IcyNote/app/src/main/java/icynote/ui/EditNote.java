@@ -6,10 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import ch.epfl.sweng.project.R;
-
-import static android.R.attr.fragment;
 
 public class EditNote extends Fragment {
 
@@ -20,12 +17,15 @@ public class EditNote extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Settings.ColorSetting curr = Settings.getStyle();
+        container.setBackgroundColor(curr.getBackgroundColor());
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
 
