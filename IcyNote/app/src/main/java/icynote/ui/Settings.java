@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+
 public class Settings extends Fragment {
 
     private Spinner spinnerStyles;
@@ -25,6 +26,8 @@ public class Settings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Style.ColorSetting curr = Style.getStyle();
+        container.setBackgroundColor(curr.getBackgroundColor());
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         setSpinnerStyles(view);
@@ -57,5 +60,7 @@ public class Settings extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
     }
+
 }

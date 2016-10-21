@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+public class Logout extends Fragment {
 
-public class Menu extends Fragment {
-
-    public Menu() {
+    public Logout() {
         // Required empty public constructor
     }
 
@@ -22,25 +20,13 @@ public class Menu extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_menu, container, false);
-        Button button = (Button) view.findViewById(R.id.menuButton);
-
-
-        // Handles onclick event for the menu button
-        /*button.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v) {
-                Log.i("menufragment","open from menu.java");
-            }
-        });*/
-
         // Inflate the layout for this fragment
-        return view;
+        Style.ColorSetting curr = Style.getStyle();
+        container.setBackgroundColor(curr.getBackgroundColor());
+        return inflater.inflate(R.layout.fragment_logout, container, false);
     }
-
 
     /**
      * This interface must be implemented by activities that contain this
