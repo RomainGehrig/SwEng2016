@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,8 +63,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     @Test
-    public void openFragmentListNotesTest() {
-        assertNull(mActivity.findViewById(R.id.listNotesView));
+    public void openFragmentTest() {
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
         assertNotNull(mActivity.findViewById(R.id.listNotesView));
@@ -110,9 +112,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertNull(mActivity.findViewById(R.id.logoutView));
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.logout)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.logoutView));
-        assertNotNull(mActivity.findViewById(R.id.menuButton));
-        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+        assertNull(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     @Test

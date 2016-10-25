@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "388727196123",
+    "firebase_url": "https://icynote-2b54f.firebaseio.com",
+    "project_id": "icynote-2b54f",
+    "storage_bucket": "icynote-2b54f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388727196123:android:d0734e88b45f0122",
+        "android_client_info": {
+          "package_name": "icynote.ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388727196123-014figa6jl2n1dhfpu63g5u4ds2uoemu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "icynote.ui",
+            "certificate_hash": "B1B5B4F2FCBFC9A0F301CDD6FAABB2C2B4C16F85"
+          }
+        },
+        {
+          "client_id": "388727196123-mts8tpf15mhvj5o9r16rson8f6lbrbdj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtiZm5MBEiOQ7mUgfyrSCWMOM4YMjoZQA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388727196123-mts8tpf15mhvj5o9r16rson8f6lbrbdj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
