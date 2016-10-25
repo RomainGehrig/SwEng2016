@@ -14,4 +14,7 @@
     <color name="backgroundColorSpinnerBright">#dddddd</color>
     <color name="backgroundColorSpinnerDark">#666666</color>
     <color name="transparent">#00000000</color>
+
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
 </resources>

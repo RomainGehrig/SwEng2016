@@ -21,4 +21,37 @@
         <item>Dark</item>
     </string-array>
 
+    <string name="label_google_sign_in">Google Sign In</string>
+    <string name="desc_google_sign_in">Log in using Google Sign In</string>
+
+    <string name="label_emailpassword">Email/Password</string>
+    <string name="desc_emailpassword">Log in with your IcyNote password</string>
+
+    <string name="hint_user_id">User ID</string>
+    <string name="get_custom_token">Get Token</string>
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="loading">Loading…</string>
+    <string name="custom_token">Custom Token</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="token_null">Token: null</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="desc_icynote_lockup">Icynote logo and name</string>
+    <string name="auth_failed">Authentication failed</string>
+
+    <string name="icynote_status_fmt">Internal User: %s</string>
+    <string name="icynote_user_management">Internal User Management</string>
+
+    <string name="google_status_fmt">Google User: %s</string>
+    <string name="google_title_text">Google Sign In</string>
+
+    <string name="emailpassword_status_fmt">Email User: %s</string>
+    <string name="emailpassword_title_text">Email and Password</string>
+
+    <string name="id_fmt">User ID: %s</string>
+    <string name="email_fmt">Email: %s</string>
+    <string name="signup_failed">Account creation failed</string>
 </resources>
