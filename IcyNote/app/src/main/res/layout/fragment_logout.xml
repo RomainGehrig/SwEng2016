@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="icynote.ui.EditTags">
+    tools:context="icynote.ui.Logout">
 
     <TextView
         android:text=""
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/fragmentEditTags"
+        android:id="@+id/fragmentLogout"
         />
 
     <fragment
@@ -24,6 +24,6 @@
         android:layout_height="match_parent"
         android:textColor="@color/textColor"
         android:gravity="center"
-        android:text="EDIT TAGS VIEW" />
+        android:text="LOG OUT VIEW" />
 
 </FrameLayout>

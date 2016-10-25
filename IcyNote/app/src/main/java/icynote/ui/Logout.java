@@ -6,45 +6,26 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
+public class Logout extends Fragment {
 
-public class Settings extends Fragment {
-
-    private Spinner spinnerStyles;
-
-    public Settings() {
+    public Logout() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         Style.ColorSetting curr = Style.getStyle();
         container.setBackgroundColor(curr.getBackgroundColor());
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
-
-        setSpinnerStyles(view);
-
-        return view;
-    }
-
-    // Set up the style spinner
-    private void setSpinnerStyles(View view) {
-        spinnerStyles = (Spinner) view.findViewById(R.id.styles_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view,
-                getResources().getStringArray(R.array.styles_list));
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
-        spinnerStyles.setAdapter(adapter);
-
-        // Spinner item selection Listener
-        spinnerStyles.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        return inflater.inflate(R.layout.fragment_logout, container, false);
     }
 
     /**
@@ -60,7 +41,5 @@ public class Settings extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-
     }
-
 }
