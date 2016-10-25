@@ -1,8 +1,8 @@
 package icynote.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import icynote.core.impl.CoreSingleton;
+import icynote.login.LoginManager;
+import icynote.login.LoginManagerFactory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Settings.OnSpinnerSelection {
@@ -26,7 +31,18 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
 
-        openFragment(EditNote.class);
+        //todo: move this into an Application subclass
+        LoginManager.Callback logOutCallback = new LoginManager.Callback() {
+            public void execute() {
+                CoreSingleton.logout();
+                Toast.makeText(MainActivity.this, "bye bye!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, LoginMenu.class);
+                startActivity(intent);
+            }
+        };
+        LoginManagerFactory.getInstance().onLogout(logOutCallback);
+
+        openFragment(NotesList.class);
     }
 
     private void hideSoftKeyboard() {
@@ -54,11 +70,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    // Handles click events related to the menu
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
 
@@ -75,16 +88,14 @@ public class MainActivity extends AppCompatActivity
             openFragment(Settings.class);
 
         } else if (id == R.id.menuLogout) {
-            openFragment(Logout.class);
+            LoginManagerFactory.getInstance().logout();
         }
 
         return true;
     }
 
     public void openSettings(View view) {
-        // open settings panel
         openFragment(MetadataNote.class);
-
     }
 
 

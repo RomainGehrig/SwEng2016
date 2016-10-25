@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/backgroundColor">
+    
+    <Button
+        android:text="Local Sign In"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:id="@+id/local_sign_in_button"
+        android:onClick="localSignIn"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/ThemeOverlay.MyDarkButton" />
+
+    <ImageView
+        style="@style/ThemeOverlay.IcynoteIcon"
+        android:id="@+id/google_icon"
+        android:contentDescription="@string/desc_icynote_lockup"
+        android:src="@drawable/icynote_lockup_400"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/local_sign_in_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="36dp" />
+
+    <Button
+        android:text="Google Sign In"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:id="@+id/googe_sign_in_button"
+        android:onClick="googleSignIn"
+        android:layout_below="@+id/local_sign_in_button"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/ThemeOverlay.MyDarkButton" />
+
+</RelativeLayout>
