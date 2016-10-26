@@ -25,6 +25,10 @@ public class Style {
             public int getTextColor(){
                 return Color.WHITE;
             }
+            @Override
+            public String toString() {
+                return "Dark";
+            }
         },
         BRIGHT {
             @Override
@@ -34,6 +38,10 @@ public class Style {
             @Override
             public int getTextColor(){
                 return Color.BLACK;
+            }
+            @Override
+            public String toString() {
+                return "Bright";
             }
         };
 

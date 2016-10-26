@@ -43,6 +43,11 @@ public class Settings extends Fragment {
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spinnerStyles.setAdapter(adapter);
 
+        // Match the current item of the spinner with the current theme
+        String currentTheme = Style.getStyle().toString();
+        int themeSpinnerIndex = adapter.getPosition(currentTheme);
+        spinnerStyles.setSelection(themeSpinnerIndex);
+
         // Spinner item selection Listener
         spinnerStyles.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
