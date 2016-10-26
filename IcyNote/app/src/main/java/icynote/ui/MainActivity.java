@@ -91,13 +91,6 @@ public class MainActivity extends AppCompatActivity
         openFragment(EditNote.class);
     }
 
-
-    // ----- COLOR SETTINGS DEV BLOCK
-    public enum ColorSetting {
-        DARK, BRIGHT
-    }
-
-
     public void openFragment(Class fragmentClass) {
         Fragment fragment = null;
 
