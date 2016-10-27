@@ -56,8 +56,4 @@ public class Theme {
     public static ThemeType getTheme() {
         return sTheme;
     }
-
-    public static void setTheme(ThemeType newStyle) {
-        sTheme = newStyle;
-    }
 }
