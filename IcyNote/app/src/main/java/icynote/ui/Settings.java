@@ -26,14 +26,15 @@ public class Settings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Style.ColorSetting curr = Style.getStyle();
-        container.setBackgroundColor(curr.getBackgroundColor());
+        //Style.ColorSetting curr = Style.getStyle();
+        //container.setBackgroundColor(curr.getBackgroundColor());
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         setSpinnerStyles(view);
 
         return view;
     }
+
 
     // Set up the style spinner
     private void setSpinnerStyles(View view) {
@@ -44,7 +45,7 @@ public class Settings extends Fragment {
         spinnerStyles.setAdapter(adapter);
 
         // Match the current item of the spinner with the current theme
-        String currentTheme = Style.getStyle().toString();
+        String currentTheme = Theme.getTheme().toString();
         int themeSpinnerIndex = adapter.getPosition(currentTheme);
         spinnerStyles.setSelection(themeSpinnerIndex);
 

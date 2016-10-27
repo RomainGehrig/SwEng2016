@@ -9,7 +9,7 @@ import android.graphics.Color;
 public class Style {
     // ----- COLOR SETTINGS DEV BLOCK
 
-    private static ColorSetting currStyle;
+    /*private static ColorSetting currStyle;
 
     public static void initStyle(){
         currStyle = ColorSetting.BRIGHT;
@@ -51,5 +51,5 @@ public class Style {
 
     public static ColorSetting getStyle() { return currStyle; }
 
-    public static void setStyle(ColorSetting newStyle) { currStyle = newStyle; }
+    public static void setStyle(ColorSetting newStyle) { currStyle = newStyle; }*/
 }

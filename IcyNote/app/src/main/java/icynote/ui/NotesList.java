@@ -23,8 +23,8 @@ public class NotesList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Style.ColorSetting curr = Style.getStyle();
-        container.setBackgroundColor(curr.getBackgroundColor());
+        //Style.ColorSetting curr = Style.getStyle();
+        //container.setBackgroundColor(curr.getBackgroundColor());
         return inflater.inflate(R.layout.fragment_notes_list, container, false);
     }
 
