@@ -11,10 +11,14 @@ public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedL
         String selected = parent.getItemAtPosition(pos).toString();
         switch (selected) {
             case "Dark":
-                Style.setStyle(Style.ColorSetting.DARK);
+                Theme.changeToTheme((MyApp) MyApp.getApp(), Theme.ThemeType.DARK);
+                Theme.setTheme(Theme.ThemeType.DARK);
+                //Style.setStyle(Style.ColorSetting.DARK);
                 break;
             default:
-                Style.setStyle(Style.ColorSetting.BRIGHT);
+                Theme.changeToTheme((MyApp) MyApp.getApp(), Theme.ThemeType.BRIGHT);
+                Theme.setTheme(Theme.ThemeType.BRIGHT);
+                //Style.setStyle(Style.ColorSetting.BRIGHT);
                 break;
         }
 
