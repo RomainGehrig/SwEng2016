@@ -3,6 +3,7 @@ package icynote.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.Editable;
 import android.text.Spannable;
@@ -122,7 +123,7 @@ public class TagEditText extends EditText {
         l.addView(tv);
         tv.setText(text);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        tv.setTextColor(Style.getStyle().getTextColor());
+        tv.setTextColor(Color.GRAY);
 
         ImageView im = new ImageView(getContext());
         l.addView(im);

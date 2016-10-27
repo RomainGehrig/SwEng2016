@@ -22,9 +22,9 @@ public class Logout extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Style.ColorSetting curr = Style.getStyle();
+        //container.setBackgroundColor(curr.getBackgroundColor());
         // Inflate the layout for this fragment
-        Style.ColorSetting curr = Style.getStyle();
-        container.setBackgroundColor(curr.getBackgroundColor());
         return inflater.inflate(R.layout.fragment_logout, container, false);
     }
 
