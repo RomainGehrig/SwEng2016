@@ -7,17 +7,15 @@ public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedL
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
+        System.out.println("testtt");
         String selected = parent.getItemAtPosition(pos).toString();
         switch (selected) {
             case "Dark":
                 Theme.changeToTheme((MyApp) MyApp.getApp(), Theme.ThemeType.DARK);
-                Theme.setTheme(Theme.ThemeType.DARK);
                 //Style.setStyle(Style.ColorSetting.DARK);
                 break;
             default:
                 Theme.changeToTheme((MyApp) MyApp.getApp(), Theme.ThemeType.BRIGHT);
-                Theme.setTheme(Theme.ThemeType.BRIGHT);
                 //Style.setStyle(Style.ColorSetting.BRIGHT);
                 break;
         }
