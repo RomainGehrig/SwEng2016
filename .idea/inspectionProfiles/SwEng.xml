@@ -100,7 +100,7 @@
       <option name="ignoreTestCases" value="false" />
       <option name="ignoreLibraryOverrides" value="false" />
     </inspection_tool>
-    <inspection_tool class="BadExceptionThrown" enabled="true" level="ERROR" enabled_by_default="true">
+    <inspection_tool class="BadExceptionThrown" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="exceptionsString" value="" />
       <option name="exceptions">
         <value />

@@ -15,11 +15,12 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Settings.OnSpinnerSelection {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Theme.initTheme();
         Theme.onActivityCreateSetTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
@@ -108,5 +109,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
 
+    }
+
+    @Override
+    public void onThemeSelected(Theme.ThemeType currentTheme)
+    {
+        System.out.println("TESTTT");
     }
 }
