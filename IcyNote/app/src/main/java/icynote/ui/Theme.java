@@ -14,12 +14,24 @@ public class Theme {
             public String toString() {
                 return "Bright";
             }
+
+            public int toInt() {
+                return R.style.AppTheme_Bright;
+            }
         },
         DARK {
             @Override
             public String toString() {
                 return "Dark";
             }
+
+            public int toInt() {
+                return R.style.AppTheme_Dark;
+            }
+        };
+
+        public int toInt() {
+            return 0;
         }
     }
 

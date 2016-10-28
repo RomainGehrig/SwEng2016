@@ -1,8 +1,10 @@
 package icynote.ui;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,16 @@ public class Logout extends Fragment {
         //Style.ColorSetting curr = Style.getStyle();
         //container.setBackgroundColor(curr.getBackgroundColor());
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_logout, container, false);
+        //return inflater.inflate(R.layout.fragment_logout, container, false);
+
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), Theme.getTheme().toInt());
+
+        // clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
+        // inflate the layout using the cloned inflater, not default inflater
+        return localInflater.inflate(R.layout.fragment_logout, container, false);
     }
 
     /**
