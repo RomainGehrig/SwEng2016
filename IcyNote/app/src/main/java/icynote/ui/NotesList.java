@@ -1,22 +1,51 @@
 package icynote.ui;
 
+import android.content.Context;
+import android.content.CursorLoader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 
-public class NotesList extends Fragment {
+import icynote.core.IcyNoteCore;
+import icynote.core.Note;
+import icynote.core.impl.CoreFactory;
+import icynote.loaders.NotesLoader;
+import icynote.storage.ListStorage;
 
-    public NotesList() {
-        // Required empty public constructor
+import static util.ArgumentChecker.requireNonNull;
+
+public class NotesList extends Fragment implements LoaderManager.LoaderCallbacks<Iterable<Note>> {
+    private static final String TAG = "NotesList";
+    private Loader<Iterable<Note>> loader;
+    private LoaderManager loaderManager;
+    private IcyNoteCore core;
+
+    public void setLoaderManager(LoaderManager loaderManager) {
+        this.loaderManager = requireNonNull(loaderManager);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            Log.i(TAG, "savedInstanceState was not null ! (could save content)");
+        }
+        Log.i(TAG, "NotesList created");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loaderManager.initLoader(1, null, this);
     }
 
     @Override
@@ -26,6 +55,10 @@ public class NotesList extends Fragment {
         Style.ColorSetting curr = Style.getStyle();
         container.setBackgroundColor(curr.getBackgroundColor());
         return inflater.inflate(R.layout.fragment_notes_list, container, false);
+    }
+
+    public void setCore(IcyNoteCore core) {
+        this.core = core;
     }
 
     /**
@@ -41,5 +74,34 @@ public class NotesList extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+        /**
+     * Instantiate and return a new Loader for the given ID.
+     *
+     * @param id   The ID whose loader is to be created.
+     * @param args Any arguments supplied by the caller.
+     * @return Return a new Loader instance that is ready to start loading.
+     */
+    @Override
+    public Loader<Iterable<Note>> onCreateLoader(int id, Bundle args) {
+        // TODO: indicate we are now waiting for the note
+        Log.i(TAG, "Loader initialized");
+        loader = new NotesLoader(getContext(), core);
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Iterable<Note>> loader, Iterable<Note> data) {
+        // TODO display notes
+        Log.i(TAG, "Received notes");
+        for(Note n: data) {
+            Log.i(TAG, "Note: " + n.getTitle() + ", " + n.getContent() + ", " + n.getId());
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Iterable<Note>> loader) {
+        Log.i(TAG, "Loader reset");
+        // TODO: anything to do ?
     }
 }
