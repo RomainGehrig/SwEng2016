@@ -25,16 +25,20 @@ public class Theme {
 
     private static ThemeType sTheme = ThemeType.BRIGHT;
 
-    public static void initStyle(){
+    public static void initTheme(){
         sTheme = ThemeType.BRIGHT;
     }
 
-    //Set the theme of the Activity, and restart it by creating a new Activity of the same type.
+    public static void setTheme(ThemeType theme) {
+        sTheme = theme;
+    }
+
+    /*//Set the theme of the Activity, and restart it by creating a new Activity of the same type.
     public static void changeToTheme(AppCompatActivity activity, ThemeType theme) {
         sTheme = theme;
-        activity.finish();
-        activity.startActivity(new Intent(activity, activity.getClass()));
-    }
+        //activity.finish();
+        //activity.startActivity(new Intent(activity, activity.getClass()));
+    }*/
 
     // Set the theme of the activity, according to the configuration.
     public static void onActivityCreateSetTheme(AppCompatActivity activity)
