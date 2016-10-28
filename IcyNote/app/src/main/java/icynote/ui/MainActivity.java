@@ -27,6 +27,12 @@ public class MainActivity extends AppCompatActivity
         setUpNavDrawer();
 
         openFragment(EditNote.class);
+
+        /*android.app.FragmentManager fragmentManager = getFragmentManager();
+        android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        EditNote fragment = new EditNote();
+        fragmentTransaction.add(R.id.content_frame, fragment);
+        fragmentTransaction.commit();*/
     }
 
     private void hideSoftKeyboard() {
@@ -108,12 +114,12 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
-
     }
 
     @Override
     public void onThemeSelected(Theme.ThemeType currentTheme)
     {
         System.out.println("TESTTT");
+        openFragment(Settings.class);
     }
 }
