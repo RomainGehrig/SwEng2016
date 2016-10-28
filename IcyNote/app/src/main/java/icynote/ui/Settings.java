@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 public class Settings extends Fragment {
 
     private Spinner spinnerStyles;
+    protected int firstSelection = 1;
     private static OnSpinnerSelection mCallback;
 
     public Settings() {
@@ -47,13 +49,21 @@ public class Settings extends Fragment {
                              Bundle savedInstanceState) {
         //Style.ColorSetting curr = Style.getStyle();
         //container.setBackgroundColor(curr.getBackgroundColor());
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        //View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), Theme.getTheme().toInt());
+
+        // clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
+        // inflate the layout using the cloned inflater, not default inflater
+        View view = localInflater.inflate(R.layout.fragment_settings, container, false);
 
         setSpinnerStyles(view);
 
         return view;
     }
-
 
     // Set up the style spinner
     private void setSpinnerStyles(View view) {
@@ -68,7 +78,6 @@ public class Settings extends Fragment {
         int themeSpinnerIndex = adapter.getPosition(currentTheme);
         spinnerStyles.setSelection(themeSpinnerIndex);
 
-        // Spinner item selection Listener
         spinnerStyles.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
@@ -97,7 +106,10 @@ public class Settings extends Fragment {
 
     }*/
 
-
+    public void firstSelectionProcessed()
+    {
+        firstSelection = 0;
+    }
 
     // Container Activity must implement this interface
     public interface OnSpinnerSelection {

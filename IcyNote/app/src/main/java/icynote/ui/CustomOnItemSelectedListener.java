@@ -7,21 +7,28 @@ public class CustomOnItemSelectedListener extends Settings implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        System.out.println("testtt");
-        String selected = parent.getItemAtPosition(pos).toString();
-        switch (selected) {
-            case "Dark":
-                Theme.setTheme(Theme.ThemeType.DARK);
-                //Theme.setTheme((MyApp) MyApp.getApp(), Theme.ThemeType.DARK);
-                //Style.setStyle(Style.ColorSetting.DARK);
-                break;
-            default:
-                Theme.setTheme(Theme.ThemeType.BRIGHT);
-                //Theme.setTheme((MyApp) MyApp.getApp(), Theme.ThemeType.BRIGHT);
-                //Style.setStyle(Style.ColorSetting.BRIGHT);
-                break;
+        if (firstSelection == 1) {
+            firstSelectionProcessed();
         }
-        tellActivityToChangeTheme(Theme.getTheme());
+        else {
+            System.out.println("testtt");
+            String selectedTheme = parent.getItemAtPosition(pos).toString();
+            if (!selectedTheme.equals(Theme.getTheme().toString())) {
+                switch (selectedTheme) {
+                    case "Dark":
+                        Theme.setTheme(Theme.ThemeType.DARK);
+                        //Theme.setTheme((MyApp) MyApp.getApp(), Theme.ThemeType.DARK);
+                        //Style.setStyle(Style.ColorSetting.DARK);
+                        break;
+                    default:
+                        Theme.setTheme(Theme.ThemeType.BRIGHT);
+                        //Theme.setTheme((MyApp) MyApp.getApp(), Theme.ThemeType.BRIGHT);
+                        //Style.setStyle(Style.ColorSetting.BRIGHT);
+                        break;
+                }
+                tellActivityToChangeTheme(Theme.getTheme());
+            }
+        }
     }
 
     @Override
