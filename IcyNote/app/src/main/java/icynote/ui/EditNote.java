@@ -6,8 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import me.gujun.android.taggroup.TagGroup;
 
 public class EditNote extends Fragment {
+    private TagGroup mDefaultTagGroup;
+
+    private String[] tags = {}; // init tags here
 
     public EditNote() {
         // Required empty public constructor
@@ -17,6 +23,10 @@ public class EditNote extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mDefaultTagGroup = (TagGroup) this.getActivity().findViewById(R.id.noteDisplayTagsText);
+        if (tags != null && tags.length > 0) {
+            mDefaultTagGroup.setTags(tags);
+        }
     }
 
     @Override
@@ -27,8 +37,6 @@ public class EditNote extends Fragment {
         container.setBackgroundColor(curr.getBackgroundColor());
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this
