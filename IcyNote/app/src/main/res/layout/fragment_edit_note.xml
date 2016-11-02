@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="icynote.ui.EditNote">
 
 
@@ -52,7 +53,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
+    <!--
     <icynote.ui.TagEditText
         android:id="@+id/noteDisplayTagsText"
         android:layout_width="wrap_content"
@@ -68,6 +69,25 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textSize="12sp" />
+        -->
+    <me.gujun.android.taggroup.TagGroup
+        android:id="@+id/noteDisplayTagsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+
+        style="@style/TagGroup"
+        app:atg_isAppendMode="true"
+        app:atg_inputHint="add ..."
+        app:atg_borderColor="@color/gray"
+        app:atg_backgroundColor="@color/transparent"
+        app:atg_checkedBackgroundColor="@color/gray"
+        app:atg_checkedBorderColor="@color/transparent"
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:id="@+id/noteDisplayBodyText"
