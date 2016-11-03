@@ -2,6 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="icynote.ui.EditNote">
 
@@ -47,41 +51,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-    <!--
-    <icynote.ui.TagEditText
-        android:id="@+id/noteDisplayTagsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:gravity="center|start"
-        android:layout_alignParentBottom="true"
-        android:hint="@string/noteDisplayTagHint"
-        android:textColorHint="@color/hintColor"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="12sp" />
-        -->
-    <me.gujun.android.taggroup.TagGroup
-        android:id="@+id/noteDisplayTagsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
 
-        style="@style/TagGroup"
-        app:atg_isAppendMode="true"
-        app:atg_inputHint="add ..."
-        app:atg_borderColor="@color/gray"
-        app:atg_backgroundColor="@color/transparent"
-        app:atg_checkedBackgroundColor="@color/gray"
-        app:atg_checkedBorderColor="@color/transparent"
-        android:layout_marginTop="10dp" />
-
+    <!-- android:inputType="textPersonName"
+android:gravity="center|start"
+android:layout_alignParentBottom="true"
+android:hint="@string/noteDisplayTagHint"
+     TEXTCOLOR
+TEMPORAIRE MERGE CONFLICT-->
     <EditText
         android:id="@+id/noteDisplayBodyText"
         android:layout_width="wrap_content"
@@ -100,5 +76,23 @@
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/noteDisplayTagsText" />
 
+    <me.gujun.android.taggroup.TagGroup
+        android:id="@+id/noteDisplayTagsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+
+        style="@style/TagGroup"
+        app:atg_isAppendMode="true"
+        app:atg_inputHint="add ..."
+        app:atg_borderColor="@color/gray"
+        app:atg_backgroundColor="@color/transparent"
+        app:atg_checkedBackgroundColor="@color/gray"
+        app:atg_checkedBorderColor="@color/transparent"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>
