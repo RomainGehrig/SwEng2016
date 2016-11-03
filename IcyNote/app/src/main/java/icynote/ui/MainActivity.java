@@ -2,6 +2,7 @@ package icynote.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +20,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Style.initStyle();
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     // Handles click events related to the menu
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.menuTagEdition) {
             openFragment(EditTags.class);
 
-        } else if (id == R.id.menuTrash) { // TODO: kind of notes list ?
+        } else if (id == R.id.menuTrash) {
             openFragment(EditNote.class);
 
         } else if (id == R.id.menuSettings) {
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (InstantiationException e) {
-            // e.printStackTrace();
+
         } catch (IllegalAccessException e) {
-            // e.printStackTrace();
+
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -6,14 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import me.gujun.android.taggroup.TagGroup;
 
 public class EditNote extends Fragment {
     private TagGroup mDefaultTagGroup;
 
-    private String[] tags = {}; // init tags here
+    private String[] tags = {}; // initialize tags here
 
     public EditNote() {
         // Required empty public constructor
@@ -23,7 +22,7 @@ public class EditNote extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDefaultTagGroup = (TagGroup) this.getActivity().findViewById(R.id.noteDisplayTagsText);
+        mDefaultTagGroup = (TagGroup) getActivity().findViewById(R.id.noteDisplayTagsText);
         if (tags != null && tags.length > 0) {
             mDefaultTagGroup.setTags(tags);
         }
@@ -33,23 +32,10 @@ public class EditNote extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Style.ColorSetting curr = Style.getStyle();
-        container.setBackgroundColor(curr.getBackgroundColor());
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
