@@ -17,13 +17,9 @@ public class CustomOnItemSelectedListener extends Settings implements AdapterVie
                 switch (selectedTheme) {
                     case "Dark":
                         Theme.setTheme(Theme.ThemeType.DARK);
-                        //Theme.setTheme((MyApp) MyApp.getApp(), Theme.ThemeType.DARK);
-                        //Style.setStyle(Style.ColorSetting.DARK);
                         break;
                     default:
                         Theme.setTheme(Theme.ThemeType.BRIGHT);
-                        //Theme.setTheme((MyApp) MyApp.getApp(), Theme.ThemeType.BRIGHT);
-                        //Style.setStyle(Style.ColorSetting.BRIGHT);
                         break;
                 }
                 tellActivityToChangeTheme(Theme.getTheme());

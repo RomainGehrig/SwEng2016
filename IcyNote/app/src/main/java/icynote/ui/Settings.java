@@ -2,6 +2,7 @@ package icynote.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 public class Settings extends Fragment {
@@ -47,10 +49,6 @@ public class Settings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Style.ColorSetting curr = Style.getStyle();
-        //container.setBackgroundColor(curr.getBackgroundColor());
-        //View view = inflater.inflate(R.layout.fragment_settings, container, false);
-
         // create ContextThemeWrapper from the original Activity Context with the custom theme
         final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), Theme.getTheme().toInt());
 
@@ -68,9 +66,25 @@ public class Settings extends Fragment {
     // Set up the style spinner
     private void setSpinnerStyles(View view) {
         spinnerStyles = (Spinner) view.findViewById(R.id.styles_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view,
-                getResources().getStringArray(R.array.styles_list));
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter;
+        switch (Theme.getTheme())
+        {
+            case BRIGHT:
+                adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view_bright,
+                        getResources().getStringArray(R.array.styles_list));
+                adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_bright);
+                break;
+            case DARK:
+                adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view_dark,
+                        getResources().getStringArray(R.array.styles_list));
+                adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_dark);
+                break;
+            default:
+                adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view_bright,
+                        getResources().getStringArray(R.array.styles_list));
+                adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_bright);
+                break;
+        }
         spinnerStyles.setAdapter(adapter);
 
         // Match the current item of the spinner with the current theme
@@ -85,9 +99,6 @@ public class Settings extends Fragment {
     {
         System.out.println("*** mCallback in tell : " + mCallback);
         mCallback.onThemeSelected(newTheme);
-        //currentTheme = theme;
-        //activity.finish();
-        //activity.startActivity(new Intent(activity, activity.getClass()));
     }
 
     /**

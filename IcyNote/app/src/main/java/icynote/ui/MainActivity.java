@@ -20,19 +20,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Theme.initTheme();
-        Theme.onActivityCreateSetTheme(this);
+        Theme.initTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
 
         openFragment(EditNote.class);
-
-        /*android.app.FragmentManager fragmentManager = getFragmentManager();
-        android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        EditNote fragment = new EditNote();
-        fragmentTransaction.add(R.id.content_frame, fragment);
-        fragmentTransaction.commit();*/
     }
 
     private void hideSoftKeyboard() {
