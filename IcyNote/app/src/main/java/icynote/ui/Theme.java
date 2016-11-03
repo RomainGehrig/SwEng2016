@@ -6,9 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 public class Theme {
     public enum ThemeType {
         BRIGHT{
-            @Override
-            public String toString() {
-                return "Bright";
+            public int toPosition() {
+                return 0;
             }
 
             public int toInt() {
@@ -20,9 +19,8 @@ public class Theme {
             }
         },
         DARK {
-            @Override
-            public String toString() {
-                return "Dark";
+            public int toPosition() {
+                return 1;
             }
 
             public int toInt() {
@@ -33,6 +31,10 @@ public class Theme {
                 return Color.parseColor("#FFFFFF");
             }
         };
+
+        public int toPosition() {
+            return 0;
+        }
 
         public int toInt() {
             return R.style.AppTheme_Bright;
@@ -50,8 +52,12 @@ public class Theme {
         activity.setTheme(R.style.AppTheme_Bright);
     }
 
-    public static void setTheme(ThemeType theme) {
-        sTheme = theme;
+    public static void setTheme(int themePosition) {
+        for (ThemeType theme : ThemeType.values()) {
+            if (theme.toPosition() == themePosition) {
+                sTheme = theme;
+            }
+        }
     }
 
     public static ThemeType getTheme() {

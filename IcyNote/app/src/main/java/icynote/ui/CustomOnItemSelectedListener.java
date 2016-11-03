@@ -11,17 +11,8 @@ public class CustomOnItemSelectedListener extends Settings implements AdapterVie
             firstSelectionProcessed();
         }
         else {
-            System.out.println("testtt");
-            String selectedTheme = parent.getItemAtPosition(pos).toString();
-            if (!selectedTheme.equals(Theme.getTheme().toString())) {
-                switch (selectedTheme) {
-                    case "Dark":
-                        Theme.setTheme(Theme.ThemeType.DARK);
-                        break;
-                    default:
-                        Theme.setTheme(Theme.ThemeType.BRIGHT);
-                        break;
-                }
+            if (!(pos == Theme.getTheme().toPosition())) {
+                Theme.setTheme(pos);
                 tellActivityToChangeTheme(Theme.getTheme());
             }
         }
@@ -30,6 +21,5 @@ public class CustomOnItemSelectedListener extends Settings implements AdapterVie
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
-
     }
 }
