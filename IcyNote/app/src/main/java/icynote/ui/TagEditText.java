@@ -117,7 +117,7 @@ public class TagEditText extends EditText {
     public View createTokenView(CharSequence text) {
         LinearLayout l = new LinearLayout(getContext());
         l.setOrientation(LinearLayout.HORIZONTAL);
-        l.setBackgroundResource(R.drawable.bordered_rectangle_rounded_corners);
+        //l.setBackgroundResource(R.drawable.bordered_rectangle_rounded_corners);
 
         TextView tv = new TextView(getContext());
         l.addView(tv);
@@ -127,7 +127,7 @@ public class TagEditText extends EditText {
 
         ImageView im = new ImageView(getContext());
         l.addView(im);
-        im.setImageResource(R.drawable.close_cross);
+        //im.setImageResource(R.drawable.close_cross);
         //im.setAlpha(0.5f);
         im.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
