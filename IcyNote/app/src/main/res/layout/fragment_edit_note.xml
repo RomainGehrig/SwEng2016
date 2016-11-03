@@ -33,6 +33,7 @@
 
     <ImageView
         android:id="@+id/note_open_metadata"
+        android:contentDescription="@string/menuOpenMetadata"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:alpha="0.5"
