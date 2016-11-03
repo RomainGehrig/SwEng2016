@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onThemeSelected(Theme.ThemeType currentTheme)
     {
-        System.out.println("TESTTT");
         openFragment(Settings.class);
     }
 }
