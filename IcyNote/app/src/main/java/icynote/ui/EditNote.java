@@ -1,6 +1,7 @@
 package icynote.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 public class EditNote extends Fragment {
 
@@ -24,11 +26,6 @@ public class EditNote extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //Style.ColorSetting curr = Style.getStyle();
-        //container.setBackgroundColor(curr.getBackgroundColor());
-        //return inflater.inflate(R.layout.fragment_edit_note, container, false);
-
         // create ContextThemeWrapper from the original Activity Context with the custom theme
         final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), Theme.getTheme().toInt());
 
@@ -36,7 +33,16 @@ public class EditNote extends Fragment {
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
         // inflate the layout using the cloned inflater, not default inflater
-        return localInflater.inflate(R.layout.fragment_edit_note, container, false);
+        View v = localInflater.inflate(R.layout.fragment_edit_note, container, false);
+
+        EditText titleTextView = (EditText)v.findViewById(R.id.noteDisplayTitleText);
+        titleTextView.setTextColor(Theme.getTheme().getTextColor());
+        EditText mainTextView = (EditText)v.findViewById(R.id.noteDisplayBodyText);
+        mainTextView.setTextColor(Theme.getTheme().getTextColor());
+        TagEditText tagTextView = (TagEditText)v.findViewById(R.id.noteDisplayTagsText);
+        tagTextView.setTextColor(Theme.getTheme().getTextColor());
+
+        return v;
     }
 
 

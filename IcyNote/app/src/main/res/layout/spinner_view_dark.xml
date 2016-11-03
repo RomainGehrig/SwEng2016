@@ -5,7 +5,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="start"
-    android:background="@color/backgroundColorSpinner"
+    android:background="@color/backgroundColorSpinnerDark"
     android:textSize="@dimen/textSizeSpinner"
+    android:textColor="@color/white"
     android:padding="5sp"
     />
