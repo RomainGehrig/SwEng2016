@@ -29,12 +29,10 @@ public class Settings extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        System.out.println("*** On Attach test *****");
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
             mCallback = (OnSpinnerSelection) context;
-            System.out.println("*** mCallback : " + mCallback);
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnSpinnerSelection");
@@ -88,16 +86,12 @@ public class Settings extends Fragment {
         spinnerStyles.setAdapter(adapter);
 
         // Match the current item of the spinner with the current theme
-        String currentTheme = Theme.getTheme().toString();
-        int themeSpinnerIndex = adapter.getPosition(currentTheme);
-        spinnerStyles.setSelection(themeSpinnerIndex);
-
+        spinnerStyles.setSelection(Theme.getTheme().toPosition());
         spinnerStyles.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
     public void tellActivityToChangeTheme(Theme.ThemeType newTheme)
     {
-        System.out.println("*** mCallback in tell : " + mCallback);
         mCallback.onThemeSelected(newTheme);
     }
 
