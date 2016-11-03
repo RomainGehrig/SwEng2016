@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/IcyNote/IcyNote.iml" filepath="$PROJECT_DIR$/IcyNote/IcyNote.iml" />
       <module fileurl="file://$PROJECT_DIR$/IcyNote/app/app.iml" filepath="$PROJECT_DIR$/IcyNote/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ui.iml" filepath="$PROJECT_DIR$/ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ui_new.iml" filepath="$PROJECT_DIR$/ui_new.iml" />
     </modules>
   </component>
 </project>
