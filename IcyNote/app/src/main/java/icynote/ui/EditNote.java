@@ -1,7 +1,6 @@
 package icynote.ui;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 import me.gujun.android.taggroup.TagGroup;
 
 
@@ -49,8 +47,6 @@ public class EditNote extends Fragment {
         titleTextView.setTextColor(Theme.getTheme().getTextColor());
         EditText mainTextView = (EditText)v.findViewById(R.id.noteDisplayBodyText);
         mainTextView.setTextColor(Theme.getTheme().getTextColor());
-        TagEditText tagTextView = (TagEditText)v.findViewById(R.id.noteDisplayTagsText);
-        tagTextView.setTextColor(Theme.getTheme().getTextColor());
 
         return v;
     }
