@@ -5,24 +5,11 @@
     tools:context="icynote.ui.NotesList">
 
     <TextView
-        android:text=""
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/fragmentNotesList"
-        />
-
-    <fragment
-        android:id="@+id/menuButtonFragment"
-        android:name="icynote.ui.Menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_menu" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:text="LIST NOTES VIEW" />
+
+    <include layout="@layout/menu_button"/>
 
 </FrameLayout>

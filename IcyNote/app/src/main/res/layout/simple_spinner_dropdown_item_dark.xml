@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10sp"
-    android:background="@color/backgroundColorSpinner"
+    android:background="@color/backgroundColorSpinnerDark"
     android:textSize="@dimen/textSizeSpinner"
     android:ellipsize="marquee"
     />
