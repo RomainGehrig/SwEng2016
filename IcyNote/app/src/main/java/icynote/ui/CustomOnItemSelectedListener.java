@@ -6,23 +6,20 @@ import android.widget.AdapterView;
 public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        String selected = parent.getItemAtPosition(pos).toString();
+        String selected = parent.getItemAtPosition(position).toString();
         switch (selected) {
             case "Dark":
-                Style.setStyle(Style.ColorSetting.DARK);
                 break;
             default:
-                Style.setStyle(Style.ColorSetting.BRIGHT);
                 break;
         }
 
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }
