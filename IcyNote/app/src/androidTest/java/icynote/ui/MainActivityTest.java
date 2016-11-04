@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 /**
@@ -48,31 +49,86 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     */
 
     @Test
-    public void openFragmentTest() {
+    public void startingViewTest() {
+        assertNotNull(mActivity.findViewById(R.id.noteDisplayTitleText));
+        assertNotNull(mActivity.findViewById(R.id.note_open_metadata));
+        assertNotNull(mActivity.findViewById(R.id.noteDisplaySettingsButton));
+        assertNotNull(mActivity.findViewById(R.id.noteDisplayBodyText));
+        assertNotNull(mActivity.findViewById(R.id.noteDisplayTagsText));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }
 
-       // NavigationView menu = (NavigationView) mActivity.findViewById(R.id.menu);
-
+    @Test
+    public void openFragmentListNotesTest() {
+        assertNull(mActivity.findViewById(R.id.listNotesView));
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.fragmentNotesList));
+        assertNotNull(mActivity.findViewById(R.id.listNotesView));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }
 
+    @Test
+    public void openFragmentEditTagsTest() {
+        assertNull(mActivity.findViewById(R.id.editTagsView));
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.editTags)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.fragmentEditTags));
+        assertNotNull(mActivity.findViewById(R.id.editTagsView));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }
 
-        /*
+    @Test
+    public void openFragmentTrashTest() {
+
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.trash)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.fragmentTrash));
-        */
+        assertNotNull(mActivity.findViewById(R.id.noteDisplayTitleText));
+        assertNotNull(mActivity.findViewById(R.id.note_open_metadata));
+        assertNotNull(mActivity.findViewById(R.id.noteDisplaySettingsButton));
+        assertNotNull(mActivity.findViewById(R.id.noteDisplayBodyText));
+        assertNotNull(mActivity.findViewById(R.id.noteDisplayTagsText));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }
 
+    @Test
+    public void openFragmentSettingsTest() {
+        assertNull(mActivity.findViewById(R.id.styles_list));
+        assertNull(mActivity.findViewById(R.id.styles_title));
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.settings)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.fragmentSettings));
+        assertNotNull(mActivity.findViewById(R.id.styles_list));
+        assertNotNull(mActivity.findViewById(R.id.styles_title));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }
 
+    @Test
+    public void openFragmentLogoutTest() {
+        assertNull(mActivity.findViewById(R.id.logoutView));
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.logout)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.fragmentLogout));
+        assertNotNull(mActivity.findViewById(R.id.logoutView));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }
 
+    @Test
+    public void openFragmentMetadatasTest() {
+        assertNull(mActivity.findViewById(R.id.noteTitle));
+        assertNull(mActivity.findViewById(R.id.noteCreationDate));
+        assertNull(mActivity.findViewById(R.id.checkBox1));
+        assertNull(mActivity.findViewById(R.id.checkBox2));
+        assertNull(mActivity.findViewById(R.id.checkBox3));
+        assertNull(mActivity.findViewById(R.id.backButton));
+        onView(withId(R.id.noteDisplaySettingsButton)).perform(click());
+        assertNotNull(mActivity.findViewById(R.id.noteTitle));
+        assertNotNull(mActivity.findViewById(R.id.noteCreationDate));
+        assertNotNull(mActivity.findViewById(R.id.checkBox1));
+        assertNotNull(mActivity.findViewById(R.id.checkBox2));
+        assertNotNull(mActivity.findViewById(R.id.checkBox3));
+        assertNotNull(mActivity.findViewById(R.id.backButton));
     }
 }
