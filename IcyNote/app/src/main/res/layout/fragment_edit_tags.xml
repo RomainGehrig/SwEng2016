@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="icynote.ui.EditTags">
+
+    <TextView
+        android:text=""
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragmentEditTags"
+        />
+
+    <fragment
+        android:id="@+id/menuButtonFragment"
+        android:name="icynote.ui.Menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_menu" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/textColor"
+        android:gravity="center"
+        android:text="EDIT TAGS VIEW" />
+
+</FrameLayout>
