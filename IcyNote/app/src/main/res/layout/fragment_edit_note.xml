@@ -52,7 +52,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-    
+
     <EditText
         android:id="@+id/noteDisplayBodyText"
         android:layout_width="wrap_content"
