@@ -1,6 +1,8 @@
 package icynote.core.impl;
 
 
+import android.support.annotation.VisibleForTesting;
+
 import icynote.core.Note;
 import icynote.core.Storage;
 import icynote.core.impl.interactors.DateInteractor;
@@ -14,6 +16,7 @@ import icynote.core.impl.interactors.NullOutputInteractor;
  * @author Julien Harbulot
  * @version 1.0
  */
+@SuppressWarnings("UtilityClassWithoutPrivateConstructor")
 final class CoreFactory {
     public static icynote.core.IcyNoteCore core(Storage s) {
         IcyNoteCoreImpl core = new IcyNoteCoreImpl(s);
@@ -30,5 +33,13 @@ final class CoreFactory {
         return core;
     }
 
-    private CoreFactory(){}
+    /**
+     * Always throws an {@code AssertionError}.
+     * It exists for coverage purposes only.
+     * @throws AssertionError always
+     */
+    @VisibleForTesting
+    CoreFactory() {
+        throw new AssertionError("This is an utility class");
+    }
 }
