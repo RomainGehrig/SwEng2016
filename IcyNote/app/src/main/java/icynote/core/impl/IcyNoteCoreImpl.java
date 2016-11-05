@@ -22,7 +22,7 @@ import util.Optional;
  * @see NoteInteractorTemplate
  */
 @SuppressWarnings("ReturnOfInnerClass")
-public class IcyNoteCoreImpl implements icynote.core.IcyNoteCore {
+class IcyNoteCoreImpl implements icynote.core.IcyNoteCore {
     private final CheckedStorage storage;
     private NoteInteractorFactory wrapper = new NoteInteractorFactory();
 
