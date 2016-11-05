@@ -1,5 +1,7 @@
 package icynote.core.impl;
 
+import android.support.annotation.VisibleForTesting;
+
 /**
  * Used by the core to check input at the boundaries.
  * This class factors the types of the exceptions.
@@ -7,6 +9,7 @@ package icynote.core.impl;
  * @author Julien Harbulot
  * @version 1.0
  */
+@SuppressWarnings("UtilityClassWithoutPrivateConstructor")
 public final class BoundaryCheckerUtil {
     public static <T> T checkNotNull(T obj) {
         if (obj == null) {
@@ -15,5 +18,13 @@ public final class BoundaryCheckerUtil {
         return obj;
     }
 
-    private BoundaryCheckerUtil(){}
+    /**
+     * Always throws an {@code AssertionError}.
+     * It exists for coverage purposes only.
+     * @throws AssertionError always
+     */
+    @VisibleForTesting
+    BoundaryCheckerUtil() {
+        throw new AssertionError("LoginManagerFactory is an utility class");
+    }
 }

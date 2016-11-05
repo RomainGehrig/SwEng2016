@@ -11,9 +11,16 @@ import util.Optional;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class CoreFactoryTests {
+    @Test(expected=AssertionError.class)
+    public void createFactory(){
+        CoreFactory c = new CoreFactory();
+        assertNull(c);
+    }
+
     @Test
     public void coreCanBeCreated() {
         icynote.core.IcyNoteCore c = CoreFactory.core(new ListStorage());

@@ -8,29 +8,51 @@ import icynote.core.Note;
 import icynote.core.impl.NoteData;
 
 public class NullOutputInteractorTests {
-    private final Note nullReturner = new NullNoteData();
-    private final Note toTest = new NullOutputInteractor(nullReturner);
-
-    @Test(expected = IllegalArgumentException.class)
-    public void getTitle() {
-        toTest.getTitle();
-    }
+    private final Note toTest_Null = new NullOutputInteractor(new NullNoteData());
+    private final Note toTest_NotNull = new NullOutputInteractor(new NoteData());
 
     //-----------------------------------------------------------------------------
 
     @Test(expected = IllegalArgumentException.class)
+    public void getTitleNull() {
+        toTest_Null.getTitle();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getContentNull() {
+        toTest_Null.getContent();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getCreationNull() {
+        toTest_Null.getCreation();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getLastUpdateNull() {
+        toTest_Null.getLastUpdate();
+    }
+
+    //-----------------------------------------------------------------------------
+
+    @Test
+    public void getTitle() {
+        toTest_NotNull.getTitle();
+    }
+
+    @Test
     public void getContent() {
-        toTest.getContent();
+        toTest_NotNull.getContent();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getCreation() {
-        toTest.getCreation();
+        toTest_NotNull.getCreation();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getLastUpdate() {
-        toTest.getLastUpdate();
+        toTest_NotNull.getLastUpdate();
     }
 
     private static class NullNoteData extends NoteData {
