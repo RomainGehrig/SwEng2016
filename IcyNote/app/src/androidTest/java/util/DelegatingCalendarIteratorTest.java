@@ -1,8 +1,12 @@
 package util;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import static org.junit.Assert.assertNotNull;
 
 public class DelegatingCalendarIteratorTest extends DelegatingIteratorTest<Calendar> {
     private ArrayList<Calendar> data = null;
@@ -29,5 +33,11 @@ public class DelegatingCalendarIteratorTest extends DelegatingIteratorTest<Calen
     @Override
     Calendar secondElement() {
         return data.get(1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void makeNewWithNull() {
+        DelegatingIterator<Calendar> d = new DelegatingIterator<>(null);
+        assertNotNull(d);
     }
 }
