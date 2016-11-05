@@ -1,5 +1,7 @@
 package icynote.core.impl;
 
+import android.support.annotation.VisibleForTesting;
+
 import icynote.core.Response;
 
 /**
@@ -8,7 +10,7 @@ import icynote.core.Response;
  * @author Julien Harbulot
  * @version 1.0
  */
-@SuppressWarnings("ReturnOfInnerClass")
+@SuppressWarnings({"ReturnOfInnerClass", "UtilityClassWithoutPrivateConstructor"})
 public final class ResponseFactory {
     public static Response positiveResponse() {
         return new Response() {
@@ -28,5 +30,14 @@ public final class ResponseFactory {
         };
     }
 
-    private ResponseFactory(){}
+    /**
+     * Always throws an {@code AssertionError}.
+     * It exists for coverage purposes only.
+     * @throws AssertionError always
+     */
+    @VisibleForTesting
+    ResponseFactory() {
+        throw new AssertionError("LoginManagerFactory is an utility class");
+    }
+
 }
