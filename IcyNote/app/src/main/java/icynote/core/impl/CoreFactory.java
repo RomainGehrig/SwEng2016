@@ -14,7 +14,7 @@ import icynote.core.impl.interactors.NullOutputInteractor;
  * @author Julien Harbulot
  * @version 1.0
  */
-public final class CoreFactory {
+final class CoreFactory {
     public static icynote.core.IcyNoteCore core(Storage s) {
         IcyNoteCoreImpl core = new IcyNoteCoreImpl(s);
         core.stack(new NoteInteractorFactory() {
