@@ -51,6 +51,7 @@ public class NotesList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         Style.ColorSetting curr = Style.getStyle();
         container.setBackgroundColor(curr.getBackgroundColor());
@@ -211,7 +212,6 @@ public class NotesList extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

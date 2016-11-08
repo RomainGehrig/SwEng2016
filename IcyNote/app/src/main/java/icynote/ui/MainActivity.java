@@ -2,6 +2,7 @@ package icynote.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,12 +16,14 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Settings.OnSpinnerSelection {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Style.initStyle();
         super.onCreate(savedInstanceState);
+        Theme.initTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
     }
 
 
@@ -51,6 +55,13 @@ public class MainActivity extends AppCompatActivity
         } else {
             drawer.openDrawer(GravityCompat.START);
         }
+    }
+
+
+    @Override
+    public void onThemeSelected(Theme.ThemeType currentTheme)
+    {
+        openFragment(Settings.class);
     }
 
 

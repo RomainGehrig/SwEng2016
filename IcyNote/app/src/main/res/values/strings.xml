@@ -1,13 +1,9 @@
 <resources>
     <string name="app_name">Icy Note</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
     <string name="noteDisplayTitleHint">enter title ...</string>
     <string name="noteDisplayTextHint">enter text ...</string>
-    <string name="noteDisplayTagHint">enter tags ...</string>
 
     <string name="listAllNotes">List all Notes</string>
     <string name="editTags">Edit tags</string>
@@ -15,10 +11,13 @@
     <string name="settings">Settings</string>
     <string name="logout">Log out</string>
 
+    <string name="Styles">Styles</string>
+
+    <string name="menuButtonImage">Menu button image</string>
+    <string name="menuOpenMetadata">Metadatas button image</string>
+
     <string-array name="styles_list">
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-
-
 </resources>
