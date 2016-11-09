@@ -6,12 +6,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -64,25 +66,9 @@ public class Settings extends Fragment {
     // Set up the style spinner
     private void setSpinnerStyles(View view) {
         spinnerStyles = (Spinner) view.findViewById(R.id.styles_list);
-        ArrayAdapter<String> adapter;
-        switch (Theme.getTheme())
-        {
-            case BRIGHT:
-                adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view_bright,
-                        getResources().getStringArray(R.array.styles_list));
-                adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_bright);
-                break;
-            case DARK:
-                adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view_dark,
-                        getResources().getStringArray(R.array.styles_list));
-                adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_dark);
-                break;
-            default:
-                adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_view_bright,
-                        getResources().getStringArray(R.array.styles_list));
-                adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item_bright);
-                break;
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), Theme.getTheme().getSpinnerView(),
+                getResources().getStringArray(R.array.styles_list));
+        adapter.setDropDownViewResource(Theme.getTheme().getSpinnerDropDown());
         spinnerStyles.setAdapter(adapter);
 
         // Match the current item of the spinner with the current theme
@@ -94,21 +80,6 @@ public class Settings extends Fragment {
     {
         mCallback.onThemeSelected(newTheme);
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    /*public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
 
     public void firstSelectionProcessed()
     {
