@@ -81,7 +81,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
 
-        style="@style/TagGroup"
+
         app:atg_isAppendMode="true"
         app:atg_inputHint="add ..."
         app:atg_borderColor="@color/gray"
