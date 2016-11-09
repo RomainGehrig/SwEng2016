@@ -1,9 +1,11 @@
 package icynote.ui;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
@@ -36,6 +38,7 @@ public class NotesList extends Fragment {
     private NotesAdapter notesAdapter;
     private Spinner spinner;
     private View view;
+    //private static OnAddClick mCallback;
 
 
     public NotesList() {
@@ -171,11 +174,15 @@ public class NotesList extends Fragment {
             }
         });
 
+
+        // Add a new note button
         Button btAdd = (Button) view.findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //a remplacer avec l'ouverture d'un fragment pour l'ajout d'une note
+                // create a new note with the core, and get its id
+                ((MainActivity)getActivity()).onAddClick(1000);
+                //mCallback.onAddClick(1000);
             }
         });
 
@@ -214,4 +221,24 @@ public class NotesList extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+
+/*
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnAddClick) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnSpinnerSelection");
+        }
+    }
+*/
+    /*
+    public interface OnAddClick {
+        public void onAddClick(int id);
+    }
+    */
 }

@@ -84,6 +84,8 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
                 int position = (Integer) view.getTag();
                 NoteData currentNote = (NoteData)getItem(position);
 
+
+                ////a remplacer
                 Intent intent = new Intent(view.getContext(), ShowNoteActivity.class);
                 intent.putExtra("icynote.core.impl.NOTE_DATA", currentNote);
                 view.getContext().startActivity(intent);

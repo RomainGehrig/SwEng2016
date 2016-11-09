@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Settings.OnSpinnerSelection {
 
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
 
-        openFragment(EditNote.class);
+        openFragment(NotesList.class);
     }
 
     private void hideSoftKeyboard() {
@@ -120,12 +121,20 @@ public class MainActivity extends AppCompatActivity
             // e.printStackTrace();
         }
 
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
 
+    }
+
+    public void onAddClick(int id){
+        bundle = new Bundle();
+        bundle.putInt("id", id);
+
+        openFragment(EditNote.class);
     }
 
 }
