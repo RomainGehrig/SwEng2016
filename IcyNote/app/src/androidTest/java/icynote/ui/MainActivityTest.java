@@ -32,6 +32,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         final Context context = InstrumentationRegistry.getTargetContext();
         mActivity = getActivity();
