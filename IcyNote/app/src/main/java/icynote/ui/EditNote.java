@@ -17,14 +17,14 @@ import icynote.core.IcyNoteCore;
 import icynote.core.Note;
 import me.gujun.android.taggroup.TagGroup;
 
+import static icynote.ui.NotesList.notes;
+
 
 public class EditNote extends Fragment {
     private TagGroup mDefaultTagGroup;
 
     /**************** DIRTY HACK FOR TESTS ****************/
     static public Note note;
-
-    private int id;
 
     private String[] tags = {}; // initialize tags here
 
@@ -40,7 +40,16 @@ public class EditNote extends Fragment {
         if (tags != null && tags.length > 0) {
             mDefaultTagGroup.setTags(tags);
         }
+
+        int id = getArguments().getInt("id");
+        if(id > notes.size()){
+            throw new IllegalArgumentException("The note with id " + id + " does not exist.");
+        }
+        note = notes.get(getArguments().getInt("id"));
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,10 +64,13 @@ public class EditNote extends Fragment {
         // inflate the layout using the cloned inflater, not default inflater
         View v = localInflater.inflate(R.layout.fragment_edit_note, container, false);
 
+
         EditText titleTextView = (EditText)v.findViewById(R.id.noteDisplayTitleText);
         titleTextView.setTextColor(Theme.getTheme().getTextColor());
+        titleTextView.setText(note.getTitle());
         EditText mainTextView = (EditText)v.findViewById(R.id.noteDisplayBodyText);
         mainTextView.setTextColor(Theme.getTheme().getTextColor());
+        mainTextView.setText(note.getContent());
 
 
         // add listener to the title
@@ -97,10 +109,6 @@ public class EditNote extends Fragment {
             }
         });
 
-        id = getArguments().getInt("id");
-        Log.i("edit note with id", Integer.toString(id));
-
-
         return v;
     }
 
@@ -108,9 +116,4 @@ public class EditNote extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-/*
-    public void editNote(int id){
-        Log.i("edit note with id:", Integer.toString(id));
-    }
-*/
 }

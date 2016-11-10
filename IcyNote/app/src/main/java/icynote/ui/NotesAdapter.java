@@ -78,17 +78,13 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         });
 
         tvTitle.setTag(position);
+        // edit a note when clicking on the title
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = (Integer) view.getTag();
                 NoteData currentNote = (NoteData)getItem(position);
-
-
-                ////a remplacer
-                Intent intent = new Intent(view.getContext(), ShowNoteActivity.class);
-                intent.putExtra("icynote.core.impl.NOTE_DATA", currentNote);
-                view.getContext().startActivity(intent);
+                ((MainActivity)getContext()).openEditNote(currentNote.getId());
             }
         });
 

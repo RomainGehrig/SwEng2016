@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity
 
     private Bundle bundle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Style.initStyle();
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
     }
 
 
@@ -122,19 +122,29 @@ public class MainActivity extends AppCompatActivity
         }
 
         fragment.setArguments(bundle);
+        //fragment.setArguments(fragmentBundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
 
     }
 
-    public void onAddClick(int id){
+    public void openEditNote(int id){
         bundle = new Bundle();
         bundle.putInt("id", id);
 
         openFragment(EditNote.class);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        int nbFragmentInStack = getSupportFragmentManager().getBackStackEntryCount();
+        if(nbFragmentInStack > 1) {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
 }

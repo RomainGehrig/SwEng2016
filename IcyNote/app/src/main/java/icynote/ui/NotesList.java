@@ -1,18 +1,16 @@
 package icynote.ui;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
-import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,18 +25,18 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 
 import icynote.core.Note;
-import icynote.core.impl.NoteData;
 import icynote.core.OrderBy;
+import icynote.core.impl.NoteData;
 
 
 public class NotesList extends Fragment {
+    // tmp storage
+    static public ArrayList<Note> notes = new ArrayList<>();
 
     private ListView listView;
-    private ArrayList<Note> notes = new ArrayList<>();
     private NotesAdapter notesAdapter;
     private Spinner spinner;
     private View view;
-    //private static OnAddClick mCallback;
 
 
     public NotesList() {
@@ -49,7 +47,27 @@ public class NotesList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Create some notes to display
+        notes.clear();
+        for(int i=0; i<10; i++){
+            Note note = new NoteData();
+            note.setTitle("Note number " + i + ".\n");
+            note.setId(i);
+            note.setCreation(new GregorianCalendar());
+            note.setContent("Some content of note number" + note.getId() +
+                    "\n Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                    "Duis ante nibh, accumsan vel dui ultrices, lacinia euismod nibh. " +
+                    "Suspendisse aliquam lacus et cursus blandit." +
+                    " Vivamus mattis accumsan vulputate. Cras bibendum justo" +
+                    " quis ante mollis, at imperdiet augue condimentum. ");
+
+            notes.add(note);
+        }
+
+        notesAdapter = new NotesAdapter(getActivity(), notes);
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,27 +78,19 @@ public class NotesList extends Fragment {
         container.setBackgroundColor(curr.getBackgroundColor());
         view = inflater.inflate(R.layout.fragment_notes_list, container, false);
 
-        for(int i=0; i<10; i++){
-            Note note = new NoteData();
-            note.setTitle("Note number " + i + ".\n");
-            note.setCreation(new GregorianCalendar());
-            for(int j=0; j<3; j++){
-                note.setContent(note.getContent() + "\n Line number fas fsdf asdf asd fasd sdasd dsadsf asdfsf dyf fasd fasd fasd fasd fadsf " + (j+1) + ".\n");
-            }
-            notes.add(note);
-        }
-
-        notesAdapter = new NotesAdapter(view.getContext(), notes);
-
         listView = (ListView) view.findViewById(R.id.lvNotes);
+        listView.setAdapter(null); // to avoid adding the notes twice
         listView.setAdapter(notesAdapter);
 
+
         //Once adapter created, new elements may be added to
+        /*
         Note noteNew1 = new NoteData();
         noteNew1.setTitle("New Note");
         noteNew1.setContent("\nNew content: line number 1 \nand line number 2.");
         noteNew1.setCreation(new GregorianCalendar());
         notesAdapter.add(noteNew1);
+        */
 
         RelativeLayout layout_2 = (RelativeLayout)view.findViewById(R.id.layout_2);
         layout_2.setBackgroundColor(Color.rgb(255, 255, 204));
@@ -153,6 +163,7 @@ public class NotesList extends Fragment {
             }
         });
 
+        // initialize search button
         Button btSearch = (Button) view.findViewById(R.id.btSearch);
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,8 +192,7 @@ public class NotesList extends Fragment {
             @Override
             public void onClick(View view) {
                 // create a new note with the core, and get its id
-                ((MainActivity)getActivity()).onAddClick(1000);
-                //mCallback.onAddClick(1000);
+                ((MainActivity)getActivity()).openEditNote(0);
             }
         });
 
@@ -212,33 +222,9 @@ public class NotesList extends Fragment {
         }
     }
 
-    /*public void addNote(@SuppressWarnings("UnunsedParameters") View view) {
-        Intent intent = new Intent(this, AddActivity.class);
-        startActivity(intent);
-    }*/
-
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
 
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            mCallback = (OnAddClick) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnSpinnerSelection");
-        }
-    }
-*/
-    /*
-    public interface OnAddClick {
-        public void onAddClick(int id);
-    }
-    */
 }
