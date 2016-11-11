@@ -3,6 +3,9 @@ package icynote.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import icynote.core.Note;
@@ -43,13 +47,29 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_note, parent, false);
         }
 
+        // Title
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
-        TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
-        Button btDelete = (Button) convertView.findViewById(R.id.btDelete);
-
         tvTitle.setText(note.getTitle());
-        tvDate.setText("Last Update: "+ note.getLastUpdate().getTime().toString());
+        tvTitle.setTag(position);
+        // edit a note when clicking on the title
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = (Integer) view.getTag();
+                NoteData currentNote = (NoteData)getItem(position);
+                ((MainActivity)getContext()).openEditNote(currentNote.getId());
+            }
+        });
+
+
+        // Date
+        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+        GregorianCalendar tmpDate = note.getLastUpdate();
+        String date = "Last Update: "
+                + tmpDate.get(GregorianCalendar.DATE) + "/"
+                + tmpDate.get(GregorianCalendar.MONTH) + "/"
+                + tmpDate.get(GregorianCalendar.YEAR);
+        tvDate.setText(date);
         String content = note.getContent();
         int pos1=-1, pos2=-1;
         if(content != "") {
@@ -62,9 +82,15 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
             }
             content = content + "...";
         }
+
+
+        // Content
+        TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
         tvContent.setText(content);
 
 
+        // Delete button
+        Button btDelete = (Button) convertView.findViewById(R.id.btDelete);
         btDelete.setTag(position);
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,21 +103,15 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
             }
         });
 
-        tvTitle.setTag(position);
-        // edit a note when clicking on the title
-        tvTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = (Integer) view.getTag();
-                NoteData currentNote = (NoteData)getItem(position);
-                ((MainActivity)getContext()).openEditNote(currentNote.getId());
-            }
-        });
+/*
+        View separator = (View) convertView.findViewById(R.id.)*/
+
+
 
         convertView.setOnCreateContextMenuListener(this);
 
         LinearLayout layout_1 = (LinearLayout)convertView.findViewById(R.id.layout_1);
-        layout_1.setBackgroundColor(Color.rgb(204, 204, 140));
+        //layout_1.setBackgroundColor(Color.rgb(204, 204, 140));
 
         return convertView;
     }

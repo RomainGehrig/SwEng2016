@@ -45,6 +45,7 @@ public class EditNote extends Fragment {
         if(id > notes.size()){
             throw new IllegalArgumentException("The note with id " + id + " does not exist.");
         }
+
         note = notes.get(getArguments().getInt("id"));
 
     }

@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="5sp"
+    android:paddingRight="5sp"
     android:id="@+id/item_note" >
 
     <LinearLayout
@@ -14,6 +16,8 @@
         <TextView
             android:id="@+id/tvTitle"
             android:text="Title"
+            android:textSize="@dimen/notesTitleSize"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_alignParentLeft="true"
@@ -22,11 +26,12 @@
 
         <Button
             android:id="@+id/btDelete"
-            android:text="Delete Content"
+            android:text="Delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textSize="12sp"
+            android:background="@color/backgroundColorSpinnerBright"
             android:layout_weight="0.3" />
     </LinearLayout>
 
@@ -45,4 +50,9 @@
         android:text="Content"
         android:textColor="@color/textColor"
         android:layout_below="@id/layout_1" />
+
+
+    <View style="@style/notesSeparator"
+        />
+
 </LinearLayout>
