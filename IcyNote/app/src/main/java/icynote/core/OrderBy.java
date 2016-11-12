@@ -8,5 +8,6 @@ package icynote.core;
  * @see icynote.core.IcyNoteCore#getNotes(OrderBy, OrderType)
  */
 public enum OrderBy {
-    TITLE, CREATION, LAST_UPDATE
+    //TITLE, CREATION, LAST_UPDATE
+    TITLE, TITLE_DOWN, CREATION, LAST_UPDATE
 }

@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -33,6 +35,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     private TagGroup mDefaultTagGroup;
 
     private String[] tags = {"1", "2", "3"}; // initialize tags here
+    private Note note;
 
     public EditNote() {
         // Required empty public constructor
@@ -95,7 +98,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
             }
         } );
 
-        // does nothing
+        // FIXME does nothing
         mDefaultTagGroup.setOnKeyListener( new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -112,6 +115,38 @@ public class EditNote extends FragmentWithCoreAndLoader implements
         titleTextView.setTextColor(Theme.getTheme().getTextColor());
         EditText mainTextView = (EditText)view.findViewById(R.id.noteDisplayBodyText);
         mainTextView.setTextColor(Theme.getTheme().getTextColor());
+
+        // add listener to the title
+        titleTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                note.setTitle(s.toString());
+            }
+        });
+
+        // add listener to the content
+        mainTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                note.setContent(s.toString());
+            }
+        });
 
         return view;
     }
@@ -133,7 +168,8 @@ public class EditNote extends FragmentWithCoreAndLoader implements
 
     @Override
     public void onLoadFinished(Loader<Optional<Note>> loader, Optional<Note> optionalNote) {
-        Note note = optionalNote.get();
+        // TODO what to do if note is not present ?
+        note = optionalNote.get();
         EditText titleTextView = (EditText)getView().findViewById(R.id.noteDisplayTitleText);
         EditText mainTextView = (EditText)getView().findViewById(R.id.noteDisplayBodyText);
         // TODO: use an asynchrone task to set these things

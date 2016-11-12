@@ -63,10 +63,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     @Test
-    public void openFragmentTest() {
+    public void openFragmentListNotesTest() { // @TODO complete
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.listNotesView));
         assertNotNull(mActivity.findViewById(R.id.menuButton));
         assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
     }
@@ -110,6 +109,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @Test
     public void openFragmentLogoutTest() {
         assertNull(mActivity.findViewById(R.id.logoutView));
+        assertNotNull(mActivity.findViewById(R.id.logoutView));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
         onView(withId(R.id.menuButton)).perform(click());
         onView(withText(R.string.logout)).perform(click());
         assertNull(FirebaseAuth.getInstance().getCurrentUser());
