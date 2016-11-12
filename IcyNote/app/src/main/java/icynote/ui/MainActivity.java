@@ -1,12 +1,9 @@
 package icynote.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.view.GravityCompat;
@@ -17,14 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import icynote.core.impl.CoreSingleton;
-import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
 
 import icynote.core.IcyNoteCore;
-import icynote.core.Note;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Settings.OnSpinnerSelection {
@@ -88,16 +82,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
         core = CoreSingleton.getCore();
-        //todo: move this into an Application subclass
-        LoginManager.Callback logOutCallback = new LoginManager.Callback() {
-            public void execute() {
-                CoreSingleton.logout();
-                Toast.makeText(MainActivity.this, "bye bye!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, LoginMenu.class);
-                startActivity(intent);
-            }
-        };
-        LoginManagerFactory.getInstance().onLogout(logOutCallback);
 
         openFragment(FragmentID.NotesList);
     }
@@ -147,6 +131,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.menuSettings) {
             openFragment(FragmentID.Settings);
         } else if (id == R.id.menuLogout) {
+            Log.d("MainActivity", "menuLogout");
             LoginManagerFactory.getInstance().logout();
         }
 

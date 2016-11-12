@@ -1,5 +1,6 @@
 package icynote.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,16 +14,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import icynote.login.LoginManager;
+import icynote.login.LoginManagerFactory;
 
 
 public class Settings extends Fragment {
 
+    static private final int RC_LINK_GOOGLE = 1505;
+    static private final int RC_UNLINK_GOOGLE = 1505;
+
     private Spinner spinnerStyles;
     protected int firstSelection = 1;
     private static OnSpinnerSelection mCallback;
+    private Button linkButton;
+    private Button unlinkButton;
 
     public Settings() {
         // Required empty public constructor
@@ -60,6 +70,22 @@ public class Settings extends Fragment {
 
         setSpinnerStyles(view);
 
+
+        linkButton = (Button) view.findViewById(R.id.linkGoogleButton);
+        linkButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                linkGoogleAccount();
+            }
+        });
+
+        unlinkButton = (Button) view.findViewById(R.id.unlinkGoogleButton);
+        unlinkButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                unlinkGoogleAccount();
+            }
+        });
+        updateLinkButtons();
+
         return view;
     }
 
@@ -91,4 +117,55 @@ public class Settings extends Fragment {
         public void onThemeSelected(Theme.ThemeType newTheme);
     }
 
+    public void linkGoogleAccount() {
+        Intent intent = new Intent(getContext(), GoogleLinkCredentials.class);
+        startActivityForResult(intent, RC_LINK_GOOGLE);
+    }
+
+    public void unlinkGoogleAccount() {
+        Intent intent = new Intent(getContext(), GoogleUnLinkCredentials.class);
+        startActivityForResult(intent, RC_UNLINK_GOOGLE);
+    }
+
+    public void updateLinkButtons() {
+        LoginManager loginManager = LoginManagerFactory.getInstance();
+
+        if (loginManager.userCanLoginWithEmail()
+                && loginManager.userCanLoginWithGoogle()) {
+            unlinkButton.setVisibility(View.VISIBLE);
+        } else {
+            unlinkButton.setVisibility(View.INVISIBLE);
+        }
+
+        if (loginManager.userCanLoginWithEmail()
+                && !loginManager.userCanLoginWithGoogle()) {
+            linkButton.setVisibility(View.VISIBLE);
+        } else {
+            linkButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from linkWithGoogleAccount()
+        if (requestCode == RC_LINK_GOOGLE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String message = data.getStringExtra("googleLink.message");
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+            updateLinkButtons();
+        }
+
+        // Result returned from unlinkWithGoogleAccount()
+        if (requestCode == RC_UNLINK_GOOGLE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getContext(), "unlink successful!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(getContext(), "sorry, unable to proceed", Toast.LENGTH_SHORT).show();
+            }
+            updateLinkButtons();
+        }
+    }
 }
