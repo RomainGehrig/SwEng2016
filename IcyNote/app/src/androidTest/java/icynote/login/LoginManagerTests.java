@@ -1,31 +1,31 @@
 package icynote.login;
 
-import android.net.Uri;
 import android.support.test.rule.UiThreadTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.Scope;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import icynote.login.LoginManager.Callback;
-import icynote.login.LoginManager.Callback2;
+import icynote.ui.GoogleSignIn;
+import util.Callback;
+import util.Callback2;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 
+@SuppressWarnings("ClassWithTooManyMethods")
 @RunWith(AndroidJUnit4.class)
 public class LoginManagerTests {
     private LoginManager manager = null;
@@ -144,7 +144,31 @@ public class LoginManagerTests {
 
     @Test
     public void onLogoutNullArgument() throws Throwable {
-        manager.onLogout(null);
+        manager.onLogout(null); //should not throw any exception
+    }
+
+    @Test
+    public void userCanLoginWithTest() throws Throwable {
+        create(true);
+        assertTrue("creation => login", manager.userIsLoggedIn());
+
+        assertTrue("can login with email", manager.userCanLoginWithEmail());
+        assertFalse("can login with google", manager.userCanLoginWithGoogle());
+
+        delete();
+        assertFalse("deletion => logout", manager.userIsLoggedIn());
+    }
+
+
+    @Test
+    public void unlinkGoogleWhenNotLinkedTest() throws Throwable {
+        create(true);
+        assertTrue("creation => login", manager.userIsLoggedIn());
+
+        assertTrue(manager.unlinkGoogleAccount());
+
+        delete();
+        assertFalse("deletion => logout", manager.userIsLoggedIn());
     }
 
 
@@ -177,6 +201,23 @@ public class LoginManagerTests {
                                 latch.countDown();
                             }
                         });
+            }
+        });
+        latch.await();
+    }
+
+    private void login(final GoogleSignInAccount a, final Boolean expected) throws Throwable {
+        final CountDownLatch latch = new CountDownLatch(1);
+        uiThreadTestRule.runOnUiThread(new Runnable() {
+            public void run() {
+                manager.onLogin(null);
+                manager.login(a, new Callback2<Boolean, String>(){
+                    @Override
+                    public void execute(Boolean success, String error) {
+                        assertEquals("login [" + error + "]", expected, success);
+                        latch.countDown();
+                    }
+                });
             }
         });
         latch.await();
@@ -245,6 +286,4 @@ public class LoginManagerTests {
         });
         latch.await();
     }
-
-
 }

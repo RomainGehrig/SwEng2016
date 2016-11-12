@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="icynote.ui">
 
-
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="false"
@@ -11,21 +10,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="icynote.ui.LoginMenu">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        <activity android:name=".LoginMenu">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name="icynote.ui.GoogleSignIn"
-            android:label="@string/label_google_sign_in" />
-        <activity
-            android:name="icynote.ui.EmailPasswordLogin"
-            android:label="@string/label_emailpassword"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
-        <activity android:name="icynote.ui.MainActivity" />
+        <activity
+            android:name=".EmailPasswordLogin"
+            android:label="@string/label_emailpassword"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <activity android:name=".GoogleSignIn"/>
+        <activity android:name=".SignOut"/>
+        <activity android:name=".GoogleLinkCredentials"/>
+        <activity android:name=".GoogleUnLinkCredentials"/>
+        <activity android:name=".MainActivity"/>
     </application>
+
 </manifest>
