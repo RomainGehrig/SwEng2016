@@ -1,12 +1,10 @@
 package icynote.ui;
 
 import android.content.Context;
-<<<<<<< HEAD
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextThemeWrapper;
-=======
 import android.content.CursorLoader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,29 +13,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
->>>>>>> origin/core_PoC
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 
 import icynote.core.IcyNoteCore;
 import icynote.core.Note;
-import icynote.core.impl.CoreFactory;
 import icynote.loaders.NotesLoader;
-import icynote.storage.ListStorage;
 
 import static util.ArgumentChecker.requireNonNull;
 
-public class NotesList extends Fragment implements LoaderManager.LoaderCallbacks<Iterable<Note>> {
+public class NotesList extends FragmentWithCoreAndLoader implements LoaderManager.LoaderCallbacks<Iterable<Note>> {
     private static final String TAG = "NotesList";
     private Loader<Iterable<Note>> loader;
-    private LoaderManager loaderManager;
-    private IcyNoteCore core;
-
-    public void setLoaderManager(LoaderManager loaderManager) {
-        this.loaderManager = requireNonNull(loaderManager);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +40,7 @@ public class NotesList extends Fragment implements LoaderManager.LoaderCallbacks
     @Override
     public void onResume() {
         super.onResume();
-        loaderManager.initLoader(1, null, this);
+        getThisLoaderManager().initLoader(1, null, this);
     }
 
     @Override
@@ -68,12 +56,6 @@ public class NotesList extends Fragment implements LoaderManager.LoaderCallbacks
         return localInflater.inflate(R.layout.fragment_notes_list, container, false);
     }
 
-<<<<<<< HEAD
-=======
-    public void setCore(IcyNoteCore core) {
-        this.core = core;
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -84,7 +66,6 @@ public class NotesList extends Fragment implements LoaderManager.LoaderCallbacks
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
->>>>>>> origin/core_PoC
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
@@ -99,7 +80,7 @@ public class NotesList extends Fragment implements LoaderManager.LoaderCallbacks
     public Loader<Iterable<Note>> onCreateLoader(int id, Bundle args) {
         // TODO: indicate we are now waiting for the note
         Log.i(TAG, "Loader initialized");
-        loader = new NotesLoader(getContext(), core);
+        loader = new NotesLoader(getContext(), getCore());
         return loader;
     }
 
@@ -110,6 +91,7 @@ public class NotesList extends Fragment implements LoaderManager.LoaderCallbacks
         for(Note n: data) {
             Log.i(TAG, "Note: " + n.getTitle() + ", " + n.getContent() + ", " + n.getId());
         }
+        Log.i(TAG, "END");
     }
 
     @Override

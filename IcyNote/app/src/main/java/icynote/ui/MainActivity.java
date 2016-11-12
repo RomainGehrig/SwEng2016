@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.view.GravityCompat;
@@ -23,15 +24,59 @@ import icynote.login.LoginManagerFactory;
 
 import icynote.core.IcyNoteCore;
 import icynote.core.Note;
-import icynote.core.impl.CoreFactory;
-import icynote.storage.ListStorage;
-import util.Optional;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Settings.OnSpinnerSelection {
 
     private static final String TAG = "MainActivity";
     private IcyNoteCore core;
+
+    private enum FragmentID {
+        EditTags(EditTags.class), EditNote(EditNote.class, true),
+        Settings(Settings.class), MetadataNote(MetadataNote.class),
+        NotesList(NotesList.class, true);
+
+        private final Class fragmentClass;
+        private final boolean needCoreAndLoader;
+
+        FragmentID(Class fragmentClass) {
+            this(fragmentClass, false);
+        }
+
+        FragmentID(Class fragmentClass, boolean needCoreAndLoader) {
+            this.fragmentClass = fragmentClass;
+            this.needCoreAndLoader = needCoreAndLoader;
+        }
+
+        public Fragment instantiateFragment() {
+            Fragment fragment = null;
+
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (IllegalAccessException e) {
+            } catch (InstantiationException e) {
+            }
+
+            return fragment;
+        }
+        public Fragment instantiateFragment(IcyNoteCore core, LoaderManager loaderManager) {
+            if (!needCoreAndLoader) {
+                return instantiateFragment();
+            }
+
+            Fragment fragment = null;
+            try {
+                FragmentWithCoreAndLoader tmpFragment = (FragmentWithCoreAndLoader) fragmentClass.newInstance();
+                tmpFragment.setCore(core);
+                tmpFragment.setLoaderManager(loaderManager);
+                fragment = tmpFragment;
+            } catch (IllegalAccessException e) {
+            } catch (InstantiationException e) {
+            }
+
+            return fragment;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +85,7 @@ public class MainActivity extends AppCompatActivity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
-        Log.i(TAG, "Initialization of the core");
-        core = CoreFactory.core(new ListStorage());
-        for (int i=0; i<5; i++){
-            Note note = core.createNote().get();
-            note.setTitle("OMG TITLE " + i);
-            note.setContent("OMG CONTENT " + i);
-            core.persist(note);
-        }
-
+        core = CoreSingleton.getCore();
         //todo: move this into an Application subclass
         LoginManager.Callback logOutCallback = new LoginManager.Callback() {
             public void execute() {
@@ -60,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         };
         LoginManagerFactory.getInstance().onLogout(logOutCallback);
 
-        openFragment(NotesList.class);
+        openFragment(FragmentID.EditNote);
     }
 
     private void hideSoftKeyboard() {
@@ -74,7 +111,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
         view.setNavigationItemSelectedListener(this);
     }
-
 
     public void toggleMenu(View view) {
         Log.i("sidebar", "display");
@@ -91,14 +127,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.menuAllNotes) {
-            openFragment(NotesList.class, getSupportLoaderManager(), core);
+            openFragment(FragmentID.NotesList);
         } else if (id == R.id.menuTagEdition) {
-            openFragment(EditTags.class);
-
+            openFragment(FragmentID.EditTags);
         } else if (id == R.id.menuTrash) {
-            openFragment(EditNote.class);
+            openFragment(FragmentID.EditNote);
         } else if (id == R.id.menuSettings) {
-            openFragment(Settings.class);
+            openFragment(FragmentID.Settings);
         } else if (id == R.id.menuLogout) {
             LoginManagerFactory.getInstance().logout();
         }
@@ -107,54 +142,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void openSettings(View view) {
-        openFragment(MetadataNote.class);
+        openFragment(FragmentID.MetadataNote);
     }
 
 
     public void backToNote(View view) {
-        openFragment(EditNote.class);
+        openFragment(FragmentID.EditNote);
     }
 
-
-    // ----- COLOR SETTINGS DEV BLOCK
-    public enum ColorSetting {
-        DARK, BRIGHT
-    }
-
-    /**
-     * FIXME: Temp function to add a loader manager
-     */
-    public void openFragment(Class fragmentClass, LoaderManager loaderManager, IcyNoteCore core) {
-        NotesList fragment = null;
-
-        try {
-            fragment = (NotesList) fragmentClass.newInstance();
-        } catch (InstantiationException e) {
-            // e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // e.printStackTrace();
-        }
-
-        fragment.setLoaderManager(loaderManager);
-        fragment.setCore(core);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
-        drawer.closeDrawer(GravityCompat.START);
-
-    }
-
-    public void openFragment(Class fragmentClass) {
+    public void openFragment(FragmentID fragmentID) {
         Fragment fragment = null;
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (InstantiationException e) {
-
-        } catch (IllegalAccessException e) {
-
+        if (fragmentID.needCoreAndLoader) {
+            fragment = fragmentID.instantiateFragment(core, getSupportLoaderManager());
+        } else {
+            fragment = fragmentID.instantiateFragment();
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -162,12 +163,13 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
+
     }
 
     @Override
     public void onThemeSelected(Theme.ThemeType currentTheme)
     {
-        openFragment(Settings.class);
+        openFragment(FragmentID.Settings);
     }
 
 }

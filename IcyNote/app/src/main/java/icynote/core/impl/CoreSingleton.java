@@ -93,6 +93,7 @@ public final class CoreSingleton {
                 Note n = c.createNote().get();
                 n.setTitle(titles[i]);
                 n.setContent(contents[i]);
+                c.persist(n);
             }
         }
     }
