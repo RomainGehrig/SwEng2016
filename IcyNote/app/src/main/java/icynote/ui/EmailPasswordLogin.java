@@ -9,15 +9,16 @@ import android.widget.Toast;
 
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
+import util.Callback2;
 
 public class EmailPasswordLogin extends ActivityWithProgressDialog implements
         View.OnClickListener {
 
     private static final String TAG = "icynote.ui.EmailPass";
 
-    private LoginManager loginManager;
-    private EditText mEmailField;
-    private EditText mPasswordField;
+    private LoginManager mLoginManager = null;
+    private EditText mEmailField = null;
+    private EditText mPasswordField = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
 
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
-        loginManager = LoginManagerFactory.getInstance();
+        mLoginManager = LoginManagerFactory.getInstance();
 
         findViewById(R.id.email_sign_in_button).setOnClickListener(this);
         findViewById(R.id.email_create_account_button).setOnClickListener(this);
@@ -37,22 +38,24 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
             Log.d(TAG, message);
         }
     }
-    private class SignInCallback extends LoginManager.Callback2<Boolean, String>{
-        private String id;
+    private class SignInCallback extends Callback2<Boolean, String> {
+        private final String id;
 
-        public SignInCallback(String loginOrSignin) {
-            id = loginOrSignin;
+        SignInCallback(String logInOrSignIn) {
+            id = logInOrSignIn;
         }
 
+        @SuppressWarnings("ParameterNameDiffersFromOverriddenParameter")
         @Override
         public void execute(Boolean successful, String errorMessage) {
             log(id + ":onComplete:" + successful);
 
-            // If sign in fails, display a message to the user. If sign in succeeds
-            // the auth state listener will be notified and logic to handle the
-            // signed in user can be handled in the listener.
             if (!successful) {
                 Toast.makeText(EmailPasswordLogin.this, errorMessage, Toast.LENGTH_SHORT).show();
+            } else {
+                // Note: the onLoginSuccess callback will be notified. It handles the transition
+                //       to the next activity.
+                Toast.makeText(EmailPasswordLogin.this, "local sign in success", Toast.LENGTH_SHORT).show();
             }
 
             hideProgressDialog();
@@ -63,7 +66,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
         log("createAccount:" + email);
         if (validateForm()) {
             showProgressDialog();
-            loginManager.createAccount(email, password, new SignInCallback("createUserWithEmail"));
+            mLoginManager.createAccount(email, password, new SignInCallback("createUserWithEmail"));
         }
     }
 
@@ -71,7 +74,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
         log("signIn:" + email);
         if (validateForm()) {
             showProgressDialog();
-            loginManager.login(email, password, new SignInCallback("signInWithEmail"));
+            mLoginManager.login(email, password, new SignInCallback("signInWithEmail"));
         }
     }
 

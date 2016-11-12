@@ -8,6 +8,7 @@ import android.view.View;
 import icynote.core.impl.CoreSingleton;
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
+import util.Callback;
 
 
 /**
@@ -16,7 +17,6 @@ import icynote.login.LoginManagerFactory;
  *  @see GoogleSignIn
  *  @see EmailPasswordLogin
  *  @author Julien Harbulot
- *  @author Kim Lan Phan Hoang
  *  @version 1.0
  *
  */
@@ -27,23 +27,7 @@ public class LoginMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chooser);
 
-        //todo: move this into an Application subclass
-        LoginManager.Callback callback = new LoginManager.Callback() {
-            public void execute() {
-
-                String uuid = LoginManagerFactory.getInstance().getCurrentUserUID();
-                CoreSingleton.login(uuid);
-
-                Intent intent = new Intent(LoginMenu.this, MainActivity.class);
-                startActivity(intent);
-            }
-        };
-        LoginManagerFactory.getInstance().onLogin(callback);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+        LoginManagerFactory.getInstance().onLogin(new OnLoginSuccessCallback());
     }
 
     public void localSignIn(View v) {
@@ -52,5 +36,20 @@ public class LoginMenu extends AppCompatActivity {
 
     public void googleSignIn(View v) {
         startActivity(new Intent(this, GoogleSignIn.class));
+    }
+
+    private class OnLoginSuccessCallback extends Callback {
+        @Override
+        public void execute() {
+            LoginManager loginManager = LoginManagerFactory.getInstance();
+
+            String uuid = loginManager.getCurrentUserUID();
+            CoreSingleton.login(uuid);
+
+            loginManager.onLogout(SignOut.getSignOutCallback(LoginMenu.this));
+
+            Intent intent = new Intent(LoginMenu.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 }

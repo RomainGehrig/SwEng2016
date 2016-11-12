@@ -1,7 +1,6 @@
 package icynote.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,10 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
-import icynote.core.impl.CoreSingleton;
-import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
 
 public class MainActivity extends AppCompatActivity
@@ -31,20 +27,18 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
 
-        //todo: move this into an Application subclass
-        LoginManager.Callback logOutCallback = new LoginManager.Callback() {
-            public void execute() {
-                CoreSingleton.logout();
-                Toast.makeText(MainActivity.this, "bye bye!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, LoginMenu.class);
-                startActivity(intent);
-            }
-        };
-        LoginManagerFactory.getInstance().onLogout(logOutCallback);
-
         openFragment(NotesList.class);
     }
-
+/*
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.r_main);
+    ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expandableListView1);
+    LayoutInflater li = getLayoutInflater();
+    String[][] data = {{"child-1", "child-2", "child-3"},{"child-1", "child-2", "child-3"}};
+    expandableListView.setAdapter(new SampleExpandableListAdapter(li, data));
+}*/
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Activity.INPUT_METHOD_SERVICE);
@@ -88,6 +82,7 @@ public class MainActivity extends AppCompatActivity
             openFragment(Settings.class);
 
         } else if (id == R.id.menuLogout) {
+            Log.d("MainActivity", "menuLogout");
             LoginManagerFactory.getInstance().logout();
         }
 
