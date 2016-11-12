@@ -37,16 +37,10 @@ public class NotesListTest extends ActivityInstrumentationTestCase2<BlankActivit
         final Context context = InstrumentationRegistry.getTargetContext();
         mActivity = getActivity();
 
-        // instanciate fragment EditNote into MainActivity
-        Fragment fragment = (Fragment) NotesList.class.newInstance();
+        // instantiate fragment EditNote into MainActivity
+        Fragment fragment = new NotesList();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragmentFrame, fragment).commit();
 
     }
-
-    @Test
-    public void test() {
-
-    }
-
 }
