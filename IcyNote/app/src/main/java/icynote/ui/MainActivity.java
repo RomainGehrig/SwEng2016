@@ -82,10 +82,18 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
         core = CoreSingleton.getCore();
-
         openFragment(FragmentID.NotesList);
     }
-
+/*
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.r_main);
+    ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expandableListView1);
+    LayoutInflater li = getLayoutInflater();
+    String[][] data = {{"child-1", "child-2", "child-3"},{"child-1", "child-2", "child-3"}};
+    expandableListView.setAdapter(new SampleExpandableListAdapter(li, data));
+}*/
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Activity.INPUT_METHOD_SERVICE);
