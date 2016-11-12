@@ -1,6 +1,5 @@
 package icynote.ui;
 
-import static icynote.ui.NotesList.notes;
 import static org.mockito.Mockito.*;
 
 import android.content.Context;
@@ -58,7 +57,6 @@ public class EditNoteTest extends ActivityInstrumentationTestCase2<BlankActivity
         bundle.putInt("id",0);
 
         note = mock(Note.class);
-        notes.add(note);
 
         // instanciate fragment EditNote into MainActivity
         Fragment fragment = (Fragment) EditNote.class.newInstance();
