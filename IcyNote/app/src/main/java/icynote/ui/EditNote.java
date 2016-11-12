@@ -3,17 +3,24 @@ package icynote.ui;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
+
+import java.util.Arrays;
+import java.util.List;
+
+import me.gujun.android.taggroup.TagGroup;
 
 import icynote.core.Note;
 import icynote.loaders.NoteLoader;
@@ -25,7 +32,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     private static final String KEY_NOTE_ID = "note_id";
     private TagGroup mDefaultTagGroup;
 
-    private String[] tags = {}; // initialize tags here
+    private String[] tags = {"1", "2", "3"}; // initialize tags here
 
     public EditNote() {
         // Required empty public constructor
@@ -38,10 +45,11 @@ public class EditNote extends FragmentWithCoreAndLoader implements
             //retrieveNote(savedInstanceState.getInt(KEY_NOTE_ID));
         }
 
+        /* Crash the app when setting tags
         mDefaultTagGroup = (TagGroup) getActivity().findViewById(R.id.noteDisplayTagsText);
         if (tags != null && tags.length > 0) {
             mDefaultTagGroup.setTags(tags);
-        }
+        }*/
     }
 
     @Override
@@ -62,14 +70,60 @@ public class EditNote extends FragmentWithCoreAndLoader implements
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
         // inflate the layout using the cloned inflater, not default inflater
-        View v = localInflater.inflate(R.layout.fragment_edit_note, container, false);
+        View view = localInflater.inflate(R.layout.fragment_edit_note, container, false);
 
-        EditText titleTextView = (EditText)v.findViewById(R.id.noteDisplayTitleText);
+        mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
+        if (tags != null && tags.length > 0) {
+            mDefaultTagGroup.setTags(tags);
+        }
+
+        mDefaultTagGroup.setOnTagChangeListener(new TagGroup.OnTagChangeListener() {
+            @Override
+            public void onAppend( TagGroup tagGroup, String tag) {
+                String[] allTags = tagGroup.getTags();
+
+                if(containsNotLast(allTags, tag)){
+                    tagGroup.setBackgroundColor(Color.BLACK);
+                } else {
+                    tagGroup.setBackgroundColor(Color.WHITE);
+                }
+            }
+
+            @Override
+            public void onDelete(TagGroup tagGroup, String tag) {
+                // ---
+            }
+        } );
+
+        // does nothing
+        mDefaultTagGroup.setOnKeyListener( new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ( event.getAction()==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_A) {
+                    Log.d("key", "press");
+                    ((TagGroup)v.findViewById(R.id.noteDisplayTagsText)).submitTag();
+                    return true;
+                }
+                return false;
+            }
+        } );
+
+        EditText titleTextView = (EditText)view.findViewById(R.id.noteDisplayTitleText);
         titleTextView.setTextColor(Theme.getTheme().getTextColor());
-        EditText mainTextView = (EditText)v.findViewById(R.id.noteDisplayBodyText);
+        EditText mainTextView = (EditText)view.findViewById(R.id.noteDisplayBodyText);
         mainTextView.setTextColor(Theme.getTheme().getTextColor());
 
-        return v;
+        return view;
+    }
+
+    private boolean containsNotLast(String[] l, String t){
+        List<String> e = Arrays.asList(l).subList(0, l.length-1);
+        for(String s: e){
+            if(s.equals(t)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
