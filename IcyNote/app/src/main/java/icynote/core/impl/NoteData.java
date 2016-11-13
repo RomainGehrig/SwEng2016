@@ -1,8 +1,5 @@
 package icynote.core.impl;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.GregorianCalendar;
 
 import icynote.core.Note;
@@ -18,20 +15,7 @@ import icynote.core.Response;
  * @version 1.0
  */
 @SuppressWarnings("UseOfClone")
-public class NoteData implements Note, Parcelable {
-
-    public static final Parcelable.Creator<NoteData> CREATOR = new Parcelable.Creator<NoteData>() {
-        @Override
-        public NoteData createFromParcel(Parcel source) {
-            return new NoteData(source);
-        }
-
-        @Override
-        public NoteData[] newArray(int size) {
-            return new NoteData[size];
-        }
-    };
-
+public class NoteData implements Note {
     private int id = 0;
     private String title = "";
     private String content = "";
@@ -48,15 +32,6 @@ public class NoteData implements Note, Parcelable {
         content = toCopy.getContent();
         creation = toCopy.getCreation();
         lastUpdate = toCopy.getLastUpdate();
-    }
-
-
-    public NoteData(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-        content = in.readString();
-        creation = (GregorianCalendar)in.readSerializable();
-        lastUpdate = (GregorianCalendar)in.readSerializable();
     }
 
     @Override
@@ -118,19 +93,5 @@ public class NoteData implements Note, Parcelable {
     public Response setLastUpdate(GregorianCalendar lastUpdateDate) {
         lastUpdate = lastUpdateDate;
         return ResponseFactory.positiveResponse();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(title);
-        dest.writeString(content);
-        dest.writeSerializable(creation);
-        dest.writeSerializable(lastUpdate);
     }
 }
