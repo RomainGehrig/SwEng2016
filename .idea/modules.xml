@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/I_sprint5.iml" filepath="$PROJECT_DIR$/I_sprint5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/I_settings.iml" filepath="$PROJECT_DIR$/I_settings.iml" />
       <module fileurl="file://$PROJECT_DIR$/IcyNote/IcyNote.iml" filepath="$PROJECT_DIR$/IcyNote/IcyNote.iml" />
       <module fileurl="file://$PROJECT_DIR$/IcyNote/app/app.iml" filepath="$PROJECT_DIR$/IcyNote/app/app.iml" />
     </modules>

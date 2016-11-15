@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Style.initStyle();
         super.onCreate(savedInstanceState);
         Theme.initTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
