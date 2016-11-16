@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="settings_main">
+
+    <PreferenceCategory
+        android:title="General"
+        android:key="general_group">
+        <SwitchPreference
+            android:key="dark_theme"
+            android:summary="enable dark theme"
+            android:title="Dark Theme"
+            android:defaultValue="false" />
+        <ListPreference
+            android:key="select_sort_by"
+            android:summary="set sorting for list of notes"
+            android:title="Sort by"
+            android:defaultValue="0"
+            android:entries="@array/sort_by"
+            android:entryValues="@array/sort_by_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"/>
+        <ListPreference
+            android:key="select_sort_order"
+            android:summary="set sorting ascending / descending"
+            android:title="Sort order"
+            android:defaultValue="1"
+            android:entries="@array/sort_order"
+            android:entryValues="@array/sort_order_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Account"
+        android:key="account_group">
+        <PreferenceScreen
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:key="account_settings"
+            android:summary="adjust account settings"
+            android:title="Account">
+            <Preference
+                android:key="account_link"
+                android:title="Link account with google"/>
+            <Preference
+                android:key="account_unlink"
+                android:title="Unlink account with google"/>
+            <Preference
+                android:key="account_passsword"
+                android:title="Generate password"/>
+            <Preference
+                android:key="account_delete"
+                android:title="Delete current account"/>
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Account"
+        android:key="account_group">
+        <PreferenceScreen
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:key="account_settings"
+            android:summary="adjust account settings"
+            android:title="Account">
+            <SwitchPreference
+                android:key="switch_1" />
+            <SwitchPreference
+                android:key="switch_2"/>
+            <SwitchPreference
+                android:key="switch_3"/>
+            <SwitchPreference
+                android:key="switch_4"/>
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>
