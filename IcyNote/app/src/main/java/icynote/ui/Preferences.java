@@ -7,6 +7,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.SwitchPreference;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Switch;
 
@@ -25,9 +26,12 @@ public class Preferences extends PreferenceActivity {
     private ListPreference orderByPref;
     private ListPreference orderTypePref;
 
-    private Preference linkPref;
-    private Preference unlinkPref;
-    private Preference emailPref;
+    //private Preference linkPref;
+    //private Preference unlinkPref;
+    //private Preference emailPref;
+
+    private Preference accountPref;
+
     private Preference deleteAccPref;
 
     @Override
@@ -86,6 +90,7 @@ public class Preferences extends PreferenceActivity {
             }
         });
 
+        /*
         linkPref = findPreference("account_link");
         linkPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -109,6 +114,43 @@ public class Preferences extends PreferenceActivity {
                 return true;
             }
         });
+        */
+
+        accountPref = findPreference("account_action");
+        LoginManager loginManager = LoginManagerFactory.getInstance();
+        if(loginManager.userCanLoginWithEmail()){
+            if(loginManager.userCanLoginWithGoogle()){
+                setAccountPref("Unlink account from google", 1);
+                /*
+                accountPref.setTitle("Unlink account from google");
+                accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    public boolean onPreferenceClick(Preference preference) {
+                        unlinkGoogleAccount();
+                        return true;
+                    }
+                });*/
+            } else {
+                setAccountPref("Link account with google", 0);
+                /*
+                accountPref.setTitle("Link account with google");
+                accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    public boolean onPreferenceClick(Preference preference) {
+                        linkGoogleAccount();
+                        return true;
+                    }
+                });*/
+            }
+        } else {
+            setAccountPref("Generate password", 2);
+            /*
+            accountPref.setTitle("Generate password");
+            accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    generatePassword();
+                    return true;
+                }
+            });*/
+        }
 
         deleteAccPref = findPreference("account_delete");
         deleteAccPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -118,9 +160,10 @@ public class Preferences extends PreferenceActivity {
             }
         });
 
-        updateLinkButtons();
+        //updateLinkButtons();
     }
 
+    /*
     public void updateLinkButtons() {
         LoginManager loginManager = LoginManagerFactory.getInstance();
 
@@ -139,7 +182,36 @@ public class Preferences extends PreferenceActivity {
             linkPref.setEnabled(false);
         }
     }
+    */
 
+    public void setAccountPref(String title, final int mode) {
+        accountPref.setTitle(title);
+        accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                execAccountAction(mode);
+                return true;
+            }
+        });
+    }
+
+    public void execAccountAction(int mode){
+        Intent intent = new Intent(this, GoogleLinkCredentials.class);
+        switch (mode){
+            case 0:
+                startActivityForResult(intent, RC_LINK_GOOGLE);
+                break;
+            case 1:
+                startActivityForResult(intent, RC_UNLINK_GOOGLE);
+                break;
+            case 2:
+                // TODO
+                break;
+            default:
+                break;
+        }
+    }
+
+    /*
     public void linkGoogleAccount() {
         Intent intent = new Intent(this, GoogleLinkCredentials.class);
         startActivityForResult(intent, RC_LINK_GOOGLE);
@@ -153,6 +225,7 @@ public class Preferences extends PreferenceActivity {
     public void generatePassword() {
         // TODO
     }
+    */
 
     public void deleteAccount() {
         // TODO
