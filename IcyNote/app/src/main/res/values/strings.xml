@@ -62,9 +62,9 @@
     </string-array>
 
     <string-array name="sort_by_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
+        <item>TITLE</item>
+        <item>CREATION</item>
+        <item>LAST_MOD</item>
     </string-array>
 
     <string-array name="sort_order">
@@ -73,8 +73,8 @@
     </string-array>
 
     <string-array name="sort_order_values">
-        <item>0</item>
-        <item>1</item>
+        <item>ASC</item>
+        <item>DSC</item>
     </string-array>
 
 </resources>
