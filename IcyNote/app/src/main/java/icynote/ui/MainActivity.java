@@ -1,6 +1,7 @@
 package icynote.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -136,7 +137,9 @@ public void onCreate(Bundle savedInstanceState) {
         } else if (id == R.id.menuTrash) {
             openFragment(FragmentID.EditNote);
         } else if (id == R.id.menuSettings) {
-            openFragment(FragmentID.Settings);
+            //openFragment(FragmentID.Settings);
+            Intent intent = new Intent(this, Preferences.class);
+            startActivity(intent);
         } else if (id == R.id.menuLogout) {
             Log.d("MainActivity", "menuLogout");
             LoginManagerFactory.getInstance().logout();

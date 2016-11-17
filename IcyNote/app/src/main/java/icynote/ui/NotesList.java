@@ -3,6 +3,7 @@ package icynote.ui;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -66,7 +67,6 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_notes_list, container, false);
 
         listView = (ListView) view.findViewById(R.id.lvNotes);
@@ -111,7 +111,8 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                OrderBy choice = (OrderBy) parent.getItemAtPosition(position);
+                //OrderBy choice = (OrderBy) parent.getItemAtPosition(position);
+                OrderBy choice = CurrentPreferences.getOrderBy();
                 switch(choice)
                 {
                     case TITLE:
@@ -122,14 +123,14 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
                             }
                         });
                         break;
-                    case TITLE_DOWN:
+                    /*case TITLE_DOWN:
                         notesAdapter.sort(new Comparator<Note>() {
                             @Override
                             public int compare(Note note1, Note note2) {
                                 return note2.getTitle().compareTo(note1.getTitle());
                             }
                         });
-                        break;
+                        break;*/
                     case CREATION:
                         notesAdapter.sort(new Comparator<Note>() {
                             @Override
