@@ -36,6 +36,7 @@
             android:key="account_settings"
             android:summary="adjust account settings"
             android:title="Account">
+            <!--
             <Preference
                 android:key="account_link"
                 android:title="Link account with google"/>
@@ -45,6 +46,9 @@
             <Preference
                 android:key="account_passsword"
                 android:title="Generate password"/>
+                -->
+            <Preference
+                android:key="account_action" />
             <Preference
                 android:key="account_delete"
                 android:title="Delete current account"/>
