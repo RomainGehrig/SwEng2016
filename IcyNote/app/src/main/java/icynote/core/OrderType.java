@@ -8,5 +8,21 @@ package icynote.core;
  * @see icynote.core.IcyNoteCore#getNotes(OrderBy, OrderType)
  */
 public enum OrderType {
-    ASC, DSC
+    ASC {
+        @Override
+        public String toString() {
+            return "ASC";
+        }
+    },
+    DSC {
+        @Override
+        public String toString() {
+            return "DSC";
+        }
+    };
+
+    @Override
+    public String toString() {
+        return "ASC";
+    }
 }

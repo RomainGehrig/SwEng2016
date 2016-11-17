@@ -9,22 +9,19 @@
         <SwitchPreference
             android:key="dark_theme"
             android:summary="enable dark theme"
-            android:title="Dark Theme"
-            android:defaultValue="false" />
+            android:title="Dark Theme"/>
         <ListPreference
             android:key="select_sort_by"
             android:summary="set sorting for list of notes"
             android:title="Sort by"
-            android:defaultValue="0"
             android:entries="@array/sort_by"
             android:entryValues="@array/sort_by_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"/>
         <ListPreference
-            android:key="select_sort_order"
+            android:key="select_sort_type"
             android:summary="set sorting ascending / descending"
             android:title="Sort order"
-            android:defaultValue="1"
             android:entries="@array/sort_order"
             android:entryValues="@array/sort_order_values"
             android:negativeButtonText="@null"
@@ -55,13 +52,13 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Account"
-        android:key="account_group">
+        android:title="Plugin"
+        android:key="plugin_group">
         <PreferenceScreen
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:key="account_settings"
-            android:summary="adjust account settings"
-            android:title="Account">
+            android:key="plugin_settings"
+            android:summary="adjust plugin settings"
+            android:title="Plugin">
             <SwitchPreference
                 android:key="switch_1" />
             <SwitchPreference
