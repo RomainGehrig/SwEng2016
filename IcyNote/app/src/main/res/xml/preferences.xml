@@ -9,10 +9,12 @@
         <SwitchPreference
             android:key="dark_theme"
             android:summary="enable dark theme"
+            android:defaultValue="false"
             android:title="Dark Theme"/>
         <ListPreference
             android:key="select_sort_by"
             android:summary="set sorting for list of notes"
+            android:defaultValue="TITLE"
             android:title="Sort by"
             android:entries="@array/sort_by"
             android:entryValues="@array/sort_by_values"
@@ -21,6 +23,7 @@
         <ListPreference
             android:key="select_sort_type"
             android:summary="set sorting ascending / descending"
+            android:defaultValue="ASC"
             android:title="Sort order"
             android:entries="@array/sort_order"
             android:entryValues="@array/sort_order_values"
@@ -36,17 +39,6 @@
             android:key="account_settings"
             android:summary="adjust account settings"
             android:title="Account">
-            <!--
-            <Preference
-                android:key="account_link"
-                android:title="Link account with google"/>
-            <Preference
-                android:key="account_unlink"
-                android:title="Unlink account with google"/>
-            <Preference
-                android:key="account_passsword"
-                android:title="Generate password"/>
-                -->
             <Preference
                 android:key="account_action" />
             <Preference
@@ -63,14 +55,6 @@
             android:key="plugin_settings"
             android:summary="adjust plugin settings"
             android:title="Plugin">
-            <SwitchPreference
-                android:key="switch_1" />
-            <SwitchPreference
-                android:key="switch_2"/>
-            <SwitchPreference
-                android:key="switch_3"/>
-            <SwitchPreference
-                android:key="switch_4"/>
         </PreferenceScreen>
     </PreferenceCategory>
 

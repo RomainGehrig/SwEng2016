@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Switch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import icynote.core.OrderBy;
 import icynote.core.OrderType;
@@ -26,9 +30,7 @@ public class Preferences extends PreferenceActivity {
     private ListPreference orderByPref;
     private ListPreference orderTypePref;
 
-    //private Preference linkPref;
-    //private Preference unlinkPref;
-    //private Preference emailPref;
+    private PreferenceScreen pluginPref;
 
     private Preference accountPref;
 
@@ -42,7 +44,6 @@ public class Preferences extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences);
 
         darkThemePref = (SwitchPreference) findPreference("dark_theme");
-        darkThemePref.setDefaultValue(Theme.getTheme() == Theme.ThemeType.DARK);
         darkThemePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -56,7 +57,6 @@ public class Preferences extends PreferenceActivity {
         });
 
         orderByPref = (ListPreference) findPreference("select_sort_by");
-        orderByPref.setDefaultValue(CurrentPreferences.getOrderBy().toString());
         orderByPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -77,7 +77,6 @@ public class Preferences extends PreferenceActivity {
         });
 
         orderTypePref = (ListPreference) findPreference("select_sort_type");
-        orderTypePref.setDefaultValue(CurrentPreferences.getOrderType().toString());
         orderTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -90,66 +89,16 @@ public class Preferences extends PreferenceActivity {
             }
         });
 
-        /*
-        linkPref = findPreference("account_link");
-        linkPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                linkGoogleAccount();
-                return true;
-            }
-        });
-
-        unlinkPref = findPreference("account_unlink");
-        unlinkPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                unlinkGoogleAccount();
-                return true;
-            }
-        });
-
-        emailPref = findPreference("account_passsword");
-        emailPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                generatePassword();
-                return true;
-            }
-        });
-        */
-
         accountPref = findPreference("account_action");
         LoginManager loginManager = LoginManagerFactory.getInstance();
         if(loginManager.userCanLoginWithEmail()){
             if(loginManager.userCanLoginWithGoogle()){
                 setAccountPref("Unlink account from google", 1);
-                /*
-                accountPref.setTitle("Unlink account from google");
-                accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    public boolean onPreferenceClick(Preference preference) {
-                        unlinkGoogleAccount();
-                        return true;
-                    }
-                });*/
             } else {
                 setAccountPref("Link account with google", 0);
-                /*
-                accountPref.setTitle("Link account with google");
-                accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    public boolean onPreferenceClick(Preference preference) {
-                        linkGoogleAccount();
-                        return true;
-                    }
-                });*/
             }
         } else {
             setAccountPref("Generate password", 2);
-            /*
-            accountPref.setTitle("Generate password");
-            accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                public boolean onPreferenceClick(Preference preference) {
-                    generatePassword();
-                    return true;
-                }
-            });*/
         }
 
         deleteAccPref = findPreference("account_delete");
@@ -160,29 +109,30 @@ public class Preferences extends PreferenceActivity {
             }
         });
 
-        //updateLinkButtons();
-    }
+        List<String> plugins = new ArrayList<>();
+        plugins.add("plugin 1");
+        plugins.add("plugin 2");
+        plugins.add("plugin 3");
 
-    /*
-    public void updateLinkButtons() {
-        LoginManager loginManager = LoginManagerFactory.getInstance();
-
-        if(loginManager.userCanLoginWithEmail()){
-            emailPref.setEnabled(false);
-            if(loginManager.userCanLoginWithGoogle()){
-                unlinkPref.setEnabled(true);
-                linkPref.setEnabled(false);
-            } else {
-                unlinkPref.setEnabled(false);
-                linkPref.setEnabled(true);
-            }
-        } else {
-            emailPref.setEnabled(true);
-            unlinkPref.setEnabled(false);
-            linkPref.setEnabled(false);
+        pluginPref = (PreferenceScreen) findPreference("plugin_settings");
+        for(final String plugin: plugins){
+            final SwitchPreference curr = new SwitchPreference(this);
+            curr.setTitle(plugin);
+            curr.setKey(plugin);
+            curr.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if(!(Boolean) newValue){
+                        curr.setSummary("disabled");
+                    } else {
+                        curr.setSummary("");
+                    }
+                    return true;
+                }
+            });
+            pluginPref.addPreference(curr);
         }
     }
-    */
 
     public void setAccountPref(String title, final int mode) {
         accountPref.setTitle(title);
@@ -204,31 +154,16 @@ public class Preferences extends PreferenceActivity {
                 startActivityForResult(intent, RC_UNLINK_GOOGLE);
                 break;
             case 2:
-                // TODO
+                // TODO generate password
                 break;
             default:
                 break;
         }
     }
 
-    /*
-    public void linkGoogleAccount() {
-        Intent intent = new Intent(this, GoogleLinkCredentials.class);
-        startActivityForResult(intent, RC_LINK_GOOGLE);
-    }
-
-    public void unlinkGoogleAccount() {
-        Intent intent = new Intent(this, GoogleUnLinkCredentials.class);
-        startActivityForResult(intent, RC_UNLINK_GOOGLE);
-    }
-
-    public void generatePassword() {
-        // TODO
-    }
-    */
 
     public void deleteAccount() {
-        // TODO
+        // TODO delete local account
     }
 
 }
