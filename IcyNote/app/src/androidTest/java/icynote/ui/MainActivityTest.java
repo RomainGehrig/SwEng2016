@@ -95,6 +95,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
     }
 
+    /*
+    Settings are new in Preferences.java and xml.preferences
+    !! Preferences is a PreferenceActivity, not a Fragment
     @Test
     public void openFragmentSettingsTest() {
         assertNull(mActivity.findViewById(R.id.styles_list));
@@ -106,17 +109,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertNotNull(mActivity.findViewById(R.id.menuButton));
         assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
     }
-
-    @Test
-    public void openFragmentLogoutTest() {
-        assertNull(mActivity.findViewById(R.id.logoutView));
-        assertNotNull(mActivity.findViewById(R.id.logoutView));
-        assertNotNull(mActivity.findViewById(R.id.menuButton));
-        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
-        onView(withId(R.id.menuButton)).perform(click());
-        onView(withText(R.string.logout)).perform(click());
-        assertNull(FirebaseAuth.getInstance().getCurrentUser());
-    }
+    */
 
     @Test
     public void openFragmentMetadatasTest() {
