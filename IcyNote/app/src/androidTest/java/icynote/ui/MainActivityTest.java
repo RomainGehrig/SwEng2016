@@ -96,6 +96,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /*
+    TODO
     Settings are new in Preferences.java and xml.preferences
     !! Preferences is a PreferenceActivity, not a Fragment
     @Test
