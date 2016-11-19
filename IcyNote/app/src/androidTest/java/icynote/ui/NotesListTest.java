@@ -9,15 +9,9 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.junit.Test;
-
-import icynote.core.Note;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 
 /**
- * Created by kl on 09.11.2016.
+ * @author Kim Lan
  */
 @RunWith(AndroidJUnit4.class)
 public class NotesListTest extends ActivityInstrumentationTestCase2<BlankActivity> {

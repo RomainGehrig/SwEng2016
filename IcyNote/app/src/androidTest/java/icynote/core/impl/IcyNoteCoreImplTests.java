@@ -1,7 +1,10 @@
 package icynote.core.impl;
 
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
@@ -14,10 +17,11 @@ import icynote.core.impl.interactors.NoteInteractorTemplate;
 import icynote.storage.ListStorage;
 import util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 @SuppressWarnings("ReturnOfInnerClass")
+@RunWith(AndroidJUnit4.class)
 public class IcyNoteCoreImplTests extends NoteProviderTests {
 
     @Override

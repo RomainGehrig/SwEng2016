@@ -1,6 +1,9 @@
 package icynote.core.impl;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.GregorianCalendar;
 
@@ -9,11 +12,12 @@ import icynote.core.Response;
 import icynote.storage.ListStorage;
 import util.Optional;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
+@RunWith(AndroidJUnit4.class)
 public class CoreFactoryTests {
     @Test(expected=AssertionError.class)
     public void createFactory(){

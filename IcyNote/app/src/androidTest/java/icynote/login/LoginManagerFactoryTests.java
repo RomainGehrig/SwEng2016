@@ -1,9 +1,18 @@
 package icynote.login;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertSame;
 
+
+@RunWith(AndroidJUnit4.class)
 public class LoginManagerFactoryTests {
 
     @Test(expected=AssertionError.class)
