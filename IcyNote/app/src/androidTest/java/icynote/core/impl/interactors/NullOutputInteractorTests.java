@@ -1,12 +1,16 @@
 package icynote.core.impl.interactors;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.GregorianCalendar;
 
 import icynote.core.Note;
 import icynote.core.impl.NoteData;
 
+@RunWith(AndroidJUnit4.class)
 public class NullOutputInteractorTests {
     private final Note toTest_Null = new NullOutputInteractor(new NullNoteData());
     private final Note toTest_NotNull = new NullOutputInteractor(new NoteData());

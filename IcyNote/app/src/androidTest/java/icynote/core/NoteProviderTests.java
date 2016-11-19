@@ -1,7 +1,10 @@
 package icynote.core;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -9,12 +12,11 @@ import java.util.Iterator;
 
 import util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -25,6 +27,7 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0
  */
 
+@RunWith(AndroidJUnit4.class)
 @SuppressWarnings("ClassWithTooManyMethods")
 public abstract class NoteProviderTests {
 
@@ -68,7 +71,7 @@ public abstract class NoteProviderTests {
         Note n1 = createNoteAndCheck();
         Note n2 = createNoteAndCheck();
         //Assert.assertThat(n1.getId(), not(equalTo(n2.getId())));
-        assertNotEquals(n1.getId(), n2.getId());
+        assertFalse("", n1.getId() == n2.getId());
     }
 
     Note createNoteAndCheck() {
@@ -167,8 +170,8 @@ public abstract class NoteProviderTests {
         assertTrue("the note should be obtainable with get after creation",
                 n2.isPresent());
 
-        assertNotEquals("but if we don't persist it, modifications shouldn't be registered",
-                n1.getTitle(), n2.get().getTitle());
+        assertFalse("but if we don't persist it, modifications shouldn't be registered",
+                n1.getTitle().equals(n2.get().getTitle()));
     }
 
     //-----------------------------------------------------------------------

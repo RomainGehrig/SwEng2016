@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -40,17 +39,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         final Context context = InstrumentationRegistry.getTargetContext();
         mActivity = getActivity();
     }
-
-    /*
-    private Fragment startFragment(Fragment fragment) {
-        FragmentTransaction transaction = mActivity.getSupportFragmentManager().beginTransaction();
-        //transaction.add(R.id.content_frame, fragment, "tag");
-        //transaction.commit();
-        getInstrumentation().waitForIdleSync();
-        Fragment frag = mActivity.getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        return frag;
-    }
-    */
 
     @Test
     public void startingViewTest() {

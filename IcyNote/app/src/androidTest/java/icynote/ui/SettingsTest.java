@@ -1,8 +1,6 @@
 package icynote.ui;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.drawable.ColorDrawable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.runner.AndroidJUnit4;
@@ -16,14 +14,10 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withTagKey;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
-import static android.support.v7.widget.TintTypedArray.obtainStyledAttributes;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -67,21 +61,6 @@ public class SettingsTest extends ActivityInstrumentationTestCase2<MainActivity>
                 .atPosition(Theme.ThemeType.DARK.toPosition()).perform(click());
         assertEquals(Theme.getTheme(), Theme.ThemeType.DARK);
     }
-
-    /*
-    @Test
-    public void backgroundIsWhiteWhenBrightTheme() {
-        // Get the background color of the editNote Fragment
-        ColorDrawable backgroundColor =
-                (ColorDrawable) mActivity.findViewById(R.id.layoutFragmentEditNote).getBackground();
-
-        // Parse the current theme to get the background color corresponding to the current theme
-        TypedArray ta =
-                mActivity.obtainStyledAttributes(Theme.getTheme().toInt(), new int[]{android.R.attr.background});
-
-        assertEquals(backgroundColor.getColor(), ta.getColor(0, 0));
-    }*/
-
 
     @Test
     public void textColorIsBlackWhenBrightTheme() {
