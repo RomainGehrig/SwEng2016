@@ -1,14 +1,19 @@
 package icynote.core.impl;
 
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import icynote.core.Response;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
+
+@RunWith(AndroidJUnit4.class)
 public class ResponseFactoryTests {
 
     @Test(expected=AssertionError.class)

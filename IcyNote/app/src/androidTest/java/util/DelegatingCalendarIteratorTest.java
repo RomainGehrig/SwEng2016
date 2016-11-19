@@ -1,13 +1,18 @@
 package util;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertNotNull;
 
+
+@RunWith(AndroidJUnit4.class)
 public class DelegatingCalendarIteratorTest extends DelegatingIteratorTest<Calendar> {
     private ArrayList<Calendar> data = null;
 

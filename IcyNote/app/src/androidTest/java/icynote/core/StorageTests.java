@@ -1,13 +1,16 @@
 package icynote.core;
 
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Unit tests for the {@code Storage} interface;
@@ -16,6 +19,7 @@ import static org.junit.Assert.assertTrue;
  * @author Mike Bardet
  * @version 1.0
  */
+@RunWith(AndroidJUnit4.class)
 public abstract class StorageTests extends NoteProviderTests {
     @Test
     public void getNoteDefensiveCopyTest() {

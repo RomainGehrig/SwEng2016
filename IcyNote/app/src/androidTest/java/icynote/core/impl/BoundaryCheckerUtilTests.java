@@ -1,13 +1,16 @@
 package icynote.core.impl;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import icynote.core.Note;
 
-import icynote.core.impl.BoundaryCheckerUtil;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertSame;
 
+@RunWith(AndroidJUnit4.class)
 public class BoundaryCheckerUtilTests {
 
     @Test(expected=AssertionError.class)
