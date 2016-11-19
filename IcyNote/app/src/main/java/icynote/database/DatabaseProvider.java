@@ -27,6 +27,7 @@ public class DatabaseProvider extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.i(LOGGING_TAG, "Creating initial DB from DatabaseProvider");
         db.execSQL(SqlCreateTable.NOTE);
+        /** TODO : table EXTRA */
     }
 
     @Override
@@ -51,10 +52,15 @@ public class DatabaseProvider extends SQLiteOpenHelper {
                         COMMA_SEP + Notes.COL_MODIFICATION_DATE + Notes.TYPE_MODIFICATION_DATE +
                         COMMA_SEP + Notes.COL_CONTENT + Notes.TYPE_CONTENT +
                         " )";
+
+        /** TODO : table EXTRA */
+
     }
 
     private static final class SqlDeleteTable {
         private static final String DROP = "DROP TABLE IF EXISTS ";
         static final String NOTE  = DROP + Notes.TABLE_NAME;
+
+        /** TODO : table EXTRA */
     }
 }
