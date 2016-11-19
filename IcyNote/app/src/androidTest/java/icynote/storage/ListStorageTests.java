@@ -1,5 +1,9 @@
 package icynote.storage;
 
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.runner.RunWith;
+
 import java.util.ArrayList;
 
 import icynote.core.Note;
@@ -7,6 +11,7 @@ import icynote.core.Storage;
 import icynote.core.StorageTests;
 import icynote.core.impl.NoteData;
 
+@RunWith(AndroidJUnit4.class)
 public class ListStorageTests extends StorageTests {
     @Override
     protected Storage makeNew() {

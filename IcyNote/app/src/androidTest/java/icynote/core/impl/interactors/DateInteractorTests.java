@@ -1,6 +1,9 @@
 package icynote.core.impl.interactors;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.GregorianCalendar;
 
@@ -10,12 +13,11 @@ import icynote.core.Response;
 import icynote.core.impl.NoteData;
 import icynote.core.impl.ResponseFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 
+@RunWith(AndroidJUnit4.class)
 public class DateInteractorTests extends NoteTests {
 
     @Override
@@ -41,6 +43,9 @@ public class DateInteractorTests extends NoteTests {
         assertEquals("check old value", toTest.getCreation(), originalCreation);
     }
 
+    private void assertFalse(String s, boolean positive) {
+    }
+
 
     @Override
     public void setLastUpdate() {
@@ -56,14 +61,14 @@ public class DateInteractorTests extends NoteTests {
     public void setTitle() {
         assertEquals(toTest.getLastUpdate(), originalUpdate);
         super.setTitle();
-        assertNotEquals(toTest.getLastUpdate(), originalUpdate);
+        assertFalse("", toTest.getLastUpdate().equals(originalUpdate));
     }
 
     @Test
     public void setTitleWhenDelegateRefuses() {
         Note blocked = getBlockedNote();
         Response r = blocked.setTitle("should be refused");
-        assertFalse(r.isPositive());
+        assertFalse("", r.isPositive());
     }
 
     private Note getBlockedNote() {

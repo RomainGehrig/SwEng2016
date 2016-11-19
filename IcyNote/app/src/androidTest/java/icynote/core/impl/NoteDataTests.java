@@ -1,15 +1,20 @@
 package icynote.core.impl;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.GregorianCalendar;
 
 import icynote.core.Note;
 import icynote.core.NoteTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 
+
+@RunWith(AndroidJUnit4.class)
 public class NoteDataTests extends NoteTests {
 
     private static final int YEAR = 2000;

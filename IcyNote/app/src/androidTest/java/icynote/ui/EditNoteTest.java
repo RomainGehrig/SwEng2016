@@ -1,7 +1,5 @@
 package icynote.ui;
 
-import static org.mockito.Mockito.*;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
@@ -9,25 +7,18 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-import android.widget.EditText;
 
 import org.junit.Before;
-import org.junit.Rule;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-
-import dalvik.annotation.TestTargetClass;
-import icynote.core.IcyNoteCore;
 import icynote.core.Note;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by kl on 09.11.2016.

@@ -1,9 +1,14 @@
 package util;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.NoSuchElementException;
 
+
+@RunWith(AndroidJUnit4.class)
 public class OptionalTests {
     @Test(expected = IllegalArgumentException.class)
     public void ofWhenNull() throws Exception {

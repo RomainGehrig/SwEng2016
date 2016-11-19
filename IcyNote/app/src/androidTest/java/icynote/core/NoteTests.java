@@ -1,14 +1,17 @@
 package icynote.core;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.GregorianCalendar;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -17,6 +20,7 @@ import static org.junit.Assert.assertTrue;
  */
 
 @SuppressWarnings("CanBeFinal")
+@RunWith(AndroidJUnit4.class)
 public abstract class NoteTests {
 
     private static final int YEAR = 2000;
