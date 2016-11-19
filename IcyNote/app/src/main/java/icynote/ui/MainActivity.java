@@ -16,10 +16,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import icynote.core.Note;
 import icynote.core.impl.CoreSingleton;
 import icynote.login.LoginManagerFactory;
 
 import icynote.core.IcyNoteCore;
+import util.Optional;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -107,7 +109,6 @@ public void onCreate(Bundle savedInstanceState) {
     }
 
     public void toggleMenu(View view) {
-        Log.i("sidebar", "display");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -133,7 +134,6 @@ public void onCreate(Bundle savedInstanceState) {
             Intent intent = new Intent(this, Preferences.class);
             startActivity(intent);
         } else if (id == R.id.menuLogout) {
-            Log.d("MainActivity", "menuLogout");
             LoginManagerFactory.getInstance().logout();
         }
 
@@ -144,18 +144,23 @@ public void onCreate(Bundle savedInstanceState) {
         openFragment(FragmentID.MetadataNote);
     }
 
-
     public void backToNote(View view) {
         openFragment(FragmentID.EditNote);
     }
 
-
-    // ----- COLOR SETTINGS DEV BLOCK
-    public enum ColorSetting {
-        DARK, BRIGHT
+    public void openEditNewNote() {
+        openFragment(FragmentID.EditNote);
+    }
+    public void openEditNote(int noteId) {
+        Bundle args = new Bundle();
+        args.putInt(EditNote.KEY_NOTE_ID, noteId);
+        openFragment(FragmentID.EditNote, args);
     }
 
     public void openFragment(FragmentID fragmentID) {
+        openFragment(fragmentID, null);
+    }
+    public void openFragment(FragmentID fragmentID, Bundle bundle) {
         Fragment fragment = null;
         if (fragmentID.needCoreAndLoader) {
             fragment = fragmentID.instantiateFragment(core, getSupportLoaderManager());
@@ -163,11 +168,15 @@ public void onCreate(Bundle savedInstanceState) {
             fragment = fragmentID.instantiateFragment();
         }
 
-        // FIXME what to do with the bundle thingy
-        //fragment.setArguments(bundle);
-        //fragment.setArguments(fragmentBundle);
+        if (bundle != null) {
+            fragment.setArguments(bundle);
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
