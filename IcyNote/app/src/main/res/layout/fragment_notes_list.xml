@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_weight="0.1"
             android:id="@+id/layout_1"
             >
 
@@ -32,7 +31,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btSearch"
-                android:background="@color/backgroundColorSpinnerBright"
                 android:layout_alignParentRight="true" />
 
             <EditText
@@ -51,7 +49,7 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <!-- <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -59,32 +57,32 @@
             android:layout_alignParentRight="true"
             android:layout_weight="0.8"
             android:id="@+id/layout_2"
-            >
+            > -->
 
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/backgroundColor"
+                android:layout_below="@id/layout_1"
+                android:layout_alignParentRight="true"
                 android:id="@+id/lvNotes"
-                android:layout_centerHorizontal="true" />
+                android:layout_weight="1"
+                />
 
-        </RelativeLayout>
+        <!-- </RelativeLayout> -->
 
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/layout_3"
-            android:layout_below="@id/layout_2"
-            android:layout_alignParentRight="true"
-            android:layout_weight="0.1" >
+            android:layout_below="@id/lvNotes"
+            android:layout_alignParentRight="true" >
 
             <Button
                 android:text="Add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btAdd"
-                android:background="@color/backgroundColorSpinnerBright"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"/>
@@ -98,13 +96,14 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/textColor"/>
 
-            <Spinner
+            <Button
+                android:text="Delete selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner"
-                android:background="@color/backgroundColorSpinnerBright"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true" />
+                android:id="@+id/btDelete"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"/>
 
         </RelativeLayout>
 
