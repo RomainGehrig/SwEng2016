@@ -42,9 +42,7 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:imeOptions="actionSearch"
-                android:textColor="@color/textColor"
                 android:hint="The String to find ..."
-                android:textColorHint="@color/textColor"
                 android:visibility="invisible" />
 
         </RelativeLayout>
@@ -93,8 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/textColor"/>
+                android:layout_centerHorizontal="true"/>
 
             <Button
                 android:text="Delete selected"
