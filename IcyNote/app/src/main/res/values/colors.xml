@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
     <color name="colorPrimary">#84ffff</color>
     <color name="colorPrimaryDark">#469be4</color>
-    <color name="colorAccent">#8cbbe2</color><!--#51e4d8-->
+    <color name="colorAccent">#8cbbe2</color>
     <color name="secondary_text">#000000</color>
     <color name="backgroundColor">#ffffff</color>
     <color name="textColor">#000000</color>
@@ -22,5 +23,5 @@
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#E0E0E0</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#66000000</color> -->
 </resources>

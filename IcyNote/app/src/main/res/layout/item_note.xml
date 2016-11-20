@@ -41,7 +41,6 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
-                android:textColor="@color/textColor"
                 android:layout_weight="0.8"/>
 
         </LinearLayout>
@@ -51,7 +50,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date"
-            android:textColor="@color/textColor"
             android:layout_below="@id/layout_1"
             />
 
@@ -60,7 +58,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Content"
-            android:textColor="@color/textColor"
             android:layout_below="@id/layout_1"
             />
 
