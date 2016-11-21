@@ -5,8 +5,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -104,16 +102,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void openFragmentMetadatasTest() {
         assertNull(mActivity.findViewById(R.id.noteTitle));
         assertNull(mActivity.findViewById(R.id.noteCreationDate));
-        assertNull(mActivity.findViewById(R.id.checkBox1));
-        assertNull(mActivity.findViewById(R.id.checkBox2));
-        assertNull(mActivity.findViewById(R.id.checkBox3));
         assertNull(mActivity.findViewById(R.id.backButton));
         onView(withId(R.id.noteDisplaySettingsButton)).perform(click());
         assertNotNull(mActivity.findViewById(R.id.noteTitle));
         assertNotNull(mActivity.findViewById(R.id.noteCreationDate));
-        assertNotNull(mActivity.findViewById(R.id.checkBox1));
-        assertNotNull(mActivity.findViewById(R.id.checkBox2));
-        assertNotNull(mActivity.findViewById(R.id.checkBox3));
         assertNotNull(mActivity.findViewById(R.id.backButton));
     }
 }

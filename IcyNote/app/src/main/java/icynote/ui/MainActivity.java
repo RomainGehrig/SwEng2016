@@ -10,20 +10,22 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
-import icynote.core.IcyNoteCore;
-import icynote.core.impl.CoreSingleton;
 import icynote.login.LoginManagerFactory;
+import icynote.note.Note;
+import icynote.noteproviders.NoteProvider;
+import icynote.noteproviders.impl.Singleton;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
-    private IcyNoteCore core;
+    private NoteProvider<Note<SpannableString>> core;
 
     private enum FragmentID {
         EditTags(EditTags.class), EditNote(EditNote.class, true),
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 
             return fragment;
         }
-        public Fragment instantiateFragment(IcyNoteCore core, LoaderManager loaderManager) {
+        public Fragment instantiateFragment(NoteProvider<Note<SpannableString>> core, LoaderManager loaderManager) {
             if (!needCoreAndLoader) {
                 return instantiateFragment();
             }
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
-        core = CoreSingleton.getCore();
+        core = Singleton.getCore();
         openFragment(FragmentID.NotesList);
     }
 /*
