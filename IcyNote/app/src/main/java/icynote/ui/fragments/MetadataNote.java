@@ -37,7 +37,7 @@ public class MetadataNote extends FragmentWithState {
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.layout);
 
         for(FormatterPlugin formatter : appState().getPluginProvider().getFormatters()) {
-            for(View button : formatter.getMetaButtons(getActivity())) {
+            for(View button : formatter.getMetaButtons(appState())) {
                 layout.addView(button);
             }
         }
