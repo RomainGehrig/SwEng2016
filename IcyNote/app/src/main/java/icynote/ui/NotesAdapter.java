@@ -1,6 +1,7 @@
 package icynote.ui;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import icynote.core.Note;
+import icynote.note.Note;
 
 import static util.ArgumentChecker.requireNonNull;
 
@@ -24,14 +25,14 @@ import static util.ArgumentChecker.requireNonNull;
  * @author Diana
  */
 // TODO can we not use store the notes in an array and let the underlying ArrayAdapter handle it ?
-public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateContextMenuListener {
+public class NotesAdapter extends ArrayAdapter<Note<SpannableString>> implements View.OnCreateContextMenuListener {
 
     private Filter filter;
-    private ArrayList<Note> notes;
-    private ArrayList<Note> checkedNotes;
+    private ArrayList<Note<SpannableString>> notes;
+    private ArrayList<Note<SpannableString>> checkedNotes;
     private final CanDeleteNote noteDeleter;
 
-    public NotesAdapter(Context context, ArrayList<Note> notes, CanDeleteNote noteDeleter) {
+    public NotesAdapter(Context context, ArrayList<Note<SpannableString>> notes, CanDeleteNote noteDeleter) {
         super(context, 0, notes);
         this.notes = notes;
         this.checkedNotes = new ArrayList<>();
@@ -39,13 +40,13 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
     }
 
     // FIXME tmp function to set the private array
-    public void setNotes(ArrayList<Note> notes) {
+    public void setNotes(ArrayList<Note<SpannableString>> notes) {
         notes = requireNonNull(notes);
         clear();
         addAll(notes);
     }
 
-    public void deleteNote(Note n) {
+    public void deleteNote(Note<SpannableString> n) {
         notes.remove(n);
         checkedNotes.remove(n);
         notifyDataSetChanged();
@@ -53,7 +54,7 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Note note = getItem(position);
+        final Note<SpannableString> note = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_note, parent, false);
         }
@@ -69,8 +70,8 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
             @Override
             public void onClick(View view) {
                 int position = (Integer) view.getTag();
-                Note currentNote = (Note)getItem(position);
-                ((MainActivity)getContext()).openEditNote(currentNote.getId());
+                Note<SpannableString> currentNote = (Note<SpannableString>) getItem(position);
+                ((MainActivity) getContext()).openEditNote(currentNote.getId());
             }
         });
 
@@ -95,23 +96,23 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
                 + tmpDate.get(GregorianCalendar.MONTH) + "/"
                 + tmpDate.get(GregorianCalendar.YEAR);
         tvDate.setText(date);
-        String content = note.getContent();
-        int pos1=-1;
-        int pos2=-1;
-        if(content != "") {
-            pos1 = content.indexOf("\n");
-            if(pos1 >= 0) {
-                pos2 = content.substring(pos1+1).indexOf("\n");
-                if(pos2 >=0) {
-                    content = content.substring(0, pos1+pos2+2);
-                }
-            }
-            content = content + "...";
+        SpannableString content = note.getContent();
+        int pos1 = -1;
+        int pos2 = -1;
+
+        String strContent = "";
+        int maxLength = 50;
+        if (content.length() > maxLength) {
+            strContent = content.subSequence(0, maxLength).toString() + "...";
+        } else {
+            strContent = content.toString();
         }
+
+        strContent = strContent.replace('\n', ' ');
 
         // Content
         TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
-        tvContent.setText(content);
+        tvContent.setText(strContent);
 
         convertView.setOnCreateContextMenuListener(this);
         return convertView;
@@ -129,15 +130,15 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         return filter;
     }
 
-    public List<Note> getCheckedNotes() {
+    public List<Note<SpannableString>> getCheckedNotes() {
         return new ArrayList<>(checkedNotes);
     }
 
     private class NoteFilter extends Filter {
 
-        private ArrayList<Note> sourceNotes;
+        private ArrayList<Note<SpannableString>> sourceNotes;
 
-        public NoteFilter(List<Note> notes) {
+        public NoteFilter(List<Note<SpannableString>> notes) {
             sourceNotes = new ArrayList<>();
             synchronized (this) {
                 sourceNotes.addAll(notes);
@@ -149,11 +150,13 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
             String filterSeq = chars.toString().toLowerCase();
             FilterResults result = new FilterResults();
             if (filterSeq != null && !filterSeq.isEmpty()) {
-                ArrayList<Note> filter = new ArrayList<Note>();
+                ArrayList<Note<SpannableString>> filter = new ArrayList<Note<SpannableString>>();
 
-                for (Note note : sourceNotes) {
-                    if ((note.getTitle() + note.getContent()).toLowerCase().contains(filterSeq))
+                for (Note<SpannableString> note : sourceNotes) {
+                    if (note.getTitle().toString().toLowerCase().contains(filterSeq)
+                            || note.getContent().toString().toLowerCase().contains(filterSeq)) {
                         filter.add(note);
+                    }
                 }
                 result.count = filter.size();
                 result.values = filter;
@@ -172,11 +175,11 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
             // NOTE: this function is *always* called from the UI thread.
-            ArrayList<Note> filtered = (ArrayList<Note>) results.values;
+            ArrayList<Note<SpannableString>> filtered = (ArrayList<Note<SpannableString>>) results.values;
             notifyDataSetChanged();
             clear();
             for (int i = 0, l = filtered.size(); i < l; i++)
-                add((Note) filtered.get(i));
+                add((Note<SpannableString>) filtered.get(i));
             notifyDataSetInvalidated();
         }
     }

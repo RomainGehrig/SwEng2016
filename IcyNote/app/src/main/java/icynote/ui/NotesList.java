@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -20,20 +21,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import icynote.core.Note;
-import icynote.core.Response;
 import icynote.loaders.NotesLoader;
+import icynote.note.Note;
+import icynote.note.Response;
 
-public class NotesList extends FragmentWithCoreAndLoader implements LoaderManager.LoaderCallbacks<Iterable<Note>>,
+public class NotesList extends FragmentWithCoreAndLoader implements LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>,
         CanDeleteNote {
     private static final String TAG = "NotesList";
-    private Loader<Iterable<Note>> loader;
+    private Loader<Iterable<Note<SpannableString>>> loader;
 
     private ListView listView;
     private NotesAdapter notesAdapter;
     private Spinner spinner;
     private View view;
-    private ArrayList<Note> notes = new ArrayList<>();
+    private ArrayList<Note<SpannableString>> notes = new ArrayList<>();
 
     public NotesList() {
         // Required empty public constructor
@@ -110,8 +111,8 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Note> checked = notesAdapter.getCheckedNotes();
-                for (Note n : checked) {
+                List<Note<SpannableString>> checked = notesAdapter.getCheckedNotes();
+                for (Note<SpannableString> n : checked) {
                     Log.i(TAG, "deleting note: " + n.getTitle());
                     notesAdapter.deleteNote(n);
                     deleteNote(n.getId());
@@ -156,7 +157,7 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
      * @return Return a new Loader instance that is ready to start loading.
      */
     @Override
-    public Loader<Iterable<Note>> onCreateLoader(int id, Bundle args) {
+    public Loader<Iterable<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
         // TODO: indicate we are now waiting for the note
         Log.i(TAG, "Loader initialized");
         loader = new NotesLoader(getContext(), getCore());
@@ -164,11 +165,11 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     }
 
     @Override
-    public void onLoadFinished(Loader<Iterable<Note>> loader, Iterable<Note> data) {
+    public void onLoadFinished(Loader<Iterable<Note<SpannableString>>> loader, Iterable<Note<SpannableString>> data) {
         // TODO display notes
         Log.i(TAG, "Received notes");
         notes.clear();
-        for (Note n: data) {
+        for (Note<SpannableString> n: data) {
             notes.add(n);
         }
         notesAdapter.notifyDataSetChanged();
@@ -177,7 +178,7 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     }
 
     @Override
-    public void onLoaderReset(Loader<Iterable<Note>> loader) {
+    public void onLoaderReset(Loader<Iterable<Note<SpannableString>>> loader) {
         Log.i(TAG, "Loader reset");
         // TODO: anything to do ?
     }

@@ -10,8 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import icynote.extras.Extra;
-
 /**
  * Simple {@code Extra} class that stores every field in memory.
  */

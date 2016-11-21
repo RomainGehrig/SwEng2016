@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import icynote.core.Note;
+import icynote.note.Note;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 public class EditNoteTest extends ActivityInstrumentationTestCase2<BlankActivity> {
 
     /********** DIRTY HACK FOR TEST *********/
-    Note note;
+    Note<String> note;
 
     private BlankActivity mActivity;
 

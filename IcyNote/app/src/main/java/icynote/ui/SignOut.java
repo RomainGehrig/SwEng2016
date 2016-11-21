@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 
-import icynote.core.impl.CoreSingleton;
+import icynote.noteproviders.impl.Singleton;
 import util.Callback;
 
 
@@ -22,7 +22,7 @@ public class SignOut extends GoogleClient {
     }
 
     private void signOut() {
-        CoreSingleton.logout();
+        Singleton.logout();
         Auth.GoogleSignInApi.signOut(apiClient());
         loginManager().onLogout(null);
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,18 +17,18 @@ import android.widget.EditText;
 import java.util.Arrays;
 import java.util.List;
 
-import icynote.core.Note;
 import icynote.loaders.NoteLoader;
+import icynote.note.Note;
 import me.gujun.android.taggroup.TagGroup;
 import util.Optional;
 
 public class EditNote extends FragmentWithCoreAndLoader implements
-        LoaderManager.LoaderCallbacks<Optional<Note>>{
+        LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>>{
     public static final String KEY_NOTE_ID = "note_id";
     private TagGroup mDefaultTagGroup;
 
     private String[] tags = {"1", "2", "3"}; // initialize tags here
-    private Note note;
+    private Note<SpannableString> note;
 
     public EditNote() {
         // Required empty public constructor
@@ -99,7 +100,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                note.setTitle(s.toString());
+                note.setTitle(new SpannableString(s));
                 getCore().persist(note);
             }
         });
@@ -116,7 +117,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                note.setContent(s.toString());
+                note.setContent(new SpannableString(s));
                 getCore().persist(note);
             }
         });
@@ -135,7 +136,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     }
 
     @Override
-    public Loader<Optional<Note>> onCreateLoader(int id, Bundle args) {
+    public Loader<Optional<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
         Optional<Integer> noteId = Optional.empty();
         if (args != null && args.containsKey(KEY_NOTE_ID))
             noteId = Optional.of(args.getInt(KEY_NOTE_ID));
@@ -144,7 +145,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     }
 
     @Override
-    public void onLoadFinished(Loader<Optional<Note>> loader, Optional<Note> optionalNote) {
+    public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader, Optional<Note<SpannableString>> optionalNote) {
         // TODO what to do if note is not present ?
         note = optionalNote.get();
         EditText titleTextView = (EditText)getView().findViewById(R.id.noteDisplayTitleText);
@@ -156,7 +157,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     }
 
     @Override
-    public void onLoaderReset(Loader<Optional<Note>> loader) {
+    public void onLoaderReset(Loader<Optional<Note<SpannableString>>> loader) {
     }
 
     public interface OnFragmentInteractionListener {
