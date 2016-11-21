@@ -1,9 +1,10 @@
 package icynote.plugins;
 
-import android.app.Activity;
 import android.content.Intent;
+
+import icynote.ui.utils.ApplicationState;
 
 public interface Plugin {
     boolean canHandle(int requestCode);
-    void handle(int requestCode, int resultCode, Intent data, Activity activity);
+    void handle(int requestCode, int resultCode, Intent data, ApplicationState state);
 }

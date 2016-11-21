@@ -10,6 +10,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import icynote.ui.fragments.NotesList;
+
 /**
  * @author Kim Lan
  */
