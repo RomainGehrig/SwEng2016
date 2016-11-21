@@ -1,4 +1,4 @@
-package icynote.ui;
+package icynote.ui.utils;
 
 import android.content.Context;
 import android.text.SpannableString;
@@ -17,6 +17,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import icynote.note.Note;
+import icynote.ui.MainActivity;
+import icynote.ui.R;
 
 import static util.ArgumentChecker.requireNonNull;
 

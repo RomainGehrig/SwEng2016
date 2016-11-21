@@ -1,4 +1,4 @@
-package icynote.ui;
+package icynote.ui.utils;
 
 import icynote.note.Response;
 

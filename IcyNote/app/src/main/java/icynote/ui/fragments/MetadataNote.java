@@ -1,7 +1,6 @@
-package icynote.ui;
+package icynote.ui.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import icynote.plugins.FormatterPlugin;
-import icynote.plugins.PluginsProvider;
+import icynote.ui.R;
 
-public class MetadataNote extends Fragment {
+public class MetadataNote extends FragmentWithState {
 
     public MetadataNote() {
         // Required empty public constructor
@@ -37,7 +36,7 @@ public class MetadataNote extends Fragment {
 
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.layout);
 
-        for(FormatterPlugin formatter : PluginsProvider.getFormatters()) {
+        for(FormatterPlugin formatter : appState().getPluginProvider().getFormatters()) {
             for(View button : formatter.getMetaButtons(getActivity())) {
                 layout.addView(button);
             }

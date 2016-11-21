@@ -1,4 +1,4 @@
-package icynote.ui;
+package icynote.ui.loginactivities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,9 +14,11 @@ import com.google.android.gms.common.api.Scope;
 
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
+import icynote.ui.ActivityWithProgressDialog;
+import icynote.ui.R;
 
 
-class GoogleClient extends ActivityWithProgressDialog
+public class GoogleClient extends ActivityWithProgressDialog
         implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks
 {
@@ -69,11 +71,11 @@ class GoogleClient extends ActivityWithProgressDialog
 
     }
 
-    LoginManager loginManager() {
+    protected LoginManager loginManager() {
         return mLoginManager;
     }
 
-    GoogleApiClient apiClient() {
+    protected GoogleApiClient apiClient() {
         return mGoogleApiClient;
     }
 }

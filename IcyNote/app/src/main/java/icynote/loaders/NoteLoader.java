@@ -60,6 +60,6 @@ public class NoteLoader extends AsyncTaskLoader<Optional<Note<SpannableString>>>
     protected void onReset() {
         super.onReset();
         // Ensure the loader is stopped
-        onStopLoading();
+        stopLoading();
     }
 }
