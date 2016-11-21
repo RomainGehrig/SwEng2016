@@ -1,13 +1,14 @@
-package icynote.ui;
+package icynote.ui.loginactivities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import icynote.noteproviders.impl.Singleton;
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
+import icynote.ui.MainActivity;
+import icynote.ui.R;
 import util.Callback;
 
 
@@ -44,11 +45,12 @@ public class LoginMenu extends AppCompatActivity {
             LoginManager loginManager = LoginManagerFactory.getInstance();
 
             String uuid = loginManager.getCurrentUserUID();
-            Singleton.login(getBaseContext(), uuid);
+            //Singleton.login(getBaseContext(), uuid);
 
             loginManager.onLogout(SignOut.getSignOutCallback(LoginMenu.this));
 
             Intent intent = new Intent(LoginMenu.this, MainActivity.class);
+            intent.putExtra("userUID", uuid);
             startActivity(intent);
         }
     }

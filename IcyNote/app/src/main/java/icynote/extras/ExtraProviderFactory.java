@@ -12,8 +12,8 @@ public interface ExtraProviderFactory {
     /**
      * Fetches or create a provider for the unique user corresponding
      * to {@code userId}.
-     * @param userId the unique if of an existing user.
+     * @param ownerId the unique if of an existing provider owner, such as a plugin.
      * @return the {@code ExtraProvider} associated with the specified user.
      */
-    ExtraProvider getProvider(String userId);
+    ExtraProvider getProvider(String ownerId);
 }

@@ -1,4 +1,4 @@
-package icynote.ui;
+package icynote.ui.loginactivities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 
-import icynote.noteproviders.impl.Singleton;
 import util.Callback;
 
 
@@ -22,7 +21,6 @@ public class SignOut extends GoogleClient {
     }
 
     private void signOut() {
-        Singleton.logout();
         Auth.GoogleSignInApi.signOut(apiClient());
         loginManager().onLogout(null);
 

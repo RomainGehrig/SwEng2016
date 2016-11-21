@@ -1,4 +1,4 @@
-package icynote.ui;
+package icynote.ui.fragments;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;

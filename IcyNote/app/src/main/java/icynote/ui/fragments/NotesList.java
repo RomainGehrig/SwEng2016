@@ -1,4 +1,4 @@
-package icynote.ui;
+package icynote.ui.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,9 +24,15 @@ import java.util.List;
 import icynote.loaders.NotesLoader;
 import icynote.note.Note;
 import icynote.note.Response;
+import icynote.ui.MainActivity;
+import icynote.ui.R;
+import icynote.ui.utils.CanDeleteNote;
+import icynote.ui.utils.NotesAdapter;
 
-public class NotesList extends FragmentWithCoreAndLoader implements LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>,
-        CanDeleteNote {
+public class NotesList
+        extends FragmentWithState
+        implements LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>, CanDeleteNote
+{
     private static final String TAG = "NotesList";
     private Loader<Iterable<Note<SpannableString>>> loader;
 
@@ -53,7 +59,9 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     @Override
     public void onResume() {
         super.onResume();
-        getThisLoaderManager().restartLoader(NotesLoader.LOADER_ID, null, this);
+        appState()
+                .getLoaderManager()
+                .restartLoader(NotesLoader.LOADER_ID, null, this);
     }
 
     @Override
@@ -132,7 +140,7 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
 
     @Override
     public Response deleteNote(int noteId) {
-        return getCore().delete(noteId);
+        return appState().getNoteProvider().delete(noteId);
     }
 
     /**
@@ -160,7 +168,7 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     public Loader<Iterable<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
         // TODO: indicate we are now waiting for the note
         Log.i(TAG, "Loader initialized");
-        loader = new NotesLoader(getContext(), getCore());
+        loader = new NotesLoader(getContext(), appState().getNoteProvider());
         return loader;
     }
 
