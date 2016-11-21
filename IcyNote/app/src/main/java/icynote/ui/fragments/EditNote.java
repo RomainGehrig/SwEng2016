@@ -1,7 +1,7 @@
 package icynote.ui.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -23,12 +23,11 @@ import me.gujun.android.taggroup.TagGroup;
 import util.Optional;
 
 public class EditNote extends FragmentWithState implements
-        LoaderCallbacks<Optional<Note<SpannableString>>> {
+        LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>> {
     public static final String KEY_NOTE_ID = "note_id";
 
     private TagGroup mDefaultTagGroup;
     private String[] tags = {"1", "2", "3"}; // initialize tags here
-    private Note<SpannableString> note;
     private Integer noteId;
 
     public EditNote() {
@@ -40,24 +39,10 @@ public class EditNote extends FragmentWithState implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        restartLoader();
-    }
-
-    private void restartLoader() {
-        Bundle args = new Bundle();
-        if (noteId != null) {
-            args.putInt(EditNote.KEY_NOTE_ID, noteId);
-        }
-        appState()
-                .getLoaderManager()
-                .restartLoader(NoteLoader.LOADER_ID, args, this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.i("EditNote", "onCreateView");
 
         // inflate the layout using the cloned inflater, not default inflater
         View view = inflater.inflate(R.layout.fragment_edit_note, container, false);
@@ -98,8 +83,19 @@ public class EditNote extends FragmentWithState implements
             }
         });
 
-        EditText titleTextView = (EditText) view.findViewById(R.id.noteDisplayTitleText);
-        EditText mainTextView = (EditText) view.findViewById(R.id.noteDisplayBodyText);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("EditNote", "onResume");
+
+        restartLoader();
+
+        EditText titleTextView = (EditText) getView().findViewById(R.id.noteDisplayTitleText);
+        EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
+        //updateTexts();
 
         // add listener to the title
         titleTextView.addTextChangedListener(new TextWatcher() {
@@ -113,8 +109,8 @@ public class EditNote extends FragmentWithState implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                note.setTitle(new SpannableString(s));
-                appState().getNoteProvider().persist(note);
+                note().setTitle(new SpannableString(s));
+                appState().getNoteProvider().persist(note());
             }
         });
 
@@ -130,22 +126,22 @@ public class EditNote extends FragmentWithState implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                note.setContent(new SpannableString(s));
-                appState().getNoteProvider().persist(note);
+                note().setContent(new SpannableString(s));
+                appState().getNoteProvider().persist(note());
+                appState().setLastOpenedNoteContent(note().getContent());
+                Log.i("EditNote", "text changed");
             }
         });
-
-        return view;
     }
 
-    private boolean containsNotLast(String[] l, String t) {
-        List<String> e = Arrays.asList(l).subList(0, l.length - 1);
-        for (String s : e) {
-            if (s.equals(t)) {
-                return true;
-            }
+    private void restartLoader() {
+        Bundle args = new Bundle();
+        if (noteId != null) {
+            args.putInt(EditNote.KEY_NOTE_ID, noteId);
         }
-        return false;
+        appState()
+                .getLoaderManager()
+                .restartLoader(NoteLoader.LOADER_ID, args, this);
     }
 
     @Override
@@ -161,18 +157,50 @@ public class EditNote extends FragmentWithState implements
     public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader,
                                Optional<Note<SpannableString>> optionalNote) {
         // TODO what to do if note is not present ?
-        note = optionalNote.get();
-        appState().setLastOpenedNoteId(note.getId());
+        setNote(optionalNote.get());
+        setNoteId(optionalNote.get().getId());
+        appState().setLastOpenedNoteId(note().getId());
+        appState().setLastOpenedNoteContent(note().getContent());
+        updateTexts();
+    }
 
+    private void updateTexts() {
+        View v = getView();
+        if (v == null || note() == null) {
+            return;
+        }
         EditText titleTextView = (EditText) getView().findViewById(R.id.noteDisplayTitleText);
         EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
-        // TODO use an asynchronous task to set these things ?
-        // (android doesn't like UI elements modified outside the UI thread
-        titleTextView.setText(note.getTitle());
-        mainTextView.setText(note.getContent());
+        titleTextView.setText(note().getTitle());
+        mainTextView.setText(note().getContent());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
+        appState().setSelectionStart(mainTextView.getSelectionStart());
+        appState().setSelectionEnd(mainTextView.getSelectionEnd());
     }
 
     @Override
     public void onLoaderReset(Loader<Optional<Note<SpannableString>>> loader) {
+    }
+
+    private Note<SpannableString> note() {
+        return appState().getLastOpenedNote();
+    }
+    private void setNote(Note<SpannableString> n) {
+        appState().setLastOpenedNote(n);
+    }
+
+    private boolean containsNotLast(String[] l, String t) {
+        List<String> e = Arrays.asList(l).subList(0, l.length - 1);
+        for (String s : e) {
+            if (s.equals(t)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

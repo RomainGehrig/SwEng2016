@@ -91,20 +91,19 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         openFragment(MetadataNote.class, null);
     }
 
-    public void openEditNote(int noteId) {
-        EditNote editFragment = (EditNote) getFragment(EditNote.class);
-        editFragment.setNoteId(noteId);
-        commitFragment(editFragment, EditNote.class.getSimpleName());
-    }
-
     public void reOpenEditNote(View view) {
         openEditNote(applicationState.getLastOpenedNoteId());
     }
-
     public void openEditNewNote() {
-        EditNote editFragment = (EditNote) getFragment(EditNote.class);
-        editFragment.setNoteId(null);
+        openEditNote(null);
+    }
+    public void openEditNote(Integer noteId) {
+        EditNote editFragment = getEditNote();
+        editFragment.setNoteId(noteId);
         commitFragment(editFragment, EditNote.class.getSimpleName());
+    }
+    public EditNote getEditNote() {
+        return (EditNote) getFragment(EditNote.class);
     }
 
     @Override
@@ -134,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
     private FragmentWithState getFragment(Class toOpen) {
         try {
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment fragment = fragmentManager.findFragmentByTag(toOpen.getSimpleName());
             if (fragment == null) {
@@ -168,5 +166,19 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        applicationState.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        applicationState = new ApplicationState(savedInstanceState, this);
+        applicationState.setLoaderManager(getSupportLoaderManager());
+
     }
 }
