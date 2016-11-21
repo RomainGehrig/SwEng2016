@@ -33,7 +33,9 @@ public final class Singleton {
         log("opening addNoteDecorators instance for user " + userUID);
 
         NoteDecoratorFactory<SpannableString> temp = new NoteDecoratorFactory<>();
-        
+        for(FormatterPlugin p : PluginsProvider.getFormatters()) {
+            temp = temp.andThen(p.getInteractorFactory());
+        }
 
         instance = Factory.make(context, userUID, temp);
     }
