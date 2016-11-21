@@ -15,7 +15,6 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.File;
@@ -33,8 +32,7 @@ import icynote.note.Note;
 import icynote.note.Response;
 import icynote.note.decorators.NoteDecoratorFactory;
 import icynote.note.decorators.NoteDecoratorTemplate;
-import icynote.ui.MainActivity;
-import icynote.ui.R;
+import icynote.ui.utils.ApplicationState;
 
 public class ImageFormatter implements FormatterPlugin {
     private static Map<String, Bitmap> images = new HashMap<>();
@@ -121,7 +119,10 @@ public class ImageFormatter implements FormatterPlugin {
     }
 
     private void writeUriToNote(Activity a, Uri uri) {
-        View view = MainActivity.editNoteView;
+
+        //todo
+
+        /*
         EditText noteContent = (EditText) view.findViewById(R.id.noteDisplayBodyText);
         if (noteContent == null) {
             Toast.makeText(a.getBaseContext(), "unable to change note content",
@@ -140,6 +141,8 @@ public class ImageFormatter implements FormatterPlugin {
             int end = Math.max(selectionStart, selectionEnd);
             noteContent.getText().replace(start, end, uriTag, 0, uriTag.length());
         }
+         */
+
     }
 
     private void startCamera(Activity a, Uri destUri) {
@@ -161,7 +164,7 @@ public class ImageFormatter implements FormatterPlugin {
     }
 
     @Override
-    public void handle(int requestCode, int resultCode, Intent data, Activity activity) {
+    public void handle(int requestCode, int resultCode, Intent data, ApplicationState state) {
         Log.i("imageFormatter", "handling " + requestCode);
         if (!canHandle(requestCode)) {
             Log.i("imageFormatter", "aborting: unknown request code " + requestCode);
@@ -169,9 +172,9 @@ public class ImageFormatter implements FormatterPlugin {
         }
         if (requestCode == mRequestCodeCamera) {
             //the picture is written in the previously provided uri
-            Toast.makeText(activity.getBaseContext(), "photo available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(state.getActivity(), "photo available", Toast.LENGTH_SHORT).show();
         } else if (requestCode == mRequestCodeGallery) {
-            Toast.makeText(activity.getBaseContext(), "photo available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(state.getActivity(), "photo available", Toast.LENGTH_SHORT).show();
         } else {
             throw new AssertionError("unhandled request code");
         }

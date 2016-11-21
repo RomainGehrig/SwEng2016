@@ -15,6 +15,7 @@ import icynote.noteproviders.OrderBy;
 import icynote.noteproviders.OrderType;
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
+import icynote.ui.loginactivities.GoogleLinkCredentials;
 
 
 public class Preferences extends PreferenceActivity {

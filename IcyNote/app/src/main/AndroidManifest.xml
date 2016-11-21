@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".LoginMenu">
+        <activity android:name=".loginactivities.LoginMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -25,14 +25,14 @@
         </activity>
 
         <activity
-            android:name=".EmailPasswordLogin"
+            android:name=".loginactivities.EmailPasswordLogin"
             android:label="@string/label_emailpassword"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
-        <activity android:name=".GoogleSignIn"/>
-        <activity android:name=".SignOut"/>
-        <activity android:name=".GoogleLinkCredentials"/>
-        <activity android:name=".GoogleUnLinkCredentials"/>
+        <activity android:name=".loginactivities.GoogleSignIn"/>
+        <activity android:name=".loginactivities.SignOut"/>
+        <activity android:name=".loginactivities.GoogleLinkCredentials"/>
+        <activity android:name=".loginactivities.GoogleUnLinkCredentials"/>
         <activity android:name=".MainActivity"/>
 
         <activity android:name=".Preferences"/>

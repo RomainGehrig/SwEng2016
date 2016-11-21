@@ -78,7 +78,7 @@ public class NotesLoader extends AsyncTaskLoader<Iterable<Note<SpannableString>>
         super.onReset();
 
         // Ensure the loader is stopped
-        onStopLoading();
+        stopLoading();
 
         notes = null;
     }

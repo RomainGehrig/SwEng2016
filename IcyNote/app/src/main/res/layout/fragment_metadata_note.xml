@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:id="@+id/relativeLayout"
-    tools:context="icynote.ui.MetadataNote">
+    tools:context="icynote.ui.fragments.MetadataNote">
 
     <Button
         android:layout_width="50dp"
@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:id="@+id/backButton"
-        android:onClick="backToNote"
+        android:onClick="reOpenEditNote"
         android:background="@drawable/meta_back"
         android:alpha="0.5"/>
 

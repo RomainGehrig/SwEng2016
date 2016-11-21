@@ -1,4 +1,4 @@
-package icynote.ui;
+package icynote.ui.loginactivities;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
+import icynote.ui.ActivityWithProgressDialog;
+import icynote.ui.BuildConfig;
+import icynote.ui.R;
 import util.Callback2;
 
 public class EmailPasswordLogin extends ActivityWithProgressDialog implements

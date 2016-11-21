@@ -1,13 +1,14 @@
-package icynote.ui;
+package icynote.ui.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class EditTags extends Fragment {
+import icynote.ui.R;
+
+public class EditTags extends FragmentWithState {
 
     public EditTags() {
         // Required empty public constructor
