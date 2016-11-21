@@ -6,70 +6,46 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/relativeLayout"
     tools:context="icynote.ui.MetadataNote">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:id="@+id/noteTitle"
-        android:layout_marginTop="18dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:textStyle="normal|bold" />
-
-    <TextView
-        android:textSize="18sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/noteCreationDate"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="38dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="63dp" />
-
-    <CheckBox
-        android:text="CheckBox 1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:id="@+id/checkBox1"
-        android:layout_below="@+id/noteCreationDate"
-        android:layout_alignLeft="@+id/noteCreationDate"
-        android:layout_alignStart="@+id/noteCreationDate" />
-
-    <CheckBox
-        android:text="CheckBox 2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox2"
-        android:layout_below="@+id/checkBox1"
-        android:layout_alignLeft="@+id/checkBox1"
-        android:layout_alignStart="@+id/checkBox1" />
-
-    <CheckBox
-        android:text="CheckBox 3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox3"
-        android:layout_below="@+id/checkBox2"
-        android:layout_alignLeft="@+id/checkBox2"
-        android:layout_alignStart="@+id/checkBox2" />
 
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignBottom="@+id/noteTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/backButton"
         android:layout_alignParentTop="true"
+        android:id="@+id/backButton"
         android:onClick="backToNote"
         android:background="@drawable/meta_back"
         android:alpha="0.5"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="101dp"
+        android:id="@+id/layout">
+
+        <TextView
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/noteCreationDate"
+            android:layout_marginLeft="38dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="63dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:id="@+id/noteTitle"
+            android:layout_marginTop="18dp"
+            android:textAlignment="center"
+            android:textStyle="normal|bold" />
+    </LinearLayout>
 
 
 </RelativeLayout>

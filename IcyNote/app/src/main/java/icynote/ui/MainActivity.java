@@ -13,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -22,12 +23,17 @@ import icynote.login.LoginManagerFactory;
 import icynote.note.Note;
 import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.impl.Singleton;
+import icynote.plugins.Plugin;
+import icynote.plugins.PluginsProvider;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
     private NoteProvider<Note<SpannableString>> core;
+
+    public static View editNoteView = null;
+    public static MainActivity instance = null;
 
     private enum FragmentID {
         EditTags(EditTags.class), EditNote(EditNote.class, true),
@@ -79,22 +85,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
         core = Singleton.getCore();
         openFragment(FragmentID.NotesList);
     }
-/*
-@Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.r_main);
-    ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expandableListView1);
-    LayoutInflater li = getLayoutInflater();
-    String[][] data = {{"child-1", "child-2", "child-3"},{"child-1", "child-2", "child-3"}};
-    expandableListView.setAdapter(new SampleExpandableListAdapter(li, data));
-}*/
+
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Activity.INPUT_METHOD_SERVICE);
@@ -122,6 +120,7 @@ public void onCreate(Bundle savedInstanceState) {
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        //hideSoftKeyboard();
 
         if (id == R.id.menuAllNotes) {
             openFragment(FragmentID.NotesList);
@@ -144,11 +143,17 @@ public void onCreate(Bundle savedInstanceState) {
     }
 
     public void backToNote(View view) {
-        openFragment(FragmentID.EditNote);
+        openEditNote();
     }
 
     public void openEditNewNote() {
         openFragment(FragmentID.EditNote);
+    }
+    public void openEditNote() {
+        //re-open last opened note
+        Bundle args = new Bundle();
+        args.putInt(EditNote.KEY_NOTE_ID, EditNote.note.getId());
+        openFragment(FragmentID.EditNote, args);
     }
     public void openEditNote(int noteId) {
         Bundle args = new Bundle();
@@ -188,6 +193,20 @@ public void onCreate(Bundle savedInstanceState) {
         if(nbFragmentInStack > 1) {
             getSupportFragmentManager().popBackStack();
         }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        for(Plugin p : PluginsProvider.getPlugins()) {
+            if (p.canHandle(requestCode)) {
+                p.handle(requestCode, resultCode, data, this);
+                return;
+            }
+        }
+
+        Log.i(TAG, "unable to handle requestCode onActivityResult " + requestCode);
+
     }
 
 }
