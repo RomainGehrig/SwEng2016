@@ -1,20 +1,12 @@
 package icynote.ui;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Picture;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -25,8 +17,8 @@ import android.widget.EditText;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import me.gujun.android.taggroup.TagGroup;
 
 import icynote.core.Note;
 import icynote.loaders.NoteLoader;
@@ -37,7 +29,6 @@ public class EditNote extends FragmentWithCoreAndLoader implements
         LoaderManager.LoaderCallbacks<Optional<Note>>{
     public static final String KEY_NOTE_ID = "note_id";
     private TagGroup mDefaultTagGroup;
-    private ImagePlugin imagePlugin;
 
     private String[] tags = {"1", "2", "3"}; // initialize tags here
     private Note note;
@@ -57,10 +48,6 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        imagePlugin = new ImagePlugin(getResources());
-
-
         // create ContextThemeWrapper from the original Activity Context with the custom theme
         final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), Theme.getTheme().toInt());
 
@@ -176,8 +163,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
         // TODO use an asynchronous task to set these things ?
         // (android doesn't like UI elements modified outside the UI thread
         titleTextView.setText(note.getTitle());
-        String newContent = note.getContent();
-        mainTextView.setText(imagePlugin.fromCoreToText(new SpannableString(newContent)));
+        mainTextView.setText(note.getContent());
     }
 
     @Override
@@ -187,40 +173,4 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-
-
-
-
-
-
-
-
-
-
-    public static SpannableString fromTextToCore(Editable ss) {
-
-        ImageSpanWithId[] spans = ss.getSpans(0, ss.toString().length(),ImageSpanWithId.class);
-        SpannableString newS = new SpannableString(ss);
-        for(int i = 0; i < spans.length; i++) {
-            newS.removeSpan(spans[i]);
-            newS.setSpan("[img="+spans[i].getName()+"]", ss.getSpanStart(spans[i]), ss.getSpanEnd(spans[i]),
-                    ss.getSpanFlags(spans[i]));
-        }
-        return newS;
-    }
-
-
-    // insert image into ss, at position start to end
-    private void insertSpan(SpannableString ss, Bitmap image, int start, int end) {
-        Drawable d = new BitmapDrawable(getResources(), image);
-        // TODO image peut dépasser un peu sur le côté
-        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-
-        String name = getActivity().getIntent().getStringExtra("newImageName");
-
-        ImageSpanWithId span = new ImageSpanWithId(name, d, ImageSpan.ALIGN_BASELINE);
-        ss.setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE); // change index
-    }
-
-
 }

@@ -10,13 +10,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import icynote.core.Note;
 import icynote.core.impl.CoreSingleton;
@@ -191,45 +189,6 @@ public void onCreate(Bundle savedInstanceState) {
         if(nbFragmentInStack > 1) {
             getSupportFragmentManager().popBackStack();
         }
-    }
-
-
-
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_TAKEPIC) {
-            if(resultCode == RESULT_OK){
-                String ss = data.getStringExtra("noteContent");
-                EditText et = (EditText) findViewById(R.id.noteDisplayBodyText);
-                et.setText(ss);
-            }
-        }
-    }
-
-
-    public static int RESULT_TAKEPIC = 1000;
-    public static int RESULT_TAKEPIC_GALLERY = 1000;
-
-    public void takePic(View v) {
-        Intent intent = new Intent(this, PicturesManager.class);
-        EditText et = (EditText) findViewById(R.id.noteDisplayBodyText);
-        intent.putExtra("photoMethod", PicturesManager.PhotoMethod.CAMERA.ordinal());
-        intent.putExtra("noteContentOriginal", EditNote.fromTextToCore(et.getText()).toString());
-        intent.putExtra("start", et.getSelectionStart());
-        intent.putExtra("end", et.getSelectionEnd());
-        startActivityForResult(intent, RESULT_TAKEPIC);
-    }
-
-
-    public void takePhotoFromGallery(View v) {
-        Intent intent = new Intent(this, PicturesManager.class);
-        EditText et = (EditText) findViewById(R.id.noteDisplayBodyText);
-        intent.putExtra("photoMethod", PicturesManager.PhotoMethod.GALLERY.ordinal());
-        intent.putExtra("noteContentOriginal", EditNote.fromTextToCore(et.getText()).toString());
-        intent.putExtra("start", et.getSelectionStart());
-        intent.putExtra("end", et.getSelectionEnd());
-        startActivityForResult(intent, RESULT_TAKEPIC_GALLERY);
     }
 
 }

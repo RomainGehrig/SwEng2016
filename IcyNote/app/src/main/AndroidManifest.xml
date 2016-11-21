@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="icynote.ui">
+          package="icynote.ui">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
+    <!--
+     TODO: Depending on your app's features, enable some Android features here
+               such as backups or search indexing
+    -->
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -18,38 +17,22 @@
 
         <activity android:name=".LoginMenu">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--<activity android:name=".PicturesManager">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>-->
 
         <activity
             android:name=".EmailPasswordLogin"
             android:label="@string/label_emailpassword"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".GoogleSignIn" />
-        <activity android:name=".SignOut" />
-        <activity android:name=".GoogleLinkCredentials" />
-        <activity android:name=".GoogleUnLinkCredentials" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".PicturesManager" />
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <activity android:name=".GoogleSignIn"/>
+        <activity android:name=".SignOut"/>
+        <activity android:name=".GoogleLinkCredentials"/>
+        <activity android:name=".GoogleUnLinkCredentials"/>
+        <activity android:name=".MainActivity"/>
+
         <activity android:name=".Preferences"/>
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="icynote.ui.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
-        </provider>
-
     </application>
-
 </manifest>
