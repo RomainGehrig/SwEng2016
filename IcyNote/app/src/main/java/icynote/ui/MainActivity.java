@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -88,22 +90,27 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         hideKeyboard(this);
         openFragment(MetadataNote.class, null);
     }
+
     public void openEditNote(int noteId) {
-        Bundle args = new Bundle();
-        args.putInt(EditNote.KEY_NOTE_ID, noteId);
-        openFragment(EditNote.class, args);
+        EditNote editFragment = (EditNote) getFragment(EditNote.class);
+        editFragment.setNoteId(noteId);
+        commitFragment(editFragment, EditNote.class.getSimpleName());
     }
+
     public void reOpenEditNote(View view) {
         openEditNote(applicationState.getLastOpenedNoteId());
     }
+
     public void openEditNewNote() {
-        openFragment(EditNote.class, null);
+        EditNote editFragment = (EditNote) getFragment(EditNote.class);
+        editFragment.setNoteId(null);
+        commitFragment(editFragment, EditNote.class.getSimpleName());
     }
 
     @Override
     public void onBackPressed() {
         int nbFragmentInStack = getSupportFragmentManager().getBackStackEntryCount();
-        if(nbFragmentInStack > 1) {
+        if (nbFragmentInStack > 1) {
             getSupportFragmentManager().popBackStack();
         }
     }
@@ -112,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        for(Plugin p : applicationState.getPluginProvider().getPlugins()) {
+        for (Plugin p : applicationState.getPluginProvider().getPlugins()) {
             if (p.canHandle(requestCode)) {
                 p.handle(requestCode, resultCode, data, applicationState);
                 return;
@@ -122,25 +129,34 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void openFragment(Class toOpen, Bundle bundle) {
+        FragmentWithState f = getFragment(toOpen);
+        commitFragment(f, toOpen.getSimpleName());
+    }
+    private FragmentWithState getFragment(Class toOpen) {
         try {
-            FragmentWithState fragment = (FragmentWithState) toOpen.newInstance();
-            fragment.setState(applicationState);
-
-            if (bundle != null) {
-                fragment.setArguments(bundle);
-            }
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .addToBackStack(null)
-                    .commit();
+            Fragment fragment = fragmentManager.findFragmentByTag(toOpen.getSimpleName());
+            if (fragment == null) {
+                fragment = (Fragment) toOpen.newInstance();
+            }
+            FragmentWithState stateFragment = (FragmentWithState) fragment;
+            stateFragment.setState(applicationState);
+            return stateFragment;
 
         } catch (InstantiationException e) {
             Log.e(TAG, e.getMessage());
         } catch (IllegalAccessException e) {
             Log.e(TAG, e.getMessage());
         }
+        return null;
+    }
+    private void commitFragment(Fragment fragment, String fragmentTag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction t = fragmentManager.beginTransaction();
+        t.replace(R.id.content_frame, fragment, fragmentTag);
+        t.addToBackStack(null);
+        t.commit();
     }
 
     public static void hideKeyboard(Activity activity) {

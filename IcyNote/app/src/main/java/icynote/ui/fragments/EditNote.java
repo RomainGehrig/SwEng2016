@@ -23,16 +23,20 @@ import me.gujun.android.taggroup.TagGroup;
 import util.Optional;
 
 public class EditNote extends FragmentWithState implements
-        LoaderCallbacks<Optional<Note<SpannableString>>>
-{
+        LoaderCallbacks<Optional<Note<SpannableString>>> {
     public static final String KEY_NOTE_ID = "note_id";
 
     private TagGroup mDefaultTagGroup;
     private String[] tags = {"1", "2", "3"}; // initialize tags here
     private Note<SpannableString> note;
+    private Integer noteId;
 
     public EditNote() {
         // Required empty public constructor
+    }
+
+    public void setNoteId(Integer id) {
+        noteId = id;
     }
 
     @Override
@@ -42,9 +46,13 @@ public class EditNote extends FragmentWithState implements
     }
 
     private void restartLoader() {
+        Bundle args = new Bundle();
+        if (noteId != null) {
+            args.putInt(EditNote.KEY_NOTE_ID, noteId);
+        }
         appState()
                 .getLoaderManager()
-                .restartLoader(NoteLoader.LOADER_ID, getArguments(), this);
+                .restartLoader(NoteLoader.LOADER_ID, args, this);
     }
 
     @Override
@@ -61,10 +69,10 @@ public class EditNote extends FragmentWithState implements
 
         mDefaultTagGroup.setOnTagChangeListener(new TagGroup.OnTagChangeListener() {
             @Override
-            public void onAppend( TagGroup tagGroup, String tag) {
+            public void onAppend(TagGroup tagGroup, String tag) {
                 String[] allTags = tagGroup.getTags();
 
-                if(containsNotLast(allTags, tag)){
+                if (containsNotLast(allTags, tag)) {
                     //tagGroup.setBackgroundColor(Color.BLACK);
                 } else {
                     //tagGroup.setBackgroundColor(Color.WHITE);
@@ -75,23 +83,23 @@ public class EditNote extends FragmentWithState implements
             public void onDelete(TagGroup tagGroup, String tag) {
                 // ---
             }
-        } );
+        });
 
         // FIXME does nothing
-        mDefaultTagGroup.setOnKeyListener( new View.OnKeyListener() {
+        mDefaultTagGroup.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ( event.getAction()==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_A) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_A) {
                     Log.d("key", "press");
-                    ((TagGroup)v.findViewById(R.id.noteDisplayTagsText)).submitTag();
+                    ((TagGroup) v.findViewById(R.id.noteDisplayTagsText)).submitTag();
                     return true;
                 }
                 return false;
             }
-        } );
+        });
 
-        EditText titleTextView = (EditText)view.findViewById(R.id.noteDisplayTitleText);
-        EditText mainTextView = (EditText)view.findViewById(R.id.noteDisplayBodyText);
+        EditText titleTextView = (EditText) view.findViewById(R.id.noteDisplayTitleText);
+        EditText mainTextView = (EditText) view.findViewById(R.id.noteDisplayBodyText);
 
         // add listener to the title
         titleTextView.addTextChangedListener(new TextWatcher() {
@@ -130,10 +138,10 @@ public class EditNote extends FragmentWithState implements
         return view;
     }
 
-    private boolean containsNotLast(String[] l, String t){
-        List<String> e = Arrays.asList(l).subList(0, l.length-1);
-        for(String s: e){
-            if(s.equals(t)){
+    private boolean containsNotLast(String[] l, String t) {
+        List<String> e = Arrays.asList(l).subList(0, l.length - 1);
+        for (String s : e) {
+            if (s.equals(t)) {
                 return true;
             }
         }
@@ -150,13 +158,14 @@ public class EditNote extends FragmentWithState implements
     }
 
     @Override
-    public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader, Optional<Note<SpannableString>> optionalNote) {
+    public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader,
+                               Optional<Note<SpannableString>> optionalNote) {
         // TODO what to do if note is not present ?
         note = optionalNote.get();
         appState().setLastOpenedNoteId(note.getId());
 
-        EditText titleTextView = (EditText)getView().findViewById(R.id.noteDisplayTitleText);
-        EditText mainTextView = (EditText)getView().findViewById(R.id.noteDisplayBodyText);
+        EditText titleTextView = (EditText) getView().findViewById(R.id.noteDisplayTitleText);
+        EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
         // TODO use an asynchronous task to set these things ?
         // (android doesn't like UI elements modified outside the UI thread
         titleTextView.setText(note.getTitle());
