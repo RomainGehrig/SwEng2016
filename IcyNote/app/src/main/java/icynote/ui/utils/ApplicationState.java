@@ -1,8 +1,10 @@
 package icynote.ui.utils;
 
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
+import android.util.Log;
 
 import icynote.extras.ExtraProviderFactory;
 import icynote.extras.list.ProviderFactory;
@@ -14,34 +16,58 @@ import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.impl.Factory;
 import icynote.plugins.FormatterPlugin;
 import icynote.plugins.PluginsProvider;
+import icynote.ui.MainActivity;
 
 
 public class ApplicationState {
-    private AppCompatActivity activity = null;
+    private String userUID;
+    private MainActivity activity = null;
     private NoteProvider<Note<SpannableString>> noteProvider = null;
     private PluginsProvider pluginProvider = null;
     private ExtraProviderFactory extraProviderFactory = null;
     private LoginManager loginManager = null;
-    private Integer lastOpenedNoteId = null;
     private LoaderManager loaderManager = null;
 
-    public ApplicationState(String UUID, AppCompatActivity a) {
+    private Uri tempFileUri = null;
+
+    private Note<SpannableString> lastOpenedNote = null;
+    private Integer lastOpenedNoteId = null;
+    private SpannableString lastOpenedNoteContent = null;
+    private int selectionStart = -1;
+    private int selectionEnd = -1;
+
+
+    public ApplicationState(String UUID, MainActivity a) {
+        userUID = UUID;
         activity = a;
         loginManager = LoginManagerFactory.getInstance();
         pluginProvider = new PluginsProvider();
         extraProviderFactory = new ProviderFactory(UUID);
         NoteDecoratorFactory<SpannableString> temp = new NoteDecoratorFactory<>();
         for(FormatterPlugin p : pluginProvider.getFormatters()) {
-            temp = temp.andThen(p.getInteractorFactory());
+            temp = temp.andThen(p.getInteractorFactory(this));
         }
         noteProvider = Factory.make(activity, UUID, temp);
     }
 
-    public AppCompatActivity getActivity() {
+    public ApplicationState(Bundle savedInstanceState, MainActivity a) {
+        this(savedInstanceState.getString("userUID"), a);
+        tempFileUri = Uri.parse(savedInstanceState.getString("tempFileUri"));
+        lastOpenedNoteId = savedInstanceState.getInt("lastOpenedNoteId");
+        Log.i("ApplicationState", "restauring application state from savedInstanceState");
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("userUID", userUID);
+        outState.putString("tempFileUri", tempFileUri.toString());
+        outState.putInt("lastOpenedNoteId", lastOpenedNoteId);
+    }
+
+    public MainActivity getActivity() {
         return activity;
     }
 
-    public void setActivity(AppCompatActivity activity) {
+    public void setActivity(MainActivity activity) {
         this.activity = activity;
     }
 
@@ -91,5 +117,45 @@ public class ApplicationState {
 
     public void setLoaderManager(LoaderManager loaderManager) {
         this.loaderManager = loaderManager;
+    }
+
+    public Uri getTempFileUri() {
+        return tempFileUri;
+    }
+
+    public void setTempFileUri(Uri tempFileUri) {
+        this.tempFileUri = tempFileUri;
+    }
+
+    public int getSelectionStart() {
+        return selectionStart;
+    }
+
+    public void setSelectionStart(int selectionStart) {
+        this.selectionStart = selectionStart;
+    }
+
+    public int getSelectionEnd() {
+        return selectionEnd;
+    }
+
+    public void setSelectionEnd(int selectionEnd) {
+        this.selectionEnd = selectionEnd;
+    }
+
+    public SpannableString getLastOpenedNoteContent() {
+        return lastOpenedNoteContent;
+    }
+
+    public void setLastOpenedNoteContent(SpannableString lastOpenedNoteContent) {
+        this.lastOpenedNoteContent = lastOpenedNoteContent;
+    }
+
+    public Note<SpannableString> getLastOpenedNote() {
+        return lastOpenedNote;
+    }
+
+    public void setLastOpenedNote(Note<SpannableString> lastOpenedNote) {
+        this.lastOpenedNote = lastOpenedNote;
     }
 }
