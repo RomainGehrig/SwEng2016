@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import icynote.core.impl.CoreSingleton;
+import icynote.noteproviders.impl.Singleton;
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
 import util.Callback;
@@ -44,7 +44,7 @@ public class LoginMenu extends AppCompatActivity {
             LoginManager loginManager = LoginManagerFactory.getInstance();
 
             String uuid = loginManager.getCurrentUserUID();
-            CoreSingleton.login(getBaseContext(), uuid);
+            Singleton.login(getBaseContext(), uuid);
 
             loginManager.onLogout(SignOut.getSignOutCallback(LoginMenu.this));
 

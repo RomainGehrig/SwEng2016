@@ -2,16 +2,18 @@ package icynote.ui;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.text.SpannableString;
 
-import icynote.core.IcyNoteCore;
+import icynote.noteproviders.NoteProvider;
+import icynote.note.Note;
 
 import static util.ArgumentChecker.requireNonNull;
 
 public abstract class FragmentWithCoreAndLoader extends Fragment {
-    private IcyNoteCore core;
+    private NoteProvider<Note<SpannableString>> core;
     private LoaderManager loaderManager;
 
-    public void setCore(IcyNoteCore core) {
+    public void setCore(NoteProvider<Note<SpannableString>> core) {
         this.core = requireNonNull(core);
     }
 
@@ -19,7 +21,7 @@ public abstract class FragmentWithCoreAndLoader extends Fragment {
         this.loaderManager = requireNonNull(loaderManager);
     }
 
-    protected IcyNoteCore getCore() {
+    protected NoteProvider<Note<SpannableString>> getCore() {
         return core;
     }
 

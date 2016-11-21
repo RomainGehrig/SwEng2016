@@ -1,28 +1,21 @@
 package icynote.login;
 
 import android.support.annotation.NonNull;
-import android.telecom.Call;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.auth.api.credentials.internal.SaveRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import icynote.core.impl.CoreSingleton;
 import util.Callback;
 import util.Callback2;
 
@@ -39,7 +32,7 @@ public class LoginManager {
 
     public static class NotLoggedInException extends RuntimeException {
         public NotLoggedInException() {
-            super("a user must be logged in before accessing the core");
+            super("a user must be logged in before accessing the addNoteDecorators");
         }
     }
 

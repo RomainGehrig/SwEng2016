@@ -11,8 +11,8 @@ import android.preference.SwitchPreference;
 import java.util.ArrayList;
 import java.util.List;
 
-import icynote.core.OrderBy;
-import icynote.core.OrderType;
+import icynote.noteproviders.OrderBy;
+import icynote.noteproviders.OrderType;
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
 
