@@ -5,7 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import icynote.plugins.FormatterPlugin;
+import icynote.plugins.PluginsProvider;
 
 public class MetadataNote extends Fragment {
 
@@ -30,13 +34,14 @@ public class MetadataNote extends Fragment {
         // inflate the layout using the cloned inflater, not default inflater
         View v = localInflater.inflate(R.layout.fragment_metadata_note, container, false);
 
-        TextView checkBox1 = (TextView)v.findViewById(R.id.checkBox1);
-        //checkBox1.setTextColor(Theme.getTheme().getTextColor());
-        TextView checkBox2 = (TextView)v.findViewById(R.id.checkBox2);
-        //checkBox2.setTextColor(Theme.getTheme().getTextColor());
-        TextView checkBox3 = (TextView)v.findViewById(R.id.checkBox3);
-        //checkBox3.setTextColor(Theme.getTheme().getTextColor());
 
+        LinearLayout layout = (LinearLayout) v.findViewById(R.id.layout);
+
+        for(FormatterPlugin formatter : PluginsProvider.getFormatters()) {
+            for(View button : formatter.getMetaButtons(getActivity())) {
+                layout.addView(button);
+            }
+        }
         return v;
     }
 

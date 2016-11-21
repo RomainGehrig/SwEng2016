@@ -28,7 +28,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     private TagGroup mDefaultTagGroup;
 
     private String[] tags = {"1", "2", "3"}; // initialize tags here
-    private Note<SpannableString> note;
+    public static Note<SpannableString> note;
 
     public EditNote() {
         // Required empty public constructor
@@ -38,8 +38,11 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     @Override
     public void onResume() {
         super.onResume();
-        getThisLoaderManager().restartLoader(NoteLoader.LOADER_ID, getArguments(), this);
+        restartLoader();
+    }
 
+    private void restartLoader() {
+        getThisLoaderManager().restartLoader(NoteLoader.LOADER_ID, getArguments(), this);
     }
 
     @Override
@@ -122,6 +125,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
             }
         });
 
+        MainActivity.editNoteView = view;
         return view;
     }
 
@@ -148,8 +152,9 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader, Optional<Note<SpannableString>> optionalNote) {
         // TODO what to do if note is not present ?
         note = optionalNote.get();
-        EditText titleTextView = (EditText)getView().findViewById(R.id.noteDisplayTitleText);
-        EditText mainTextView = (EditText)getView().findViewById(R.id.noteDisplayBodyText);
+        View view = MainActivity.editNoteView;
+        EditText titleTextView = (EditText)view.findViewById(R.id.noteDisplayTitleText);
+        EditText mainTextView = (EditText)view.findViewById(R.id.noteDisplayBodyText);
         // TODO use an asynchronous task to set these things ?
         // (android doesn't like UI elements modified outside the UI thread
         titleTextView.setText(note.getTitle());
