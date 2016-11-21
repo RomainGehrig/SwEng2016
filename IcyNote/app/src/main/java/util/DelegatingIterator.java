@@ -2,30 +2,14 @@ package util;
 
 import java.util.Iterator;
 
-public class DelegatingIterator<T> implements Iterator<T> {
-    private Iterator<T> delegate;
+public class DelegatingIterator<T> extends DelegatingIterator2<T, T> {
 
     public DelegatingIterator(Iterator<T> toDelegateTo) {
-        if (toDelegateTo == null) {
-            //do not use the core.Checker class here
-            throw new IllegalArgumentException("cannot create DelegatingIterator with null delegate");
-        }
-
-        delegate = toDelegateTo;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return delegate.hasNext();
+        super(toDelegateTo);
     }
 
     @Override
     public T next() {
-        return delegate.next();
-    }
-
-    @Override
-    public void remove() {
-        delegate.remove();
+        return getDelegate().next();
     }
 }

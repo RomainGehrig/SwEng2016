@@ -1,8 +1,8 @@
 package icynote.ui;
 
 
-import icynote.core.OrderBy;
-import icynote.core.OrderType;
+import icynote.noteproviders.OrderBy;
+import icynote.noteproviders.OrderType;
 
 public class CurrentPreferences {
 

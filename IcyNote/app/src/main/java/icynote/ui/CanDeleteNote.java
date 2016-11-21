@@ -1,6 +1,6 @@
 package icynote.ui;
 
-import icynote.core.Response;
+import icynote.note.Response;
 
 public interface CanDeleteNote {
     Response deleteNote(int noteId);
