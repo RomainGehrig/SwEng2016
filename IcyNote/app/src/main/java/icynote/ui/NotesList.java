@@ -67,8 +67,6 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        Style.ColorSetting curr = Style.getStyle();
-        container.setBackgroundColor(curr.getBackgroundColor());
         view = inflater.inflate(R.layout.fragment_notes_list, container, false);
 
         listView = (ListView) view.findViewById(R.id.lvNotes);
