@@ -44,9 +44,9 @@ public class Preferences extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if((Boolean) newValue){
-                    Theme.setTheme(Theme.ThemeType.DARK.toPosition());
+                    //Theme.setTheme(Theme.ThemeType.DARK.toPosition());
                 } else {
-                    Theme.setTheme(Theme.ThemeType.BRIGHT.toPosition());
+                    //Theme.setTheme(Theme.ThemeType.BRIGHT.toPosition());
                 }
                 return true;
             }
