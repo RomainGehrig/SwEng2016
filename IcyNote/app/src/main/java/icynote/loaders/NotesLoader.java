@@ -18,6 +18,7 @@ import icynote.core.OrderType;
  * @see icynote.core.IcyNoteCore
  */
 public class NotesLoader extends AsyncTaskLoader<Iterable<Note>> {
+    public static final int LOADER_ID = 1;
     private final IcyNoteCore core;
     private Iterable<Note> notes;
     private OrderBy orderBy = OrderBy.CREATION;

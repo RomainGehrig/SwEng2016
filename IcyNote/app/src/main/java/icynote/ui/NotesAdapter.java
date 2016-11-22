@@ -34,14 +34,16 @@ import static util.ArgumentChecker.requireNonNull;
 // TODO can we not use store the notes in an array and let the underlying ArrayAdapter handle it ?
 public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateContextMenuListener {
 
-    public final static String ONE_NOTE = "ch.epfl.sweng.prdia_adapterlistview.NOTE_DATA";
+    public static final String ONE_NOTE = "ch.epfl.sweng.prdia_adapterlistview.NOTE_DATA";
 
     private Filter filter;
     private ArrayList<Note> notes;
+    private final CanDeleteNote noteDeleter;
 
-    public NotesAdapter(Context context, ArrayList<Note> notes) {
+    public NotesAdapter(Context context, ArrayList<Note> notes, CanDeleteNote noteDeleter) {
         super(context, 0, notes);
         this.notes = notes;
+        this.noteDeleter = requireNonNull(noteDeleter);
     }
 
     // FIXME tmp function to set the private array
@@ -69,8 +71,7 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
                 int position = (Integer) view.getTag();
                 Note currentNote = (Note)getItem(position);
                 // TODO & FIXME: edit a note on click
-                Log.i("NotesAdapter", "Click on note !");
- //               ((MainActivity)getContext()).openEditNote(currentNote.getId());
+                ((MainActivity)getContext()).openEditNote(currentNote.getId());
             }
         });
 
@@ -84,7 +85,8 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
                 + tmpDate.get(GregorianCalendar.YEAR);
         tvDate.setText(date);
         String content = note.getContent();
-        int pos1=-1, pos2=-1;
+        int pos1=-1;
+        int pos2=-1;
         if(content != "") {
             pos1 = content.indexOf("\n");
             if(pos1 >= 0) {
@@ -96,11 +98,9 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
             content = content + "...";
         }
 
-
         // Content
         TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
         tvContent.setText(content);
-
 
         // Delete button
         Button btDelete = (Button) convertView.findViewById(R.id.btDelete);
@@ -110,8 +110,9 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
             public void onClick(View view) {
                 int position = (Integer) view.getTag();
                 Note note1 = getItem(position);
-
+                // TODO remove at position ?
                 notes.remove(note1);
+                Log.i("NotesAdapter", Boolean.toString(noteDeleter.deleteNote(note1.getId()).isPositive()));
                 TextView tvNumNotes  = (TextView) view.getRootView().findViewById(R.id.tvNumNotes);
                 tvNumNotes.setText(notes.size() + " notes");
                 notifyDataSetChanged();
@@ -120,8 +121,6 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
 
 /*
         View separator = (View) convertView.findViewById(R.id.)*/
-
-
 
         convertView.setOnCreateContextMenuListener(this);
 
@@ -148,7 +147,7 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         private ArrayList<Note> sourceNotes;
 
         public NoteFilter(List<Note> notes) {
-            sourceNotes = new ArrayList<Note>();
+            sourceNotes = new ArrayList<>();
             synchronized (this) {
                 sourceNotes.addAll(notes);
             }
@@ -158,7 +157,7 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         protected FilterResults performFiltering(CharSequence chars) {
             String filterSeq = chars.toString().toLowerCase();
             FilterResults result = new FilterResults();
-            if (filterSeq != null && filterSeq.length() > 0) {
+            if (filterSeq != null && !filterSeq.isEmpty()) {
                 ArrayList<Note> filter = new ArrayList<Note>();
 
                 for (Note note : sourceNotes) {

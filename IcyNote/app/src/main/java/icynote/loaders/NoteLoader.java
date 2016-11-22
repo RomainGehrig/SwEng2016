@@ -19,20 +19,24 @@ import static util.ArgumentChecker.requireNonNull;
  * @see icynote.core.IcyNoteCore
  */
 public class NoteLoader extends AsyncTaskLoader<Optional<Note>> {
+    public static final int LOADER_ID = 2;
     private final IcyNoteCore core;
-    private int noteId;
+    private Optional<Integer> noteId;
 
-    public NoteLoader(Context context, IcyNoteCore core, int noteId) {
+    public NoteLoader(Context context, IcyNoteCore core, Optional<Integer> noteId) {
         super(context);
         if (core == null)
             throw new IllegalArgumentException("core is null");
         this.core = requireNonNull(core);
-        this.noteId = noteId;
+        this.noteId = requireNonNull(noteId);
     }
 
     @Override
     public Optional<Note> loadInBackground() {
-        return core.getNote(noteId);
+        if (noteId.isPresent())
+            return core.getNote(noteId.get());
+        else
+            return core.createNote();
     }
 
     @Override
