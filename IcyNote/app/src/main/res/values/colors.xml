@@ -5,6 +5,7 @@
     <color name="colorAccent">#8cbbe2</color><!--#51e4d8-->
 
     <color name="backgroundColor">#ffffff</color>
+    <color name="textColor">#000000</color>
     <color name="hintColor">#808080</color>
 
     <color name="white">#ffffff</color>
