@@ -111,7 +111,9 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
                 int position = (Integer) view.getTag();
                 Note note1 = getItem(position);
 
-                note1.setContent("");
+                notes.remove(note1);
+                TextView tvNumNotes  = (TextView) view.getRootView().findViewById(R.id.tvNumNotes);
+                tvNumNotes.setText(notes.size() + " notes");
                 notifyDataSetChanged();
             }
         });
