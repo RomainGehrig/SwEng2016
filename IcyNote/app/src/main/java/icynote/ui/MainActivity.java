@@ -3,6 +3,7 @@ package icynote.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Style.initStyle();
         super.onCreate(savedInstanceState);
         Theme.initTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         };
         LoginManagerFactory.getInstance().onLogout(logOutCallback);
 
-        openFragment(FragmentID.EditNote);
+        openFragment(FragmentID.NotesList);
     }
 
     private void hideSoftKeyboard() {
@@ -122,6 +124,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    @Override
+    public void onThemeSelected(Theme.ThemeType currentTheme)
+    {
+        openFragment(FragmentID.Settings);
+    }
+
+
+    // Handles click events related to the menu
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -150,6 +162,12 @@ public class MainActivity extends AppCompatActivity
         openFragment(FragmentID.EditNote);
     }
 
+
+    // ----- COLOR SETTINGS DEV BLOCK
+    public enum ColorSetting {
+        DARK, BRIGHT
+    }
+
     public void openFragment(FragmentID fragmentID) {
         Fragment fragment = null;
         if (fragmentID.needCoreAndLoader) {
@@ -158,8 +176,11 @@ public class MainActivity extends AppCompatActivity
             fragment = fragmentID.instantiateFragment();
         }
 
+        // FIXME what to do with the bundle thingy
+        //fragment.setArguments(bundle);
+        //fragment.setArguments(fragmentBundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -167,9 +188,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onThemeSelected(Theme.ThemeType currentTheme)
-    {
-        openFragment(FragmentID.Settings);
+    public void onBackPressed() {
+        int nbFragmentInStack = getSupportFragmentManager().getBackStackEntryCount();
+        if(nbFragmentInStack > 1) {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
 }
