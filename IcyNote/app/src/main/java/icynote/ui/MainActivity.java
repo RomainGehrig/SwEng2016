@@ -24,14 +24,14 @@ import icynote.core.IcyNoteCore;
 import icynote.core.Note;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Settings.OnSpinnerSelection {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
     private IcyNoteCore core;
 
     private enum FragmentID {
         EditTags(EditTags.class), EditNote(EditNote.class, true),
-        Settings(Settings.class), MetadataNote(MetadataNote.class),
+        MetadataNote(MetadataNote.class),
         NotesList(NotesList.class, true);
 
         private final Class fragmentClass;
@@ -120,13 +120,6 @@ public void onCreate(Bundle savedInstanceState) {
     }
 
 
-    @Override
-    public void onThemeSelected(Theme.ThemeType currentTheme)
-    {
-        openFragment(FragmentID.Settings);
-    }
-
-
     // Handles click events related to the menu
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -140,7 +133,6 @@ public void onCreate(Bundle savedInstanceState) {
         } else if (id == R.id.menuTrash) {
             openFragment(FragmentID.EditNote);
         } else if (id == R.id.menuSettings) {
-            //openFragment(FragmentID.Settings);
             Intent intent = new Intent(this, Preferences.class);
             startActivity(intent);
         } else if (id == R.id.menuLogout) {
