@@ -85,7 +85,9 @@
     <inspection_tool class="AssignmentToCatchBlockParameter" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AssignmentToStaticFieldFromInstanceMethod" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AssignmentUsedAsCondition" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AutoCloseableResource" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AutoCloseableResource" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="METHOD_MATCHER_CONFIG" value="java.util.Formatter,format,java.io.Writer,append,com.google.common.base.Preconditions,checkNotNull,org.hibernate.Session,close,android.database.sqlite.SQLiteDatabase,query,android.database.sqlite.SQLiteOpenHelper,getReadableDatabase|getWritableDatabase" />
+    </inspection_tool>
     <inspection_tool class="BadExceptionCaught" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="exceptionsString" value="" />
       <option name="exceptions">

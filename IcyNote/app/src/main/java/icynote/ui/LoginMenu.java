@@ -44,7 +44,7 @@ public class LoginMenu extends AppCompatActivity {
             LoginManager loginManager = LoginManagerFactory.getInstance();
 
             String uuid = loginManager.getCurrentUserUID();
-            CoreSingleton.login(uuid);
+            CoreSingleton.login(getBaseContext(), uuid);
 
             loginManager.onLogout(SignOut.getSignOutCallback(LoginMenu.this));
 

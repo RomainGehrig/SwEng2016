@@ -1,19 +1,31 @@
 package icynote.core.impl;
 
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(AndroidJUnit4.class)
 public class CoreSingletonTests {
+    private Context context = InstrumentationRegistry.getTargetContext();
+
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         CoreSingleton.logout();
     }
 
+    private void login(String userUID) {
+        CoreSingleton.login(context, userUID);
+    }
+    
     @Test(expected=AssertionError.class)
     public void createFactory(){
         CoreSingleton c = new CoreSingleton();
@@ -22,12 +34,12 @@ public class CoreSingletonTests {
 
     @Test
     public void login() {
-        CoreSingleton.login("a");
+        login("a");
     }
 
     @Test
     public void isLoggedInWhenYes() {
-        CoreSingleton.login("a");
+        login("a");
         assertTrue(CoreSingleton.isLoggedIn());
     }
 
@@ -39,7 +51,7 @@ public class CoreSingletonTests {
 
     @Test
     public void logout() {
-        CoreSingleton.login("a");
+        login("a");
         assertTrue(CoreSingleton.isLoggedIn());
         CoreSingleton.logout();
         assertFalse(CoreSingleton.isLoggedIn());
@@ -47,7 +59,7 @@ public class CoreSingletonTests {
 
     @Test
     public void getCore() {
-        CoreSingleton.login("a");
+        login("a");
         assertNotNull(CoreSingleton.getCore());
     }
 

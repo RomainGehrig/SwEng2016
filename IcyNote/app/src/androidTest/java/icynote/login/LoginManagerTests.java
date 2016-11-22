@@ -9,12 +9,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 import java.sql.Timestamp;
 import java.util.concurrent.CountDownLatch;
 
-import icynote.ui.GoogleSignIn;
 import util.Callback;
 import util.Callback2;
 
@@ -22,7 +20,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 
 @SuppressWarnings("ClassWithTooManyMethods")
