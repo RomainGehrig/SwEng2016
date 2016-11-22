@@ -12,19 +12,6 @@
 
     <include layout="@layout/menu_button" />
 
-    <Spinner
-        android:id="@+id/styles_list"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_below="@+id/styles_title"
-        android:layout_marginTop="15dp"
-        android:entries="@+id/styles_list"
-        android:dropDownWidth="match_parent"
-        android:layout_alignLeft="@+id/styles_title"
-        android:layout_alignStart="@+id/styles_title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <TextView
         android:text="@string/Styles"
         android:layout_width="wrap_content"
@@ -38,22 +25,45 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Button
-        android:text="Link Google Sign In"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/styles_list"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="57dp"
-        android:id="@+id/linkGoogleButton" />
+    <Spinner
+        android:id="@+id/styles_list"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/styles_title"
+        android:layout_marginTop="15dp"
+        android:entries="@+id/styles_list"
+        android:dropDownWidth="match_parent"
+        android:layout_alignLeft="@+id/styles_title"
+        android:layout_alignStart="@+id/styles_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:text="Unlink Google Sign In"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linkGoogleButton"
+        android:id="@+id/unlinkGoogleButton"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp"
-        android:id="@+id/unlinkGoogleButton" />
+        android:layout_marginBottom="26dp" />
+
+    <Button
+        android:text="Link Google Sign In"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linkGoogleButton"
+        android:layout_above="@+id/unlinkGoogleButton"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Account informaion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:id="@+id/account_info_title"
+        android:layout_marginTop="39dp"
+        android:layout_below="@+id/styles_list"
+        android:layout_alignLeft="@+id/styles_list"
+        android:layout_alignStart="@+id/styles_list" />
 
 </RelativeLayout>
