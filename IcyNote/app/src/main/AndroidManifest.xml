@@ -33,5 +33,5 @@
         <activity android:name=".GoogleUnLinkCredentials"/>
         <activity android:name=".MainActivity"/>
     </application>
-
 </manifest>
+
