@@ -30,12 +30,13 @@ import java.util.Comparator;
 
 import icynote.core.Note;
 import icynote.core.OrderBy;
-import icynote.core.impl.CoreSingleton;
+import icynote.core.Response;
 import icynote.loaders.NotesLoader;
 
 import static util.ArgumentChecker.requireNonNull;
 
-public class NotesList extends FragmentWithCoreAndLoader implements LoaderManager.LoaderCallbacks<Iterable<Note>> {
+public class NotesList extends FragmentWithCoreAndLoader implements LoaderManager.LoaderCallbacks<Iterable<Note>>,
+        CanDeleteNote {
     private static final String TAG = "NotesList";
     private Loader<Iterable<Note>> loader;
 
@@ -52,7 +53,7 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        notesAdapter = new NotesAdapter(getActivity(), notes);
+        notesAdapter = new NotesAdapter(getActivity(), notes, this);
 
         if (savedInstanceState != null) {
             Log.i(TAG, "savedInstanceState was not null ! (could save content)");
@@ -62,7 +63,7 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     @Override
     public void onResume() {
         super.onResume();
-        getThisLoaderManager().initLoader(1, null, this);
+        getThisLoaderManager().restartLoader(NotesLoader.LOADER_ID, null, this);
     }
 
     @Override
@@ -74,16 +75,6 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
         listView = (ListView) view.findViewById(R.id.lvNotes);
         listView.setAdapter(null); // to avoid adding the notes twice
         listView.setAdapter(notesAdapter);
-
-
-        //Once adapter created, new elements may be added to
-        /*
-        Note noteNew1 = new NoteData();
-        noteNew1.setTitle("New Note");
-        noteNew1.setContent("\nNew content: line number 1 \nand line number 2.");
-        noteNew1.setCreation(new GregorianCalendar());
-        notesAdapter.add(noteNew1);
-        */
 
         RelativeLayout layout_2 = (RelativeLayout)view.findViewById(R.id.layout_2);
         layout_2.setBackgroundColor(Color.rgb(255, 255, 204));
@@ -185,17 +176,8 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Note n = CoreSingleton.getCore().createNote().get();
-                n.setTitle("new title");
-                n.setContent("new very interesting content");
-                CoreSingleton.getCore().persist(n);
-                Toast.makeText(getContext(), "restart the app to see the new note ^^", Toast.LENGTH_SHORT)
-                        .show();
-                notesAdapter.notifyDataSetChanged();
-                // TODO
-                // Open EditNote with no ID
-                // let EditNote create the new note
-                //((MainActivity)getActivity()).openEditNote(0);
+                ((MainActivity)getActivity()).openEditNewNote();
+                // TODO notify underlying list
             }
         });
 
@@ -209,14 +191,25 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     }
 
     @Override
+    public Response deleteNote(int noteId) {
+        return getCore().delete(noteId);
+    }
+
+    /*
+    @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        Log.i(TAG, Integer.toString(item.getItemId()));
         switch (item.getItemId()) {
             case R.id.delete_id:
                 notes.remove(info.position);
+                // TODO asynchronous delete
+                int noteId = notes.get(info.position).getId();
+                Log.i(TAG, "Deleting note with id " + noteId);
+                Log.i(TAG, getCore().delete(noteId).toString());
                 notesAdapter.notifyDataSetChanged();
                 TextView tvNumNotes = (TextView) view.findViewById(R.id.tvNumNotes);
-                tvNumNotes.setText(notesAdapter.getCount()+ " notes");
+                tvNumNotes.setText(notesAdapter.getCount() + " notes");
                 return true;
             case R.id.retour_id:
                 return true;
@@ -224,6 +217,7 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
                 return super.onContextItemSelected(item);
         }
     }
+    */
 
     /**
      * This interface must be implemented by activities that contain this
