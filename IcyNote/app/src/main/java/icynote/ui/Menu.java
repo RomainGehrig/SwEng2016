@@ -27,6 +27,7 @@ public class Menu extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
         Button button = (Button) view.findViewById(R.id.menuButton);
+
         return view;
     }
 
