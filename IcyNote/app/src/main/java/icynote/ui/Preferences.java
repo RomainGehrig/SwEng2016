@@ -1,16 +1,12 @@
 package icynote.ui;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,17 +85,7 @@ public class Preferences extends PreferenceActivity {
             }
         });
 
-        accountPref = findPreference("account_action");
-        LoginManager loginManager = LoginManagerFactory.getInstance();
-        if(loginManager.userCanLoginWithEmail()){
-            if(loginManager.userCanLoginWithGoogle()){
-                setAccountPref("Unlink account from google", 1);
-            } else {
-                setAccountPref("Link account with google", 0);
-            }
-        } else {
-            setAccountPref("Generate password", 2);
-        }
+        updateButton();
 
         deleteAccPref = findPreference("account_delete");
         deleteAccPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -134,11 +120,26 @@ public class Preferences extends PreferenceActivity {
         }
     }
 
+    public void updateButton() {
+        accountPref = findPreference("account_action");
+        LoginManager loginManager = LoginManagerFactory.getInstance();
+        if(loginManager.userCanLoginWithEmail()){
+            if(loginManager.userCanLoginWithGoogle()){
+                setAccountPref("Unlink account from google", 1);
+            } else {
+                setAccountPref("Link account with google", 0);
+            }
+        } else {
+            setAccountPref("Generate password", 2);
+        }
+    }
+
     public void setAccountPref(String title, final int mode) {
         accountPref.setTitle(title);
         accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 execAccountAction(mode);
+                updateButton();
                 return true;
             }
         });
