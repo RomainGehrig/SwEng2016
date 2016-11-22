@@ -1,20 +1,14 @@
 package icynote.ui;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,27 +16,25 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import icynote.core.Note;
-import icynote.core.impl.NoteData;
 
 import static util.ArgumentChecker.requireNonNull;
 
+
 /**
- * Created by DAP on 25.10.2016.
+ * @author Diana
  */
-
-
 // TODO can we not use store the notes in an array and let the underlying ArrayAdapter handle it ?
 public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateContextMenuListener {
 
-    public static final String ONE_NOTE = "ch.epfl.sweng.prdia_adapterlistview.NOTE_DATA";
-
     private Filter filter;
     private ArrayList<Note> notes;
+    private ArrayList<Note> checkedNotes;
     private final CanDeleteNote noteDeleter;
 
     public NotesAdapter(Context context, ArrayList<Note> notes, CanDeleteNote noteDeleter) {
         super(context, 0, notes);
         this.notes = notes;
+        this.checkedNotes = new ArrayList<>();
         this.noteDeleter = requireNonNull(noteDeleter);
     }
 
@@ -53,9 +45,15 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         addAll(notes);
     }
 
+    public void deleteNote(Note n) {
+        notes.remove(n);
+        checkedNotes.remove(n);
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Note note = getItem(position);
+        final Note note = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_note, parent, false);
         }
@@ -64,22 +62,35 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
         tvTitle.setText(note.getTitle());
         tvTitle.setTag(position);
-        // edit a note when clicking on the title
-        tvTitle.setOnClickListener(new View.OnClickListener() {
+
+        View itemContent = convertView.findViewById(R.id.item_content);
+        itemContent.setTag(position);
+        itemContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = (Integer) view.getTag();
                 Note currentNote = (Note)getItem(position);
-                // TODO & FIXME: edit a note on click
                 ((MainActivity)getContext()).openEditNote(currentNote.getId());
             }
         });
 
+        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox);
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    checkedNotes.add(note);
+                } else {
+                    checkedNotes.remove(note);
+                }
+            }
+        });
+        cb.setChecked(checkedNotes.contains(note));
 
         // Date
         TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
         GregorianCalendar tmpDate = note.getLastUpdate();
-        String date = "Last Update: "
+        String date = "Last update: "
                 + tmpDate.get(GregorianCalendar.DATE) + "/"
                 + tmpDate.get(GregorianCalendar.MONTH) + "/"
                 + tmpDate.get(GregorianCalendar.YEAR);
@@ -102,31 +113,7 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
         tvContent.setText(content);
 
-        // Delete button
-        Button btDelete = (Button) convertView.findViewById(R.id.btDelete);
-        btDelete.setTag(position);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = (Integer) view.getTag();
-                Note note1 = getItem(position);
-                // TODO remove at position ?
-                notes.remove(note1);
-                Log.i("NotesAdapter", Boolean.toString(noteDeleter.deleteNote(note1.getId()).isPositive()));
-                TextView tvNumNotes  = (TextView) view.getRootView().findViewById(R.id.tvNumNotes);
-                tvNumNotes.setText(notes.size() + " notes");
-                notifyDataSetChanged();
-            }
-        });
-
-/*
-        View separator = (View) convertView.findViewById(R.id.)*/
-
         convertView.setOnCreateContextMenuListener(this);
-
-        LinearLayout layout_1 = (LinearLayout)convertView.findViewById(R.id.layout_1);
-        //layout_1.setBackgroundColor(Color.rgb(204, 204, 140));
-
         return convertView;
     }
 
@@ -140,6 +127,10 @@ public class NotesAdapter extends ArrayAdapter<Note> implements View.OnCreateCon
         if (filter == null)
             filter = new NoteFilter(notes);
         return filter;
+    }
+
+    public List<Note> getCheckedNotes() {
+        return new ArrayList<>(checkedNotes);
     }
 
     private class NoteFilter extends Filter {
