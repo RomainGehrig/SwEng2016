@@ -1,9 +1,6 @@
 package icynote.ui;
 
 import android.content.Context;
-import android.content.CursorLoader;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -48,11 +45,6 @@ public class EditNote extends FragmentWithCoreAndLoader implements
             //retrieveNote(savedInstanceState.getInt(KEY_NOTE_ID));
         }
 
-        /* Crash the app when setting tags
-        mDefaultTagGroup = (TagGroup) getActivity().findViewById(R.id.noteDisplayTagsText);
-        if (tags != null && tags.length > 0) {
-            mDefaultTagGroup.setTags(tags);
-        }*/
     }
 
     @Override
@@ -86,9 +78,9 @@ public class EditNote extends FragmentWithCoreAndLoader implements
                 String[] allTags = tagGroup.getTags();
 
                 if(containsNotLast(allTags, tag)){
-                    tagGroup.setBackgroundColor(Color.BLACK);
+                    //tagGroup.setBackgroundColor(Color.BLACK);
                 } else {
-                    tagGroup.setBackgroundColor(Color.WHITE);
+                    //tagGroup.setBackgroundColor(Color.WHITE);
                 }
             }
 

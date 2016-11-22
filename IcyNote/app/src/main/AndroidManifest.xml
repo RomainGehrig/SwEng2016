@@ -32,6 +32,8 @@
         <activity android:name=".GoogleLinkCredentials"/>
         <activity android:name=".GoogleUnLinkCredentials"/>
         <activity android:name=".MainActivity"/>
+
+        <activity android:name=".Preferences"/>
     </application>
 </manifest>
 
