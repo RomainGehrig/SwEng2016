@@ -88,9 +88,11 @@
         app:atg_isAppendMode="true"
         app:atg_inputHint="add ..."
         app:atg_borderColor="@color/gray"
-        app:atg_backgroundColor="@color/transparent"
-        app:atg_checkedBackgroundColor="@color/gray"
+        app:atg_backgroundColor="@color/white"
+        app:atg_textColor="@color/black"
+        app:atg_checkedBackgroundColor="@color/black"
         app:atg_checkedBorderColor="@color/transparent"
+        app:atg_checkedTextColor="@color/white"
         android:layout_marginTop="10dp" />
 
 </RelativeLayout>

@@ -54,4 +54,27 @@
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
     <string name="signup_failed">Account creation failed</string>
+
+    <string-array name="sort_by">
+        <item>Title</item>
+        <item>Created</item>
+        <item>Last modified</item>
+    </string-array>
+
+    <string-array name="sort_by_values">
+        <item>TITLE</item>
+        <item>CREATION</item>
+        <item>LAST_MOD</item>
+    </string-array>
+
+    <string-array name="sort_order">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+
+    <string-array name="sort_order_values">
+        <item>ASC</item>
+        <item>DSC</item>
+    </string-array>
+
 </resources>
