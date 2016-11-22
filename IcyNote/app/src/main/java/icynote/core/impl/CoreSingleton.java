@@ -1,5 +1,6 @@
 package icynote.core.impl;
 
+import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 import icynote.core.IcyNoteCore;
 import icynote.core.Note;
 import icynote.storage.ListStorage;
+import icynote.storage.SQLiteStorage;
 import icynote.ui.BuildConfig;
 
 /**
@@ -16,6 +18,8 @@ import icynote.ui.BuildConfig;
  */
 @SuppressWarnings("UtilityClassWithoutPrivateConstructor")
 public final class CoreSingleton {
+    private static IcyNoteCore instance = null;
+
     public static class NotLoggedInException extends RuntimeException {
         public NotLoggedInException() {
             super("a user must be logged in before accessing the core");
@@ -26,15 +30,9 @@ public final class CoreSingleton {
      * Reload the core with the data of the user corresponding to the provided UUID.
      * @param userUID the current user's unique ID.
      */
-    public static void login(String userUID) {
-        initializeDefaultAccount();
-
-        if (!cores.containsKey(userUID)) {
-            cores.put(userUID, CoreFactory.core(new ListStorage()));
-            log("creating core for " + userUID);
-        }
-        instance = cores.get(userUID);
-        log("getting core for " + userUID);
+    public static void login(Context context, String userUID) {
+        log("opening core instance for user " + userUID);
+        instance = CoreFactory.core(new SQLiteStorage(context, userUID));
     }
 
     /**
@@ -68,33 +66,6 @@ public final class CoreSingleton {
     private static void log(String message) {
         if (BuildConfig.DEBUG) {
            Log.d("icynote.CoreSingleton", message);
-        }
-    }
-    private static IcyNoteCore instance = null;
-    private static Map<String, IcyNoteCore> cores = new HashMap<>();
-
-    /**
-     * Debug method: creates a few notes for the user `test@icynote.ch`.
-     */
-    private static void initializeDefaultAccount() {
-        final String defaultUUID = "zb3VspTPCmNshPDH9zb8iE7mxxP2";
-        if (!cores.containsKey(defaultUUID)) {
-            cores.put(defaultUUID, CoreFactory.core(new ListStorage()));
-            IcyNoteCore c = cores.get(defaultUUID);
-
-            String[] titles = new String[]{
-                    "monday morning", "todo", "ideas"
-            };
-            String[] contents = new String[]{
-                    "I went to the market!", "SwEng Quizz", "Ad impossibilia nemo tenetur"
-            };
-
-            for (int i = 0; i < titles.length; ++i) {
-                Note n = c.createNote().get();
-                n.setTitle(titles[i]);
-                n.setContent(contents[i]);
-                c.persist(n);
-            }
         }
     }
 

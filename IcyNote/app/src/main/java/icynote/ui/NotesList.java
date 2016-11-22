@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +29,7 @@ import java.util.Comparator;
 
 import icynote.core.Note;
 import icynote.core.OrderBy;
+import icynote.core.impl.CoreSingleton;
 import icynote.loaders.NotesLoader;
 
 import static util.ArgumentChecker.requireNonNull;
@@ -184,8 +186,16 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // create a new note with the core, and get its id
+                Note n = CoreSingleton.getCore().createNote().get();
+                n.setTitle("new title");
+                n.setContent("new very interesting content");
+                CoreSingleton.getCore().persist(n);
+                Toast.makeText(getContext(), "restart the app to see the new note ^^", Toast.LENGTH_SHORT)
+                        .show();
+                notesAdapter.notifyDataSetChanged();
                 // TODO
+                // Open EditNote with no ID
+                // let EditNote create the new note
                 //((MainActivity)getActivity()).openEditNote(0);
             }
         });
