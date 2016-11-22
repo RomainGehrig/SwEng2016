@@ -1,7 +1,6 @@
 package icynote.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -17,10 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
-import icynote.core.impl.CoreSingleton;
-import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
 
 import icynote.core.IcyNoteCore;
@@ -100,8 +96,18 @@ public class MainActivity extends AppCompatActivity
         LoginManagerFactory.getInstance().onLogout(logOutCallback);
 
         openFragment(FragmentID.NotesList);
-    }
 
+    }
+/*
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.r_main);
+    ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expandableListView1);
+    LayoutInflater li = getLayoutInflater();
+    String[][] data = {{"child-1", "child-2", "child-3"},{"child-1", "child-2", "child-3"}};
+    expandableListView.setAdapter(new SampleExpandableListAdapter(li, data));
+}*/
     private void hideSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Activity.INPUT_METHOD_SERVICE);
@@ -147,6 +153,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.menuSettings) {
             openFragment(FragmentID.Settings);
         } else if (id == R.id.menuLogout) {
+            Log.d("MainActivity", "menuLogout");
             LoginManagerFactory.getInstance().logout();
         }
 

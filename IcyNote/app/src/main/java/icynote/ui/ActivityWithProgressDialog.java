@@ -1,3 +1,7 @@
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ * Apache 2.0 licence: http://www.apache.org/licenses/LICENSE-2.0
+ */
 package icynote.ui;
 
 import android.app.ProgressDialog;
