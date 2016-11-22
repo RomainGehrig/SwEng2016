@@ -3,9 +3,13 @@ package icynote.ui;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 
-public class Theme {
+public final class Theme {
+    private Theme() {
+        throw new IllegalStateException("Not instanciable");
+    }
+
     public enum ThemeType {
-        BRIGHT{
+        BRIGHT {
             public int toPosition() {
                 return 0;
             }
@@ -16,6 +20,14 @@ public class Theme {
 
             public int getTextColor() {
                 return Color.parseColor("#000000");
+            }
+
+            public int getSpinnerView() {
+                return R.layout.spinner_view_bright;
+            }
+
+            public int getSpinnerDropDown() {
+                return R.layout.simple_spinner_dropdown_item_bright;
             }
         },
         DARK {
@@ -30,6 +42,14 @@ public class Theme {
             public int getTextColor() {
                 return Color.parseColor("#FFFFFF");
             }
+
+            public int getSpinnerView() {
+                return R.layout.spinner_view_dark;
+            }
+
+            public int getSpinnerDropDown() {
+                return R.layout.simple_spinner_dropdown_item_dark;
+            }
         };
 
         public int toPosition() {
@@ -42,6 +62,14 @@ public class Theme {
 
         public int getTextColor() {
             return Color.parseColor("#000000");
+        }
+
+        public int getSpinnerView() {
+            return R.layout.spinner_view_bright;
+        }
+
+        public int getSpinnerDropDown() {
+            return R.layout.simple_spinner_dropdown_item_bright;
         }
     }
 
