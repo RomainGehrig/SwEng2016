@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_alignParentLeft="true"
             android:textColor="@color/textColor"
-            android:layout_weight="0.7" />
+            android:layout_weight="0.8" />
 
         <Button
             android:id="@+id/btDelete"
@@ -31,8 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textSize="12sp"
-            android:background="@color/backgroundColorSpinnerBright"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.2" />
     </LinearLayout>
 
     <TextView
