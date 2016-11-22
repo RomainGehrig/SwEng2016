@@ -84,19 +84,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
         core = CoreSingleton.getCore();
-        //todo: move this into an Application subclass
-        LoginManager.Callback logOutCallback = new LoginManager.Callback() {
-            public void execute() {
-                CoreSingleton.logout();
-                Toast.makeText(MainActivity.this, "bye bye!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, LoginMenu.class);
-                startActivity(intent);
-            }
-        };
-        LoginManagerFactory.getInstance().onLogout(logOutCallback);
 
         openFragment(FragmentID.NotesList);
-
     }
 /*
 @Override
