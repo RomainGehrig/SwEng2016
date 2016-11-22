@@ -1,10 +1,8 @@
 package icynote.ui.utils;
 
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.text.SpannableString;
-import android.util.Log;
 
 import icynote.extras.ExtraProviderFactory;
 import icynote.extras.list.ProviderFactory;
@@ -48,19 +46,6 @@ public class ApplicationState {
             temp = temp.andThen(p.getInteractorFactory(this));
         }
         noteProvider = Factory.make(activity, UUID, temp);
-    }
-
-    public ApplicationState(Bundle savedInstanceState, MainActivity a) {
-        this(savedInstanceState.getString("userUID"), a);
-        tempFileUri = Uri.parse(savedInstanceState.getString("tempFileUri"));
-        lastOpenedNoteId = savedInstanceState.getInt("lastOpenedNoteId");
-        Log.i("ApplicationState", "restauring application state from savedInstanceState");
-    }
-
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putString("userUID", userUID);
-        outState.putString("tempFileUri", tempFileUri.toString());
-        outState.putInt("lastOpenedNoteId", lastOpenedNoteId);
     }
 
     public MainActivity getActivity() {

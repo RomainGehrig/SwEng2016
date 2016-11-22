@@ -215,7 +215,11 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
     }
 
     private static String getContent(@NonNull Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndexOrThrow(Notes.COL_CONTENT));
+        String content = cursor.getString(cursor.getColumnIndexOrThrow(Notes.COL_CONTENT));
+        if (content == null) {
+            throw new RuntimeException("unexpected null content from the database");
+        }
+        return content;
     }
 
     @NonNull
@@ -233,7 +237,11 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
     }
 
     private static String getTitle(@NonNull Cursor cursor) {
-        return cursor.getString(cursor.getColumnIndexOrThrow(Notes.COL_TITLE));
+        String title = cursor.getString(cursor.getColumnIndexOrThrow(Notes.COL_TITLE));
+        if (title == null) {
+            throw new RuntimeException("unexpected null title from the database");
+        }
+        return title;
     }
 
     @NonNull

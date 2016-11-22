@@ -167,18 +167,4 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        applicationState.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        applicationState = new ApplicationState(savedInstanceState, this);
-        applicationState.setLoaderManager(getSupportLoaderManager());
-
-    }
 }
