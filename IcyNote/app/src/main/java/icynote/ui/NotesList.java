@@ -1,39 +1,28 @@
 package icynote.ui;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
 import icynote.core.Note;
-import icynote.core.OrderBy;
 import icynote.core.Response;
 import icynote.loaders.NotesLoader;
-
-import static util.ArgumentChecker.requireNonNull;
 
 public class NotesList extends FragmentWithCoreAndLoader implements LoaderManager.LoaderCallbacks<Iterable<Note>>,
         CanDeleteNote {
@@ -76,77 +65,14 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
         listView.setAdapter(null); // to avoid adding the notes twice
         listView.setAdapter(notesAdapter);
 
-        RelativeLayout layout_2 = (RelativeLayout)view.findViewById(R.id.layout_2);
-        layout_2.setBackgroundColor(Color.rgb(255, 255, 204));
+        //RelativeLayout layout_2 = (RelativeLayout)view.findViewById(R.id.layout_2);
+        //layout_2.setBackgroundColor(Color.rgb(255, 255, 204));
 
-        TextView tvNumNotes = (TextView)view.findViewById(R.id.tvNumNotes);
+        final TextView tvNumNotes = (TextView)view.findViewById(R.id.tvNumNotes);
         tvNumNotes.setText(notesAdapter.getCount()+ " notes");
-        tvNumNotes.setBackgroundColor(Color.WHITE);
+        //tvNumNotes.setBackgroundColor(Color.WHITE);
 
         registerForContextMenu(listView);
-
-        spinner = (Spinner) view.findViewById(R.id.spinner);
-
-        ArrayList<OrderBy> sortingTypes = new ArrayList<>();
-        for(OrderBy el : OrderBy.values()) {
-            sortingTypes.add(el);
-        }
-
-        ArrayAdapter<OrderBy> adapter =
-                new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item, sortingTypes);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-
-        spinner.setBackgroundColor(Color.LTGRAY);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //OrderBy choice = (OrderBy) parent.getItemAtPosition(position);
-                OrderBy choice = CurrentPreferences.getOrderBy();
-                switch(choice)
-                {
-                    case TITLE:
-                        notesAdapter.sort(new Comparator<Note>() {
-                            @Override
-                            public int compare(Note note1, Note note2) {
-                                return note1.getTitle().compareTo(note2.getTitle());
-                            }
-                        });
-                        break;
-                    /*case TITLE_DOWN:
-                        notesAdapter.sort(new Comparator<Note>() {
-                            @Override
-                            public int compare(Note note1, Note note2) {
-                                return note2.getTitle().compareTo(note1.getTitle());
-                            }
-                        });
-                        break;*/
-                    case CREATION:
-                        notesAdapter.sort(new Comparator<Note>() {
-                            @Override
-                            public int compare(Note note1, Note note2) {
-                                return note1.getCreation().compareTo(note2.getCreation());
-                            }
-                        });
-                        break;
-                    case LAST_UPDATE:
-                        notesAdapter.sort(new Comparator<Note>() {
-                            @Override
-                            public int compare(Note note1, Note note2) {
-                                return note1.getLastUpdate().compareTo(note2.getLastUpdate());
-                            }
-                        });
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
 
         // initialize search button
         Button btSearch = (Button) view.findViewById(R.id.btSearch);
@@ -177,7 +103,20 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
             @Override
             public void onClick(View view) {
                 ((MainActivity)getActivity()).openEditNewNote();
-                // TODO notify underlying list
+            }
+        });
+
+        Button btDelete = (Button) view.findViewById(R.id.btDelete);
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Note> checked = notesAdapter.getCheckedNotes();
+                for (Note n : checked) {
+                    Log.i(TAG, "deleting note: " + n.getTitle());
+                    notesAdapter.deleteNote(n);
+                    deleteNote(n.getId());
+                    tvNumNotes.setText(notesAdapter.getCount()+ " notes");
+                }
             }
         });
 
@@ -194,30 +133,6 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
     public Response deleteNote(int noteId) {
         return getCore().delete(noteId);
     }
-
-    /*
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        Log.i(TAG, Integer.toString(item.getItemId()));
-        switch (item.getItemId()) {
-            case R.id.delete_id:
-                notes.remove(info.position);
-                // TODO asynchronous delete
-                int noteId = notes.get(info.position).getId();
-                Log.i(TAG, "Deleting note with id " + noteId);
-                Log.i(TAG, getCore().delete(noteId).toString());
-                notesAdapter.notifyDataSetChanged();
-                TextView tvNumNotes = (TextView) view.findViewById(R.id.tvNumNotes);
-                tvNumNotes.setText(notesAdapter.getCount() + " notes");
-                return true;
-            case R.id.retour_id:
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-    */
 
     /**
      * This interface must be implemented by activities that contain this
@@ -256,8 +171,9 @@ public class NotesList extends FragmentWithCoreAndLoader implements LoaderManage
         for (Note n: data) {
             notes.add(n);
         }
-
         notesAdapter.notifyDataSetChanged();
+        final TextView tvNumNotes = (TextView)view.findViewById(R.id.tvNumNotes);
+        tvNumNotes.setText(notesAdapter.getCount()+ " notes");
     }
 
     @Override
