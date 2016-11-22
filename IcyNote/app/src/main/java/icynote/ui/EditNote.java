@@ -1,6 +1,5 @@
 package icynote.ui;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -8,7 +7,6 @@ import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +15,6 @@ import android.widget.EditText;
 
 import java.util.Arrays;
 import java.util.List;
-
-import me.gujun.android.taggroup.TagGroup;
 
 import icynote.core.Note;
 import icynote.loaders.NoteLoader;
@@ -48,14 +44,9 @@ public class EditNote extends FragmentWithCoreAndLoader implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // create ContextThemeWrapper from the original Activity Context with the custom theme
-        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), Theme.getTheme().toInt());
-
-        // clone the inflater using the ContextThemeWrapper
-        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
         // inflate the layout using the cloned inflater, not default inflater
-        View view = localInflater.inflate(R.layout.fragment_edit_note, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_note, container, false);
 
         mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
         if (tags != null && tags.length > 0) {
@@ -94,9 +85,7 @@ public class EditNote extends FragmentWithCoreAndLoader implements
         } );
 
         EditText titleTextView = (EditText)view.findViewById(R.id.noteDisplayTitleText);
-        titleTextView.setTextColor(Theme.getTheme().getTextColor());
         EditText mainTextView = (EditText)view.findViewById(R.id.noteDisplayBodyText);
-        mainTextView.setTextColor(Theme.getTheme().getTextColor());
 
         // add listener to the title
         titleTextView.addTextChangedListener(new TextWatcher() {
