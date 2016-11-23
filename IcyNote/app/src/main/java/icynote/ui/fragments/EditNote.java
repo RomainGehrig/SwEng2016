@@ -10,7 +10,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,8 +30,6 @@ public class EditNote extends Fragment implements NotePresenter {
     //-------------------------------------------------------------------------------------
 
     private EditNote.Contract activity;
-
-    public static final String KEY_NOTE_ID = "note_id";
 
     private TagGroup mDefaultTagGroup;
     private String[] tags = {"1", "2", "3"}; // initialize tags here
@@ -111,13 +108,14 @@ public class EditNote extends Fragment implements NotePresenter {
             return;
 
         viewHolder.enableAll();
+        viewHolder.getTitle().setHint(R.string.noteDisplayTextHint);
+        viewHolder.getContent().setHint(R.string.noteDisplayTitleHint);
         setTextWatchers();
         updateTexts();
     }
 
     private void updateTexts() {
-        Log.i("EditNote", "view: " + getView() + " note:" + note);
-        if (getView() == null || note == null)
+        if (note == null || getView() == null)
             return;
 
         viewHolder.getTitle().setText(note.getTitle());
@@ -159,7 +157,6 @@ public class EditNote extends Fragment implements NotePresenter {
             public void afterTextChanged(Editable s) {
                 note.setContent(new SpannableString(s));
                 activity.saveNote(note);
-                Log.i("EditNote", "text changed");
             }
         });
     }
