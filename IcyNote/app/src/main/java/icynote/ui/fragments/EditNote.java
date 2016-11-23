@@ -1,8 +1,7 @@
 package icynote.ui.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -16,42 +15,41 @@ import android.widget.EditText;
 import java.util.Arrays;
 import java.util.List;
 
-import icynote.loaders.NoteLoader;
+import icynote.ui.contracts.NotePresenter;
 import icynote.note.Note;
 import icynote.ui.R;
+import icynote.ui.view.NoteViewHolder;
 import me.gujun.android.taggroup.TagGroup;
-import util.Optional;
 
-public class EditNote extends FragmentWithState implements
-        LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>> {
+public class EditNote extends Fragment implements NotePresenter {
+
+    private Note<SpannableString> note;
 
     public interface Contract {
         void saveNote(Note<SpannableString> note);
     }
     //-------------------------------------------------------------------------------------
 
+    private EditNote.Contract activity;
+
     public static final String KEY_NOTE_ID = "note_id";
 
     private TagGroup mDefaultTagGroup;
     private String[] tags = {"1", "2", "3"}; // initialize tags here
-    private Integer noteId;
+    private NoteViewHolder viewHolder;
 
     public EditNote() {
         // Required empty public constructor
-    }
-
-    public void setNoteId(Integer id) {
-        noteId = id;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i("EditNote", "onCreateView");
-
         // inflate the layout using the cloned inflater, not default inflater
         View view = inflater.inflate(R.layout.fragment_edit_note, container, false);
+
+        viewHolder = new NoteViewHolder(view);
 
         mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
         if (tags != null && tags.length > 0) {
@@ -89,19 +87,36 @@ public class EditNote extends FragmentWithState implements
             }
         });
 
+        setupNoteView();
+
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("EditNote", "onResume");
+        try {
+            activity = (EditNote.Contract) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " has to implement EditNote.Contract.");
+        }
+        setupNoteView();
+    }
 
-        restartLoader();
+    private void setupNoteView() {
+        if (note == null || viewHolder == null)
+            return;
+
+        viewHolder.enableAll();
+        setTextWatchers();
+    }
+    private void setTextWatchers() {
+        View v = getView();
+        if (note == null || v == null)
+            return;
 
         EditText titleTextView = (EditText) getView().findViewById(R.id.noteDisplayTitleText);
         EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
-        //updateTexts();
 
         // add listener to the title
         titleTextView.addTextChangedListener(new TextWatcher() {
@@ -115,8 +130,8 @@ public class EditNote extends FragmentWithState implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                note().setTitle(new SpannableString(s));
-                appState().getNoteProvider().persist(note());
+                note.setTitle(new SpannableString(s));
+                activity.saveNote(note);
             }
         });
 
@@ -132,72 +147,29 @@ public class EditNote extends FragmentWithState implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                note().setContent(new SpannableString(s));
-                appState().getNoteProvider().persist(note());
-                appState().setLastOpenedNoteContent(note().getContent());
+                note.setContent(new SpannableString(s));
+                activity.saveNote(note);
                 Log.i("EditNote", "text changed");
             }
         });
     }
 
-    private void restartLoader() {
-        Bundle args = new Bundle();
-        if (noteId != null) {
-            args.putInt(EditNote.KEY_NOTE_ID, noteId);
-        }
-        appState()
-                .getLoaderManager()
-                .restartLoader(NoteLoader.LOADER_ID, args, this);
-    }
-
     @Override
-    public Loader<Optional<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
-        Optional<Integer> noteId = Optional.empty();
-        if (args != null && args.containsKey(KEY_NOTE_ID)) {
-            noteId = Optional.of(args.getInt(KEY_NOTE_ID));
-        }
-        return new NoteLoader(getContext(), appState().getNoteProvider(), noteId);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader,
-                               Optional<Note<SpannableString>> optionalNote) {
-        // TODO what to do if note is not present ?
-        setNote(optionalNote.get());
-        setNoteId(optionalNote.get().getId());
-        appState().setLastOpenedNoteId(note().getId());
-        appState().setLastOpenedNoteContent(note().getContent());
+    public void receiveNote(Note<SpannableString> note) {
+        this.note = note;
+        setTextWatchers();
         updateTexts();
     }
 
     private void updateTexts() {
         View v = getView();
-        if (v == null || note() == null) {
+        if (v == null || note == null) {
             return;
         }
         EditText titleTextView = (EditText) getView().findViewById(R.id.noteDisplayTitleText);
         EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
-        titleTextView.setText(note().getTitle());
-        mainTextView.setText(note().getContent());
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
-        appState().setSelectionStart(mainTextView.getSelectionStart());
-        appState().setSelectionEnd(mainTextView.getSelectionEnd());
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Optional<Note<SpannableString>>> loader) {
-    }
-
-    private Note<SpannableString> note() {
-        return appState().getLastOpenedNote();
-    }
-    private void setNote(Note<SpannableString> n) {
-        appState().setLastOpenedNote(n);
+        titleTextView.setText(note.getTitle());
+        mainTextView.setText(note.getContent());
     }
 
     private boolean containsNotLast(String[] l, String t) {
