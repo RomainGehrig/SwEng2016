@@ -28,6 +28,7 @@ import icynote.loaders.NotesLoader;
 import icynote.note.Note;
 import icynote.plugins.Plugin;
 import icynote.ui.contracts.NotePresenter;
+import icynote.ui.contracts.NotesPresenter;
 import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
 import icynote.ui.fragments.MetadataNote;
@@ -46,6 +47,7 @@ public class MainActivity
 
     private boolean dirtyNotes = true; // list of notes needs a reload
     private List<NotePresenter> presenters;
+    private NotesPresenter listPresenter = null;
 
     private static final String BUNDLE_NOTE_ID = "note_id";
     private LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>> noteLoaderCallback =
@@ -140,7 +142,7 @@ public class MainActivity
 
         switch (id) {
             case R.id.menuAllNotes:
-                openFragment(NotesList.class, null);
+                openNotesList();
                 break;
             case R.id.menuTagEdition:
                 openFragment(EditTags.class, null);
@@ -161,6 +163,11 @@ public class MainActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void openNotesList() {
+        NotesList f = openFragment(NotesList.class, null);
+        listPresenter = f;
     }
 
     public void openMetadata(View view) {
@@ -204,16 +211,19 @@ public class MainActivity
         Log.i(TAG, "unable to handle requestCode onActivityResult " + requestCode);
     }
 
-    private void openFragment(Class toOpen, Bundle bundle) {
-        Fragment f = getFragment(toOpen);
+    private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
+        F f = getFragment(toOpen);
+        listPresenter = null;
         commitFragment(f, toOpen.getSimpleName());
+        return f;
     }
-    private Fragment getFragment(Class toOpen) {
+    private <F> F getFragment(Class<F> toOpen) {
         try {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment fragment = fragmentManager.findFragmentByTag(toOpen.getSimpleName());
+            @SuppressWarnings("unchecked")
+            F fragment = (F)fragmentManager.findFragmentByTag(toOpen.getSimpleName());
             if (fragment == null) {
-                fragment = (Fragment) toOpen.newInstance();
+                fragment = (F) toOpen.newInstance();
             }
             return fragment;
         } catch (InstantiationException e) {
@@ -259,10 +269,6 @@ public class MainActivity
 
     @Override
     public void deleteNotes(List<Integer> notes) {
-
-    }
-
-    void loadNote(int id) {
 
     }
 
