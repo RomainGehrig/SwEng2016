@@ -30,19 +30,17 @@ import static util.ArgumentChecker.requireNonNull;
 public class NotesAdapter extends ArrayAdapter<Note<SpannableString>> implements View.OnCreateContextMenuListener {
 
     private Filter filter;
-    private ArrayList<Note<SpannableString>> notes;
-    private ArrayList<Note<SpannableString>> checkedNotes;
-    private final CanDeleteNote noteDeleter;
+    private List<Note<SpannableString>> notes;
+    private List<Note<SpannableString>> checkedNotes;
 
-    public NotesAdapter(Context context, ArrayList<Note<SpannableString>> notes, CanDeleteNote noteDeleter) {
+    public NotesAdapter(Context context, List<Note<SpannableString>> notes) {
         super(context, 0, notes);
         this.notes = notes;
         this.checkedNotes = new ArrayList<>();
-        this.noteDeleter = requireNonNull(noteDeleter);
     }
 
     // FIXME tmp function to set the private array
-    public void setNotes(ArrayList<Note<SpannableString>> notes) {
+    public void setNotes(List<Note<SpannableString>> notes) {
         notes = requireNonNull(notes);
         clear();
         addAll(notes);
