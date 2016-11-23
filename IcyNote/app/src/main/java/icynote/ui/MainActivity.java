@@ -195,4 +195,9 @@ public class MainActivity
     public void deleteNotes(List<Integer> notes) {
 
     }
+
+    void loadNote(int id) {
+
+    }
+
 }

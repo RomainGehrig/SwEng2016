@@ -50,6 +50,9 @@ public class NotesList extends Fragment implements NotesPresenter {
     /** The attached activity implementing this fragment's contract. */
     private Contract activity;
 
+    /** Indicates whether receivedNote was called or not */
+    private boolean notesReceived = false;
+
     //-------------------------------------------------------------------------------------
 
     public NotesList() {
@@ -66,6 +69,7 @@ public class NotesList extends Fragment implements NotesPresenter {
     public void onResume() {
         super.onResume();
         activity = (Contract) getActivity();
+        notesAdapter = new NotesAdapter(getActivity(), null);
     }
 
     @Override
@@ -74,38 +78,13 @@ public class NotesList extends Fragment implements NotesPresenter {
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
-
-        //utility class to access the item in the layout
         viewHolder = new NotesListViewHolder(view);
-
         registerForContextMenu(viewHolder.getListView());
+        setViewListeners();
 
-        viewHolder.getSearchBar().setOnEditorActionListener(
-                new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    userFilterNotesListener();
-                }
-                return false;
-            }
-        });
-        viewHolder.getBtAdd().setOnClickListener(
-                new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userCreateNoteListener();
-            }
-        });
-
-        viewHolder.getBtDelete().setOnClickListener(
-                new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userDeleteNotesListener();
-            }
-        });
-
+        if (notesReceived) {
+            enableView();
+        }
         return  view;
     }
 
@@ -135,7 +114,8 @@ public class NotesList extends Fragment implements NotesPresenter {
     @Override
     public void onDeleteNoteFailure(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        restaureNoteSetForDeletion();
+        notesAdapter.enableCheckedNotes();
+
     }
 
     //-------------------------------------------------------------------------------------
@@ -145,8 +125,33 @@ public class NotesList extends Fragment implements NotesPresenter {
         viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
         viewHolder.getSearchBar().setHint("Enter text to find");
     }
-    private void restaureNoteSetForDeletion() {
-        //List<notesAdapter.getCheckedNotes();
+
+    private void setViewListeners() {
+        viewHolder.getSearchBar().setOnEditorActionListener(
+                new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                            userFilterNotesListener();
+                        }
+                        return false;
+                    }
+                });
+        viewHolder.getBtAdd().setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userCreateNoteListener();
+                    }
+                });
+
+        viewHolder.getBtDelete().setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userDeleteNotesListener();
+                    }
+                });
     }
     private void userFilterNotesListener() {
         if (notesAdapter != null) {

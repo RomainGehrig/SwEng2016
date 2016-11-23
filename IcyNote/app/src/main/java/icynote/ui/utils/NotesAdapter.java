@@ -134,6 +134,10 @@ public class NotesAdapter extends ArrayAdapter<Note<SpannableString>> implements
         return new ArrayList<>(checkedNotes);
     }
 
+    public void enableCheckedNotes() {
+
+    }
+
     private class NoteFilter extends Filter {
 
         private ArrayList<Note<SpannableString>> sourceNotes;
