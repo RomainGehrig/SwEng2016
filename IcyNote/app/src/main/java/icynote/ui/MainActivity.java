@@ -3,7 +3,6 @@ package icynote.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
@@ -12,12 +11,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.List;
+
+import icynote.note.Note;
 import icynote.plugins.Plugin;
 import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
@@ -27,7 +30,11 @@ import icynote.ui.fragments.NotesList;
 import icynote.ui.utils.ApplicationState;
 
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
-public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
+public class MainActivity
+        extends AppCompatActivity
+        implements OnNavigationItemSelectedListener,
+        NotesList.Contract, EditNote.Contract, MetadataNote.Contract
+{
 
     private static final String TAG = "MainActivity";
     private ApplicationState applicationState;
@@ -170,16 +177,22 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        applicationState.onSaveInstanceState(outState);
+    public void saveNote(Note<SpannableString> note) {
+
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        applicationState = new ApplicationState(savedInstanceState, this);
-        applicationState.setLoaderManager(getSupportLoaderManager());
+    public void openNote(int id) {
+
+    }
+
+    @Override
+    public void createNote() {
+
+    }
+
+    @Override
+    public void deleteNotes(List<Integer> notes) {
 
     }
 }

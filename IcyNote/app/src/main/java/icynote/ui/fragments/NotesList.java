@@ -33,6 +33,13 @@ public class NotesList
         extends FragmentWithState
         implements LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>, CanDeleteNote
 {
+
+    public interface Contract {
+        void openNote(int id);
+        void createNote();
+        void deleteNotes(List<Integer> notes);
+    }
+    //-------------------------------------------------------------------------------------
     private static final String TAG = "NotesList";
     private Loader<Iterable<Note<SpannableString>>> loader;
 

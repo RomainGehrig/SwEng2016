@@ -24,6 +24,12 @@ import util.Optional;
 
 public class EditNote extends FragmentWithState implements
         LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>> {
+
+    public interface Contract {
+        void saveNote(Note<SpannableString> note);
+    }
+    //-------------------------------------------------------------------------------------
+
     public static final String KEY_NOTE_ID = "note_id";
 
     private TagGroup mDefaultTagGroup;
