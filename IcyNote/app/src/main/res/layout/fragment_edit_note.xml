@@ -14,6 +14,8 @@
 
     <EditText
         android:id="@+id/noteDisplayTitleText"
+        android:enabled="false"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -22,7 +24,7 @@
         android:layout_gravity="end"
         android:textStyle="normal|bold"
         android:textSize="@dimen/titleSize"
-        android:hint="@string/noteDisplayTitleHint"
+        android:hint="@string/loading"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="50sp"
         android:layout_marginRight="50sp"
@@ -55,6 +57,8 @@
 
     <EditText
         android:id="@+id/noteDisplayBodyText"
+        android:enabled="false"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -62,7 +66,7 @@
         android:lines="99"
         android:gravity="top|start"
         android:scrollbars="vertical"
-        android:hint="@string/noteDisplayTextHint"
+        android:hint="@string/loading"
         android:layout_below="@+id/noteDisplayTitleText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

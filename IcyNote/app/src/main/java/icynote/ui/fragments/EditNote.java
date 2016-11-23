@@ -48,7 +48,6 @@ public class EditNote extends Fragment implements NotePresenter {
 
         // inflate the layout using the cloned inflater, not default inflater
         View view = inflater.inflate(R.layout.fragment_edit_note, container, false);
-
         viewHolder = new NoteViewHolder(view);
 
         mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
@@ -87,9 +86,13 @@ public class EditNote extends Fragment implements NotePresenter {
             }
         });
 
-        setupNoteView();
-
         return view;
+    }
+
+    @Override
+    public void receiveNote(Note<SpannableString> note) {
+        this.note = note;
+        setupNoteView();
     }
 
     @Override
@@ -109,17 +112,24 @@ public class EditNote extends Fragment implements NotePresenter {
 
         viewHolder.enableAll();
         setTextWatchers();
+        updateTexts();
     }
-    private void setTextWatchers() {
-        View v = getView();
-        if (note == null || v == null)
+
+    private void updateTexts() {
+        Log.i("EditNote", "view: " + getView() + " note:" + note);
+        if (getView() == null || note == null)
             return;
 
-        EditText titleTextView = (EditText) getView().findViewById(R.id.noteDisplayTitleText);
-        EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
+        viewHolder.getTitle().setText(note.getTitle());
+        viewHolder.getContent().setText(note.getContent());
+    }
+
+    private void setTextWatchers() {
+        if (note == null || getView() == null)
+            return;
 
         // add listener to the title
-        titleTextView.addTextChangedListener(new TextWatcher() {
+        viewHolder.getTitle().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -136,7 +146,7 @@ public class EditNote extends Fragment implements NotePresenter {
         });
 
         // add listener to the content
-        mainTextView.addTextChangedListener(new TextWatcher() {
+        viewHolder.getContent().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -152,24 +162,6 @@ public class EditNote extends Fragment implements NotePresenter {
                 Log.i("EditNote", "text changed");
             }
         });
-    }
-
-    @Override
-    public void receiveNote(Note<SpannableString> note) {
-        this.note = note;
-        setTextWatchers();
-        updateTexts();
-    }
-
-    private void updateTexts() {
-        View v = getView();
-        if (v == null || note == null) {
-            return;
-        }
-        EditText titleTextView = (EditText) getView().findViewById(R.id.noteDisplayTitleText);
-        EditText mainTextView = (EditText) getView().findViewById(R.id.noteDisplayBodyText);
-        titleTextView.setText(note.getTitle());
-        mainTextView.setText(note.getContent());
     }
 
     private boolean containsNotLast(String[] l, String t) {
