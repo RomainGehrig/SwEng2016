@@ -11,11 +11,12 @@ import android.preference.SwitchPreference;
 import java.util.ArrayList;
 import java.util.List;
 
-import icynote.noteproviders.OrderBy;
-import icynote.noteproviders.OrderType;
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
+import icynote.noteproviders.OrderBy;
+import icynote.noteproviders.OrderType;
 import icynote.ui.loginactivities.GoogleLinkCredentials;
+import icynote.ui.loginactivities.GoogleUnLinkCredentials;
 
 
 public class Preferences extends PreferenceActivity {
@@ -147,14 +148,17 @@ public class Preferences extends PreferenceActivity {
     }
 
     public void execAccountAction(int mode){
-        Intent intent = new Intent(this, GoogleLinkCredentials.class);
         switch (mode){
-            case 0:
+            case 0: {
+                Intent intent = new Intent(this, GoogleLinkCredentials.class);
                 startActivityForResult(intent, RC_LINK_GOOGLE);
                 break;
-            case 1:
+            }
+            case 1: {
+                Intent intent = new Intent(this, GoogleUnLinkCredentials.class);
                 startActivityForResult(intent, RC_UNLINK_GOOGLE);
                 break;
+            }
             case 2:
                 // TODO generate password
                 break;
