@@ -18,12 +18,18 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.ArrayList;
+
 import icynote.loaders.NoteLoader;
 import icynote.loaders.NotesLoader;
 import icynote.note.Note;
 import icynote.note.Response;
+import icynote.plugins.FormatterPlugin;
 import icynote.plugins.Plugin;
+import icynote.ui.contracts.NoteOpenerBase;
+import icynote.ui.contracts.NoteOptionsPresenter;
 import icynote.ui.contracts.NotePresenter;
+import icynote.ui.contracts.NotePresenterBase;
 import icynote.ui.contracts.NotesPresenter;
 import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
@@ -31,6 +37,8 @@ import icynote.ui.fragments.MetadataNote;
 import icynote.ui.fragments.NotesList;
 import icynote.ui.utils.ApplicationState;
 import util.Optional;
+
+import static android.R.attr.id;
 
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
 public class MainActivity  extends AppCompatActivity implements
@@ -46,8 +54,9 @@ public class MainActivity  extends AppCompatActivity implements
 
     private boolean mustReloadListOfNotes = true;
     private boolean mustReloadSingleNote = true;
-    private NotePresenter singleNotePresenter = null;
+    private NotePresenterBase singleNotePresenter = null;
     private NotesPresenter listOfNotesPresenter = null;
+    private NoteOpenerBase singleNoteOpener = null;
 
 
     @Override
@@ -118,28 +127,13 @@ public class MainActivity  extends AppCompatActivity implements
         applicationState.getLoginManager().logout();
     }
 
-    /** menu's on click listener that open the metadata view */
-    public void openMetadata(View view) {
-        openFragment(MetadataNote.class, null);
-    }
-
-
     //********************************************************************************************
     //*  CONTRACTS
     //**
 
     /** fragment contract */
     @Override
-    public void saveNote(Note<SpannableString> note, NotePresenter requester) {
-        Response r = applicationState.getNoteProvider().persist(note);
-        if (!r.isPositive() && requester != null) {
-            requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
-        }
-    }
-
-    /** fragment contract */
-    @Override
-    public void openNote(int id, NotesPresenter requester) {
+    public void openNote(int id, NoteOpenerBase requester) {
         singleNotePresenter = openFragment(EditNote.class, null);
         loadNote(id);
     }
@@ -162,21 +156,48 @@ public class MainActivity  extends AppCompatActivity implements
                 requester.onNoteDeletionFailure(note, "could not delete note");
             }
         }
-
     }
 
+    /** fragment contract */
+    @Override
+    public void saveNote(Note<SpannableString> note, NotePresenterBase requester) {
+        Response r = applicationState.getNoteProvider().persist(note);
+        if (!r.isPositive() && requester != null) {
+            requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
+        }
+    }
+
+    /** fragment contract */
+    @Override
+    public void openOptionalPresenter(NotePresenter requester) {
+        MetadataNote n = openFragment(MetadataNote.class, null);
+        singleNotePresenter = n;
+
+        ArrayList<View> buttons = new ArrayList<>();
+        for(FormatterPlugin plugin : applicationState.getPluginProvider().getFormatters()) {
+            for(View pluginAction : plugin.getMetaButtons(applicationState)) {
+                buttons.add(pluginAction);
+            }
+        }
+
+        n.receivePluginData(buttons);
+        loadNote(id);
+    }
+
+    /** fragment contract */
+    @Override
+    public void optionPresenterFinished(NoteOptionsPresenter finished) {
+        onBackPressed(); //go back to EditNote.
+    }
 
     //********************************************************************************************
     //*  FRAGMENTS
     //**
 
 
-
     public EditNote getEditNote() {
         return (EditNote) getFragment(EditNote.class);
     }
-
-
 
     private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
         F f = getFragment(toOpen);
@@ -210,8 +231,6 @@ public class MainActivity  extends AppCompatActivity implements
         t.addToBackStack(null);
         t.commit();
     }
-
-
 
     private void loadListOfNotes() {
         getSupportLoaderManager().restartLoader(NotesLoader.LOADER_ID, null, notesLoaderCallback);
@@ -266,7 +285,7 @@ public class MainActivity  extends AppCompatActivity implements
                 public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader,
                                            Optional<Note<SpannableString>> data) {
                     if (!data.isPresent()) {
-                        // TODO call error on singleNotePresenter if not present
+                        //todo call error on singleNotePresenter if data is not present
                     } else {
                         Note<SpannableString> note = data.get();
                         Log.i(TAG, "Received note: " + note.getId());
@@ -298,7 +317,6 @@ public class MainActivity  extends AppCompatActivity implements
                 @Override
                 public void onLoadFinished(Loader<Iterable<Note<SpannableString>>> loader,
                                            Iterable<Note<SpannableString>> data) {
-                    // TODO data received, call observers
                     Log.i(TAG, "Received list of notes");
                     if (listOfNotesPresenter != null) {
                         listOfNotesPresenter.receiveNotes(data);

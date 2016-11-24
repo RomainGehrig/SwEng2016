@@ -1,13 +1,8 @@
 package icynote.ui.contracts;
 
-import android.text.SpannableString;
-
-import icynote.note.Note;
-
-public interface NotePresenter {
-    interface Contract {
-        void saveNote(Note<SpannableString> note, NotePresenter requester);
+public interface NotePresenter extends NotePresenterBase {
+    interface Contract extends NotePresenterBase.Contract{
+        void openOptionalPresenter(NotePresenter requester);
     }
-    void receiveNote(Note<SpannableString> note);
-    void onSaveNoteFailure(String message);
+    void onOpenOptPresenterFailure(String message);
 }

@@ -16,7 +16,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:id="@+id/backButton"
-        android:onClick="reOpenEditNote"
         android:background="@drawable/meta_back"
         android:alpha="0.5"/>
 
