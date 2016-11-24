@@ -3,8 +3,6 @@ package icynote.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,12 +18,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import icynote.loaders.NoteLoader;
 import icynote.loaders.NotesLoader;
 import icynote.note.Note;
+import icynote.note.Response;
 import icynote.plugins.Plugin;
 import icynote.ui.contracts.NotePresenter;
 import icynote.ui.contracts.NotesPresenter;
@@ -37,157 +33,38 @@ import icynote.ui.utils.ApplicationState;
 import util.Optional;
 
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
-public class MainActivity
-        extends AppCompatActivity
-        implements OnNavigationItemSelectedListener,
-        NotesList.Contract, EditNote.Contract, MetadataNote.Contract {
-
+public class MainActivity  extends AppCompatActivity implements
+        NotesList.Contract,
+        EditNote.Contract,
+        MetadataNote.Contract
+{
     private static final String TAG = "MainActivity";
-    private ApplicationState applicationState;
-
-    private boolean dirtyNotes = true; // list of notes needs a reload
-    private List<NotePresenter> presenters;
-    private NotesPresenter listPresenter = null;
-
     private static final String BUNDLE_NOTE_ID = "note_id";
-    private LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>> noteLoaderCallback =
-            new LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>>(){
-                @Override
-                public Loader<Optional<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
-                    Optional<Integer> noteId = Optional.empty();
-                    if (args != null && args.containsKey(BUNDLE_NOTE_ID)) {
-                        noteId = Optional.of(args.getInt(BUNDLE_NOTE_ID));
-                    }
-                    return new NoteLoader(getApplicationContext(), applicationState.getNoteProvider(), noteId);
-                }
 
-                @Override
-                public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader,
-                                           Optional<Note<SpannableString>> data) {
-                    // TODO call observers
-                    if (!data.isPresent()) {
-                        // TODO call error on presenters if not present
-                    } else {
-                        Note<SpannableString> note = data.get();
-                        Log.i(TAG, "Received note: " + note.getId());
-                        for (NotePresenter presenter: presenters) {
-                            presenter.receiveNote(note);
-                        }
-                    }
-                }
+    private ApplicationState applicationState;
+    private DrawerLayout drawer;
 
-                @Override
-                public void onLoaderReset(Loader<Optional<Note<SpannableString>>> loader) { }
-            };
+    private boolean mustReloadListOfNotes = true;
+    private boolean mustReloadSingleNote = true;
+    private NotePresenter singleNotePresenter = null;
+    private NotesPresenter listOfNotesPresenter = null;
 
-    private LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>> notesLoaderCallback =
-            new LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>(){
-                @Override
-                public Loader<Iterable<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
-                    return new NotesLoader(getApplicationContext(), applicationState.getNoteProvider());
-                }
-
-                @Override
-                public void onLoadFinished(Loader<Iterable<Note<SpannableString>>> loader,
-                                           Iterable<Note<SpannableString>> data) {
-                    // TODO data received, call observers
-                    dirtyNotes = false;
-                }
-
-                @Override
-                public void onLoaderReset(Loader<Iterable<Note<SpannableString>>> loader) { }
-            };
-
-
-    private void loadNewNote() {
-        getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, null, noteLoaderCallback);
-    }
-    private void loadNote(int noteId) {
-        Bundle args = new Bundle();
-        args.putInt(BUNDLE_NOTE_ID, noteId);
-        getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         applicationState = new ApplicationState(getIntent().getExtras().getString("userUID"), this);
         applicationState.setLoaderManager(getSupportLoaderManager());
-        presenters = new ArrayList<>();
-        presenters.add(getEditNote());
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
-        setUpNavDrawer();
-        openEditNewNote();
-    }
-
-    private void setUpNavDrawer() {
-        NavigationView view = (NavigationView) findViewById(R.id.menu);
-        view.setNavigationItemSelectedListener(this);
-    }
-
-    public void toggleMenu(View view) {
-        hideKeyboard(this);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            drawer.openDrawer(GravityCompat.START);
-        }
+        getDelegate().setContentView(R.layout.activity_main);
+        drawer = (DrawerLayout) findViewById(R.id.main_layout);
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menuAllNotes:
-                openNotesList();
-                break;
-            case R.id.menuTagEdition:
-                openFragment(EditTags.class, null);
-                break;
-            case R.id.menuTrash:
-                openFragment(NotesList.class, null);
-                break;
-            case R.id.menuSettings:
-                Intent intent = new Intent(this, Preferences.class);
-                startActivity(intent);
-                break;
-            case R.id.menuLogout:
-                applicationState.getLoginManager().logout();
-                break;
-            default:
-                return false;
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void openNotesList() {
-        NotesList f = openFragment(NotesList.class, null);
-        listPresenter = f;
-    }
-
-    public void openMetadata(View view) {
-        hideKeyboard(this);
-        openFragment(MetadataNote.class, null);
-    }
-
-    public void reOpenEditNote(View view) {
-        openEditNote(applicationState.getLastOpenedNoteId());
-    }
-    public void openEditNewNote() {
-        loadNewNote();
-        commitFragment(getEditNote(), EditNote.class.getSimpleName());
-    }
-    public void openEditNote(Integer noteId) {
-        loadNote(noteId);
-        commitFragment(getEditNote(), EditNote.class.getSimpleName());
-    }
-    public EditNote getEditNote() {
-        return (EditNote) getFragment(EditNote.class);
+    protected void onStart() {
+        super.onStart();
+        openListOfNotes(null);
     }
 
     @Override
@@ -198,22 +75,115 @@ public class MainActivity
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        for (Plugin p : applicationState.getPluginProvider().getPlugins()) {
-            if (p.canHandle(requestCode)) {
-                p.handle(requestCode, resultCode, data, applicationState);
-                return;
+    //********************************************************************************************
+    //*  MENU
+    //**
+
+    /** on click listener that opens the dawer menu or closes it */
+    public void toggleMenu(View view) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            drawer.openDrawer(GravityCompat.START);
+        }
+        hideKeyboard(this);
+    }
+
+    /** menu's on click listener that opens the list of notes */
+    public void openListOfNotes(MenuItem item) {
+        listOfNotesPresenter = openFragment(NotesList.class, null);
+        loadListOfNotes();
+    }
+
+    /** menu's on click listener that opens the list of tags */
+    public void openListOfTags(MenuItem item) {
+        openFragment(EditTags.class, null);
+    }
+
+    /** menu's on click listener that opens the list of deleted notes */
+    public void openListOfDeletedNotes(MenuItem item) {
+        openFragment(NotesList.class, null);
+    }
+
+    /** menu's on click listener that opens the settings */
+    public void openSettings(MenuItem item) {
+        Intent intent = new Intent(this, Preferences.class);
+        startActivity(intent);
+    }
+
+    /** menu's on click listener that logs the current user out */
+    public void logout(MenuItem item) {
+        applicationState.getLoginManager().logout();
+    }
+
+    /** menu's on click listener that open the metadata view */
+    public void openMetadata(View view) {
+        openFragment(MetadataNote.class, null);
+    }
+
+
+    //********************************************************************************************
+    //*  CONTRACTS
+    //**
+
+    /** fragment contract */
+    @Override
+    public void saveNote(Note<SpannableString> note, NotePresenter requester) {
+        Response r = applicationState.getNoteProvider().persist(note);
+        if (!r.isPositive() && requester != null) {
+            requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
+        }
+    }
+
+    /** fragment contract */
+    @Override
+    public void openNote(int id, NotesPresenter requester) {
+        singleNotePresenter = openFragment(EditNote.class, null);
+        loadNote(id);
+    }
+
+    /** fragment contract */
+    @Override
+    public void createNote(NotesPresenter requester) {
+        singleNotePresenter = openFragment(EditNote.class, null);
+        loadNewNote();
+    }
+
+    /** fragment contract */
+    @Override
+    public void deleteNote(Note<SpannableString> note, NotesPresenter requester) {
+        Response r = applicationState.getNoteProvider().delete(note.getId());
+        if (requester != null) {
+            if (r.isPositive()) {
+                requester.onNoteDeletionSuccess(note);
+            } else {
+                requester.onNoteDeletionFailure(note, "could not delete note");
             }
         }
-        Log.i(TAG, "unable to handle requestCode onActivityResult " + requestCode);
+
     }
+
+
+    //********************************************************************************************
+    //*  FRAGMENTS
+    //**
+
+
+
+    public EditNote getEditNote() {
+        return (EditNote) getFragment(EditNote.class);
+    }
+
+
 
     private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
         F f = getFragment(toOpen);
-        listPresenter = null;
+        listOfNotesPresenter = null;
+        singleNotePresenter = null;
+        drawer.closeDrawer(GravityCompat.START);
+        hideKeyboard(this);
         commitFragment(f, toOpen.getSimpleName());
         return f;
     }
@@ -241,6 +211,104 @@ public class MainActivity
         t.commit();
     }
 
+
+
+    private void loadListOfNotes() {
+        getSupportLoaderManager().restartLoader(NotesLoader.LOADER_ID, null, notesLoaderCallback);
+    }
+    private void loadNewNote() {
+        getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, null, noteLoaderCallback);
+    }
+    private void loadNote(int noteId) {
+        Bundle args = new Bundle();
+        args.putInt(BUNDLE_NOTE_ID, noteId);
+        getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
+    }
+
+    //********************************************************************************************
+    /**
+     * Simple hook for the plugins to be able to start activities for result.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        for (Plugin p : applicationState.getPluginProvider().getPlugins()) {
+            if (p.canHandle(requestCode)) {
+                p.handle(requestCode, resultCode, data, applicationState);
+                return;
+            }
+        }
+        Log.i(TAG, "unable to handle requestCode onActivityResult " + requestCode);
+    }
+
+    //********************************************************************************************
+    /**
+     * NoteLoaderCallback, triggered when a note is available.
+     *
+     */
+    private final LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>>
+            noteLoaderCallback =
+            new LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>>(){
+                @Override
+                public Loader<Optional<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
+                    Optional<Integer> noteId = Optional.empty();
+                    if (args != null && args.containsKey(BUNDLE_NOTE_ID)) {
+                        noteId = Optional.of(args.getInt(BUNDLE_NOTE_ID));
+                    }
+                    return new NoteLoader(
+                            getApplicationContext(),
+                            applicationState.getNoteProvider(),
+                            noteId);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader,
+                                           Optional<Note<SpannableString>> data) {
+                    if (!data.isPresent()) {
+                        // TODO call error on singleNotePresenter if not present
+                    } else {
+                        Note<SpannableString> note = data.get();
+                        Log.i(TAG, "Received note: " + note.getId());
+                        if (singleNotePresenter != null) {
+                            singleNotePresenter.receiveNote(note);
+                        }
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Optional<Note<SpannableString>>> loader) { }
+            };
+
+    //********************************************************************************************
+    /**
+     * NotesLoaderCallback, triggered when the list of notes is available.
+     *
+     */
+    private final LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>
+            notesLoaderCallback =
+            new LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>(){
+                @Override
+                public Loader<Iterable<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
+                    return new NotesLoader(
+                            getApplicationContext(),
+                            applicationState.getNoteProvider());
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Iterable<Note<SpannableString>>> loader,
+                                           Iterable<Note<SpannableString>> data) {
+                    // TODO data received, call observers
+                    Log.i(TAG, "Received list of notes");
+                    if (listOfNotesPresenter != null) {
+                        listOfNotesPresenter.receiveNotes(data);
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Iterable<Note<SpannableString>>> loader) { }
+            };
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -251,25 +319,4 @@ public class MainActivity
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
-    @Override
-    public void saveNote(Note<SpannableString> note) {
-        applicationState.getNoteProvider().persist(note);
-    }
-
-    @Override
-    public void openNote(int id) {
-        openEditNote(id);
-    }
-
-    @Override
-    public void createNote() {
-        openEditNewNote();
-    }
-
-    @Override
-    public void deleteNotes(List<Integer> notes) {
-
-    }
-
 }

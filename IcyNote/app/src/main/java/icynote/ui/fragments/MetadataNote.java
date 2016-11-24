@@ -1,16 +1,25 @@
 package icynote.ui.fragments;
 
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import icynote.note.Note;
 import icynote.plugins.FormatterPlugin;
 import icynote.ui.R;
+import icynote.ui.contracts.NotePresenter;
 
 public class MetadataNote extends FragmentWithState {
+
+    public interface Contract {
+        void saveNote(Note<SpannableString> note, NotePresenter requester);
+    }
+    //-------------------------------------------------------------------------------------
+
 
     public MetadataNote() {
         // Required empty public constructor

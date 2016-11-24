@@ -33,7 +33,8 @@
         <activity android:name=".loginactivities.SignOut"/>
         <activity android:name=".loginactivities.GoogleLinkCredentials"/>
         <activity android:name=".loginactivities.GoogleUnLinkCredentials"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity android:name=".Preferences"/>
 

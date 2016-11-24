@@ -103,7 +103,7 @@ class ImageFormatter implements FormatterPlugin {
 
         @Override
         public SpannableString getContent() {
-            Log.i("ImgFormatter.Decorator", "getContent");
+            //Log.i("ImgFormatter.Decorator", "getContent");
 
             SpannableString contentFromCore = super.getContent();
 
@@ -242,7 +242,7 @@ class ImageFormatter implements FormatterPlugin {
                         Toast.LENGTH_SHORT).show();
             } else {
                 writeUriToNote(state, state.getTempFileUri());
-                state.getActivity().reOpenEditNote(null);
+                state.getActivity().onBackPressed();
                 //insertImageInNoteContent(state, state.getTempFileUri());
             }
         } else if (requestCode == mRequestCodeGallery) {
