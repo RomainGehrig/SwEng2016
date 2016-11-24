@@ -6,27 +6,32 @@
             android:id="@+id/menuAllNotes"
             android:icon="@drawable/drawer_list"
             android:alpha="0.5"
-            android:title="@string/listAllNotes" />
+            android:title="@string/listAllNotes"
+            android:onClick="openListOfNotes"/>
         <item
             android:id="@+id/menuTagEdition"
             android:icon="@drawable/drawer_tags"
             android:alpha="0.5"
-            android:title="@string/editTags" />
+            android:title="@string/editTags"
+            android:onClick="openListOfTags"/>
         <item
             android:id="@+id/menuTrash"
             android:icon="@drawable/drawer_delete"
             android:alpha="0.5"
-            android:title="@string/trash" />
+            android:title="@string/trash"
+            android:onClick="openListOfDeletedNotes"/>
         <item
             android:id="@+id/menuSettings"
             android:icon="@drawable/drawer_settings"
             android:alpha="0.5"
-            android:title="@string/settings" />
+            android:title="@string/settings"
+            android:onClick="openSettings"/>
         <item
             android:id="@+id/menuLogout"
             android:icon="@drawable/drawer_logout"
             android:alpha="0.5"
-            android:title="@string/logout" />
+            android:title="@string/logout"
+            android:onClick="logout"/>
     </group>
 
 </menu>

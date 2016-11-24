@@ -31,7 +31,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:imeOptions="actionDone"/>
 
     <ImageView
         android:id="@+id/note_open_metadata"
@@ -72,7 +73,15 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/noteDisplayTagsText" />
+        android:layout_above="@+id/noteDisplayTagsText"
+        android:imeOptions="actionDone"/>
+
+    <LinearLayout android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px" >
+        <requestFocus />
+    </LinearLayout>
 
     <me.gujun.android.taggroup.TagGroup
         android:id="@+id/noteDisplayTagsText"
@@ -87,7 +96,8 @@
         style="@style/TagGroup"
         app:atg_isAppendMode="true"
         app:atg_inputHint="add ..."
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:imeOptions="actionDone" />
 
 </RelativeLayout>
 
