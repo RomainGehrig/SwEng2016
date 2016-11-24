@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,12 @@ public class EditNote extends Fragment implements NotePresenter {
         View view = inflater.inflate(R.layout.fragment_edit_note, container, false);
         viewHolder = new NoteViewHolder(view);
 
+        viewHolder.getOptionButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.openOptionalPresenter(EditNote.this);
+            }
+        });
         mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
         if (tags != null && tags.length > 0) {
             mDefaultTagGroup.setTags(tags);
@@ -179,5 +186,11 @@ public class EditNote extends Fragment implements NotePresenter {
             }
         }
         return false;
+    }
+
+    @Override
+    public void onOpenOptPresenterFailure(String message) {
+        Toast.makeText(getActivity(),
+                message, Toast.LENGTH_SHORT).show();
     }
 }
