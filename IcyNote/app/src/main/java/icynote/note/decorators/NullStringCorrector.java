@@ -53,9 +53,9 @@ public class NullStringCorrector<S> extends NoteDecoratorTemplate<S> {
     public Response setContent(S newContent) {
         if (newContent == null) {
             log("null setTitle corrected");
-            return super.setTitle(corrector.makeCorrection());
+            return super.setContent(corrector.makeCorrection());
         }
-        return super.setTitle(newContent);
+        return super.setContent(newContent);
     }
 
     @Override
