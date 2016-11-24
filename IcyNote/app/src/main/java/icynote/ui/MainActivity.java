@@ -3,44 +3,122 @@ package icynote.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import icynote.loaders.NoteLoader;
+import icynote.loaders.NotesLoader;
+import icynote.note.Note;
 import icynote.plugins.Plugin;
+import icynote.ui.contracts.NotePresenter;
+import icynote.ui.contracts.NotesPresenter;
 import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
-import icynote.ui.fragments.FragmentWithState;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.fragments.NotesList;
 import icynote.ui.utils.ApplicationState;
+import util.Optional;
 
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
-public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
+public class MainActivity
+        extends AppCompatActivity
+        implements OnNavigationItemSelectedListener,
+        NotesList.Contract, EditNote.Contract, MetadataNote.Contract {
 
     private static final String TAG = "MainActivity";
     private ApplicationState applicationState;
+
+    private boolean dirtyNotes = true; // list of notes needs a reload
+    private List<NotePresenter> presenters;
+    private NotesPresenter listPresenter = null;
+
+    private static final String BUNDLE_NOTE_ID = "note_id";
+    private LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>> noteLoaderCallback =
+            new LoaderManager.LoaderCallbacks<Optional<Note<SpannableString>>>(){
+                @Override
+                public Loader<Optional<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
+                    Optional<Integer> noteId = Optional.empty();
+                    if (args != null && args.containsKey(BUNDLE_NOTE_ID)) {
+                        noteId = Optional.of(args.getInt(BUNDLE_NOTE_ID));
+                    }
+                    return new NoteLoader(getApplicationContext(), applicationState.getNoteProvider(), noteId);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Optional<Note<SpannableString>>> loader,
+                                           Optional<Note<SpannableString>> data) {
+                    // TODO call observers
+                    if (!data.isPresent()) {
+                        // TODO call error on presenters if not present
+                    } else {
+                        Note<SpannableString> note = data.get();
+                        Log.i(TAG, "Received note: " + note.getId());
+                        for (NotePresenter presenter: presenters) {
+                            presenter.receiveNote(note);
+                        }
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Optional<Note<SpannableString>>> loader) { }
+            };
+
+    private LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>> notesLoaderCallback =
+            new LoaderManager.LoaderCallbacks<Iterable<Note<SpannableString>>>(){
+                @Override
+                public Loader<Iterable<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
+                    return new NotesLoader(getApplicationContext(), applicationState.getNoteProvider());
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Iterable<Note<SpannableString>>> loader,
+                                           Iterable<Note<SpannableString>> data) {
+                    // TODO data received, call observers
+                    dirtyNotes = false;
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Iterable<Note<SpannableString>>> loader) { }
+            };
+
+
+    private void loadNewNote() {
+        getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, null, noteLoaderCallback);
+    }
+    private void loadNote(int noteId) {
+        Bundle args = new Bundle();
+        args.putInt(BUNDLE_NOTE_ID, noteId);
+        getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         applicationState = new ApplicationState(getIntent().getExtras().getString("userUID"), this);
         applicationState.setLoaderManager(getSupportLoaderManager());
+        presenters = new ArrayList<>();
+        presenters.add(getEditNote());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setUpNavDrawer();
-        openFragment(NotesList.class, null);
+        openEditNewNote();
     }
 
     private void setUpNavDrawer() {
@@ -64,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         switch (id) {
             case R.id.menuAllNotes:
-                openFragment(NotesList.class, null);
+                openNotesList();
                 break;
             case R.id.menuTagEdition:
                 openFragment(EditTags.class, null);
@@ -87,6 +165,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         return true;
     }
 
+    private void openNotesList() {
+        NotesList f = openFragment(NotesList.class, null);
+        listPresenter = f;
+    }
+
     public void openMetadata(View view) {
         hideKeyboard(this);
         openFragment(MetadataNote.class, null);
@@ -96,12 +179,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         openEditNote(applicationState.getLastOpenedNoteId());
     }
     public void openEditNewNote() {
-        openEditNote(null);
+        loadNewNote();
+        commitFragment(getEditNote(), EditNote.class.getSimpleName());
     }
     public void openEditNote(Integer noteId) {
-        EditNote editFragment = getEditNote();
-        editFragment.setNoteId(noteId);
-        commitFragment(editFragment, EditNote.class.getSimpleName());
+        loadNote(noteId);
+        commitFragment(getEditNote(), EditNote.class.getSimpleName());
     }
     public EditNote getEditNote() {
         return (EditNote) getFragment(EditNote.class);
@@ -128,21 +211,21 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         Log.i(TAG, "unable to handle requestCode onActivityResult " + requestCode);
     }
 
-    private void openFragment(Class toOpen, Bundle bundle) {
-        FragmentWithState f = getFragment(toOpen);
+    private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
+        F f = getFragment(toOpen);
+        listPresenter = null;
         commitFragment(f, toOpen.getSimpleName());
+        return f;
     }
-    private FragmentWithState getFragment(Class toOpen) {
+    private <F> F getFragment(Class<F> toOpen) {
         try {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment fragment = fragmentManager.findFragmentByTag(toOpen.getSimpleName());
+            @SuppressWarnings("unchecked")
+            F fragment = (F)fragmentManager.findFragmentByTag(toOpen.getSimpleName());
             if (fragment == null) {
-                fragment = (Fragment) toOpen.newInstance();
+                fragment = (F) toOpen.newInstance();
             }
-            FragmentWithState stateFragment = (FragmentWithState) fragment;
-            stateFragment.setState(applicationState);
-            return stateFragment;
-
+            return fragment;
         } catch (InstantiationException e) {
             Log.e(TAG, e.getMessage());
         } catch (IllegalAccessException e) {
@@ -170,16 +253,23 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        applicationState.onSaveInstanceState(outState);
+    public void saveNote(Note<SpannableString> note) {
+        applicationState.getNoteProvider().persist(note);
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        applicationState = new ApplicationState(savedInstanceState, this);
-        applicationState.setLoaderManager(getSupportLoaderManager());
+    public void openNote(int id) {
+        openEditNote(id);
+    }
+
+    @Override
+    public void createNote() {
+        openEditNewNote();
+    }
+
+    @Override
+    public void deleteNotes(List<Integer> notes) {
 
     }
+
 }
