@@ -17,6 +17,12 @@ public final class BoundaryCheckerUtil {
         }
         return obj;
     }
+    public static <T> T checkNotNull(T obj, String message) {
+        if (obj == null) {
+            throw new IllegalArgumentException("value can't be null! " + message);
+        }
+        return obj;
+    }
 
     /**
      * Always throws an {@code AssertionError}.

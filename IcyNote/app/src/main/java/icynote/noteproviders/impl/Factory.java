@@ -14,6 +14,8 @@ import icynote.note.decorators.DateDecorator;
 import icynote.note.decorators.NoteDecoratorFactory;
 import icynote.note.decorators.NullInput;
 import icynote.note.decorators.NullOutput;
+import icynote.note.decorators.NullStringCorrector;
+import icynote.note.impl.NoteData;
 import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.decorators.AdaptedProvider;
 import icynote.noteproviders.decorators.CheckedNoteProvider;
@@ -41,9 +43,9 @@ public final class Factory {
             @Override
             public Note<S> make(Note<S> delegate) {
                 Note<S> tmp = delegate;
-                tmp = new NullOutput<>(tmp);
+                tmp = new NullOutput<>(tmp, "site: persistent delegate output");
                 tmp = new DateDecorator<>(tmp);
-                tmp = new NullInput<>(tmp);
+                tmp = new NullInput<>(tmp, "site: date decorator input");
                 return tmp;
             }
         });
@@ -53,15 +55,46 @@ public final class Factory {
     public static NoteProvider<Note<SpannableString>> make(
             Context c,
             String userUID,
-            NoteDecoratorFactory<SpannableString> formatters)
+            final NoteDecoratorFactory<SpannableString> formatters)
     {
         SQLiteNoteProvider sqlite = new SQLiteNoteProvider(c, userUID);
 
+        NoteWithInteractorsProvider<String> sqliteChecked =
+                new NoteWithInteractorsProvider<>(sqlite);
+        sqliteChecked.stack(new NoteDecoratorFactory<String>() {
+            @Override
+            public Note<String> make(Note<String> delegate) {
+                //delegate = new NullOutput<>(delegate, "site: sqlite output");
+                //delegate = new NullInput<>(delegate, "site: sqlite input");
+                delegate = new NullStringCorrector<String>(delegate, "sqlite",
+                        new NullStringCorrector.Corrector<String>() {
+                    @Override
+                    public String makeCorrection() {
+                        return "{null}";
+                    }
+                });
+                return delegate;
+
+            }
+        });
+
         NoteProvider<Note<SpannableString>> adapted =
-                new AdaptedProvider<>(sqlite, new NoteAdapter());
+                new AdaptedProvider<>(sqliteChecked, new NoteAdapter());
+        //new SpannableAdapterProvider(sqliteChecked);
 
         NoteWithInteractorsProvider<SpannableString> noteChecked = addNoteDecorators(adapted);
-        noteChecked.stack(formatters);
+        noteChecked.stack(new NoteDecoratorFactory<SpannableString>(){
+            @Override
+            public Note<SpannableString> make(Note<SpannableString> delegate) {
+                Note<SpannableString> tmp = delegate;
+                tmp = new NullOutput<>(tmp, "site: interactors delegate output");
+                tmp = new NullInput<>(tmp, "site: interactors delegate input");
+                tmp = formatters.make(tmp);
+                tmp = new NullOutput<>(tmp, "site: formatters output");
+                tmp = new NullInput<>(tmp, "site: formatters input");
+                return tmp;
+            }
+        });
 
         return addNullChecks(noteChecked);
     }
@@ -86,7 +119,7 @@ public final class Factory {
         }
         @Override
         public String from(SpannableString a) {
-            return a.toString();
+            return "" + a;
         }
     };
 
@@ -95,15 +128,22 @@ public final class Factory {
 
         @Override
         public Note<SpannableString> to(Note<String> b) {
-            if (!cache.containsKey(b.getId())) {
-                cache.put(b.getId(), new AdaptedNote<>(b,  strAdapter));
-            }
-            return cache.get(b.getId());
+            return new AdaptedNote<>(b, strAdapter);
         }
 
         @Override
         public Note<String> from(Note<SpannableString> a) {
-            return cache.get(a.getId()).getAdaptedNote();
+            return Factory.trim(a, strAdapter);
         }
+    }
+
+    public static <S> NoteData trim(Note<S> note, Adapter<S, String> strAdapter) {
+        NoteData trimmed = new NoteData();
+        trimmed.setId(note.getId());
+        trimmed.setTitle(strAdapter.from(note.getTitle()));
+        trimmed.setContent(strAdapter.from(note.getContent()));
+        trimmed.setLastUpdate(note.getLastUpdate());
+        trimmed.setCreation(note.getCreation());
+        return trimmed;
     }
 }
