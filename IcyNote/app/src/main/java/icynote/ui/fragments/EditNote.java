@@ -118,8 +118,8 @@ public class EditNote extends Fragment implements NotePresenter {
             return;
 
         viewHolder.enableAll();
-        viewHolder.getTitle().setHint(R.string.noteDisplayTextHint);
-        viewHolder.getContent().setHint(R.string.noteDisplayTitleHint);
+        viewHolder.getTitle().setHint(R.string.noteDisplayTitleHint);
+        viewHolder.getContent().setHint(R.string.noteDisplayTextHint);
         updateTexts();
         setTextWatchers();
     }
