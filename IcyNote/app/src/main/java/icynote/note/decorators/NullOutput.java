@@ -14,27 +14,33 @@ import static icynote.note.common.BoundaryCheckerUtil.checkNotNull;
  * @version 1.0
  */
 public class NullOutput<S> extends NoteDecoratorTemplate<S> {
+    private String name = "";
+
     public NullOutput(Note<S> delegateInteractor) {
         super(delegateInteractor);
+    }
+    public NullOutput(Note<S> delegateInteractor, String errorMessage) {
+        super(delegateInteractor);
+        name = errorMessage;
     }
 
     @Override
     public GregorianCalendar getLastUpdate() {
-        return checkNotNull(super.getLastUpdate());
+        return checkNotNull(super.getLastUpdate(), name);
     }
 
     @Override
     public GregorianCalendar getCreation() {
-        return checkNotNull(super.getCreation());
+        return checkNotNull(super.getCreation(), name);
     }
 
     @Override
     public S getContent() {
-        return checkNotNull(super.getContent());
+        return checkNotNull(super.getContent(), name);
     }
 
     @Override
     public S getTitle() {
-        return checkNotNull(super.getTitle());
+        return checkNotNull(super.getTitle(), name);
     }
 }

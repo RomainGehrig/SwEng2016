@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 
 import icynote.note.Note;
+import icynote.note.decorators.NullInput;
 import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.OrderBy;
 import icynote.noteproviders.OrderType;
@@ -200,7 +201,7 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
         data.setId((int) id);
         data.setCreation(now);
         data.setLastUpdate(now);
-        return new ConstId<String>(data);
+        return new NullInput<String>(new ConstId<String>(data));
     }
 
     @NonNull
