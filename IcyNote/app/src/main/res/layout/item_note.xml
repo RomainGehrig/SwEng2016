@@ -25,6 +25,7 @@
         android:layout_alignParentLeft="true"
         android:layout_weight="1"
         android:id="@+id/item_content"
+        android:descendantFocusability="blocksDescendants"
         >
 
         <LinearLayout
