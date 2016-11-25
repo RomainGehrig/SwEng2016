@@ -39,8 +39,6 @@ import icynote.ui.fragments.NotesList;
 import icynote.ui.utils.ApplicationState;
 import util.Optional;
 
-import static android.R.attr.id;
-
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
 public class MainActivity  extends AppCompatActivity implements
         NotesList.Contract,
@@ -185,7 +183,7 @@ public class MainActivity  extends AppCompatActivity implements
         }
 
         n.receivePluginData(buttons);
-        loadNote(id);
+        reloadNote();
     }
 
     /** fragment contract */
@@ -250,7 +248,12 @@ public class MainActivity  extends AppCompatActivity implements
     private void loadNote(int noteId) {
         Bundle args = new Bundle();
         args.putInt(BUNDLE_NOTE_ID, noteId);
+        Log.d(TAG, "loadNote(" + noteId + ")");
         getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
+    }
+    private void reloadNote() {
+        Log.d(TAG, "reloadingNote");
+        getSupportLoaderManager().initLoader(NoteLoader.LOADER_ID, null, noteLoaderCallback);
     }
 
     //********************************************************************************************
