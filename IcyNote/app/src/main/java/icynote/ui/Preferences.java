@@ -24,7 +24,6 @@ public class Preferences extends PreferenceActivity {
     static private final int RC_LINK_GOOGLE = 1505;
     static private final int RC_UNLINK_GOOGLE = 1505;
 
-    private SwitchPreference darkThemePref;
     private ListPreference orderByPref;
     private ListPreference orderTypePref;
 
@@ -41,18 +40,6 @@ public class Preferences extends PreferenceActivity {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
-        darkThemePref = (SwitchPreference) findPreference("dark_theme");
-        darkThemePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if((Boolean) newValue){
-                    //Theme.setTheme(Theme.ThemeType.DARK.toPosition());
-                } else {
-                    //Theme.setTheme(Theme.ThemeType.BRIGHT.toPosition());
-                }
-                return true;
-            }
-        });
 
         orderByPref = (ListPreference) findPreference("select_sort_by");
         orderByPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

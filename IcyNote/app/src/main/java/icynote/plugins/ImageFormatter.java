@@ -36,6 +36,7 @@ import icynote.note.Note;
 import icynote.note.Response;
 import icynote.note.decorators.NoteDecoratorFactory;
 import icynote.note.decorators.NoteDecoratorTemplate;
+import icynote.ui.R;
 import icynote.ui.utils.ApplicationState;
 
 import static android.R.attr.minHeight;
@@ -66,7 +67,8 @@ class ImageFormatter implements FormatterPlugin {
 
         final AppCompatActivity a = state.getActivity();
         Button takePictureButton = new Button(a.getBaseContext());
-        takePictureButton.setText("insert photo from camera");
+        takePictureButton.setBackgroundResource(R.drawable.meta_photo);
+        takePictureButton.setAlpha(0.5f);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +79,8 @@ class ImageFormatter implements FormatterPlugin {
 
 
         Button usePictureButton = new Button(a.getBaseContext());
-        usePictureButton.setText("insert picture from gallery");
+        usePictureButton.setBackgroundResource(R.drawable.meta_gallery);
+        usePictureButton.setAlpha(0.5f);
         usePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
