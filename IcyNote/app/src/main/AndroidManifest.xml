@@ -38,6 +38,24 @@
 
         <activity android:name=".Preferences"/>
 
+
+
+        <activity android:name=".view.MockEditNote">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+
+
+        <activity android:name=".view.MockNotesList">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="icynote.ui.fileprovider"

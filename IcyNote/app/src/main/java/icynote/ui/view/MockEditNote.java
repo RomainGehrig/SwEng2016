@@ -1,0 +1,36 @@
+package icynote.ui.view;
+
+import android.text.SpannableString;
+import android.view.View;
+
+import icynote.note.Note;
+import icynote.ui.BlankActivity;
+import icynote.ui.contracts.NotePresenter;
+import icynote.ui.contracts.NotePresenterBase;
+import icynote.ui.fragments.EditNote;
+
+/**
+ * Created by kl on 23.11.2016.
+ */
+public class MockEditNote extends BlankActivity implements EditNote.Contract {
+
+    public boolean saveNote = false;
+    public boolean openMetadata = false;
+
+    public MockEditNote() {}
+
+
+    public void openMetadata(View view) {
+        openMetadata = true;
+    }
+
+    @Override
+    public void openOptionalPresenter(NotePresenter requester) {
+
+    }
+
+    @Override
+    public void saveNote(Note<SpannableString> note, NotePresenterBase requester) {
+        saveNote = true;
+    }
+}
