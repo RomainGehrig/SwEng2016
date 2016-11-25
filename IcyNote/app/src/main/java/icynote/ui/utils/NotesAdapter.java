@@ -11,9 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import icynote.note.Note;
 import icynote.ui.R;
@@ -28,6 +31,7 @@ import icynote.ui.R;
 public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
     private Context context;
     private BucketClickedListener onClickListener;
+    private List<Bucket> lastListSetBySetNotesMethod = new ArrayList<>();
 
     public static class Bucket {
         public Note<SpannableString> note;
@@ -126,76 +130,6 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         return convertView;
     }
 
-    /*
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final Note<SpannableString> note = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_note, parent, false);
-        }
-
-        // Title
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        tvTitle.setText(note.getTitle());
-        tvTitle.setTag(position);
-
-        View itemContent = convertView.findViewById(R.id.item_content);
-        itemContent.setTag(position);
-
-        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox);
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    checkedNotes.add(note);
-                } else {
-                    checkedNotes.remove(note);
-                }
-            }
-        });
-        cb.setChecked(checkedNotes.contains(note));
-
-        // Date
-        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
-        GregorianCalendar tmpDate = note.getLastUpdate();
-        String date = "Last update: "
-                + tmpDate.get(GregorianCalendar.DATE) + "/"
-                + tmpDate.get(GregorianCalendar.MONTH) + "/"
-                + tmpDate.get(GregorianCalendar.YEAR);
-        tvDate.setText(date);
-        SpannableString content = note.getContent();
-        int pos1 = -1;
-        int pos2 = -1;
-
-        String strContent = "";
-        int maxLength = 50;
-        if (content.length() > maxLength) {
-            strContent = content.subSequence(0, maxLength).toString() + "...";
-        } else {
-            strContent = content.toString();
-        }
-
-        strContent = strContent.replace('\n', ' ');
-
-        // Content
-        TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
-        tvContent.setText(strContent);
-
-        convertView.setOnCreateContextMenuListener(this);
-
-        // Enabled
-        if (notesOnHold.contains(note)) {
-            cb.setChecked(false);
-            checkedNotes.remove(note);
-            itemContent.setEnabled(false);
-            itemContent.setClickable(false);
-        } else {
-            itemContent.setEnabled(true);
-            itemContent.setClickable(true);
-        }
-        return convertView;
-    }
-     */
     public void add(Note<SpannableString> note) {
         Bucket b = new Bucket(note);
         super.add(b);
@@ -203,8 +137,11 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
 
     public void setNotes(Iterable<Note<SpannableString>> notes) {
         super.clear();
+        lastListSetBySetNotesMethod.clear();
         for (Note<SpannableString> n : notes) {
-            super.add(new Bucket(n));
+            Bucket current = new Bucket(n);
+            super.add(current);
+            lastListSetBySetNotesMethod.add(current);
         }
     }
 
@@ -227,209 +164,71 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         }
         return null;
     }
-/*
-    private Filter filter;
-    private List<Note<SpannableString>> notes;
-    private List<Note<SpannableString>> checkedNotes;
-    private List<Note<SpannableString>> notesOnHold;
-    Context context;
+    //filter
 
-    public NotesAdapter(Context c) {
-        super();
-        this.context = c;
-        notes = new ArrayList<>();
-        checkedNotes = new ArrayList<>();
-        notesOnHold = new ArrayList<>();
-    }
 
-    // FIXME tmp function to set the private array
-    public void setNotes(Iterable<Note<SpannableString>> notesToSet) {
-        notesToSet = requireNonNull(notesToSet);
-        notes.clear();
-        checkedNotes.clear();
-        notesOnHold.clear();
-        for(Note<SpannableString> n : notesToSet) {
-            notes.add(n);
-        }
-    }
-
-    public void deleteNote(Note<SpannableString> n) {
-        notes.remove(n);
-        checkedNotes.remove(n);
-        notesOnHold.remove(n);
-        notifyDataSetChanged();
-    }
-
+    @NonNull
     @Override
-    public int getCount() {
-        return notes.size();
-    }
-
-    @Override
-    public Note<SpannableString> getItem(int position) {
-        return notes.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return notes.get(position).getId();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final Note<SpannableString> note = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_note, parent, false);
-        }
-
-        // Title
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        tvTitle.setText(note.getTitle());
-        tvTitle.setTag(position);
-
-        View itemContent = convertView.findViewById(R.id.item_content);
-        itemContent.setTag(position);
-
-        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox);
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    checkedNotes.add(note);
-                } else {
-                    checkedNotes.remove(note);
-                }
-            }
-        });
-        cb.setChecked(checkedNotes.contains(note));
-
-        // Date
-        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
-        GregorianCalendar tmpDate = note.getLastUpdate();
-        String date = "Last update: "
-                + tmpDate.get(GregorianCalendar.DATE) + "/"
-                + tmpDate.get(GregorianCalendar.MONTH) + "/"
-                + tmpDate.get(GregorianCalendar.YEAR);
-        tvDate.setText(date);
-        SpannableString content = note.getContent();
-        int pos1 = -1;
-        int pos2 = -1;
-
-        String strContent = "";
-        int maxLength = 50;
-        if (content.length() > maxLength) {
-            strContent = content.subSequence(0, maxLength).toString() + "...";
-        } else {
-            strContent = content.toString();
-        }
-
-        strContent = strContent.replace('\n', ' ');
-
-        // Content
-        TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
-        tvContent.setText(strContent);
-
-        convertView.setOnCreateContextMenuListener(this);
-
-        // Enabled
-        if (notesOnHold.contains(note)) {
-            cb.setChecked(false);
-            checkedNotes.remove(note);
-            itemContent.setEnabled(false);
-            itemContent.setClickable(false);
-        } else {
-            itemContent.setEnabled(true);
-            itemContent.setClickable(true);
-        }
-        return convertView;
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu contextMenu,
-                                    View view,
-                                    ContextMenu.ContextMenuInfo contextMenuInfo) {
-    }
-
     public Filter getFilter() {
-        if (filter == null)
-            filter = new NoteFilter(notes);
         return filter;
     }
 
-    public List<Note<SpannableString>> getCheckedNotes() {
-        return new ArrayList<>(checkedNotes);
-    }
-
-
-    // returns the index of note with given id, or -1 if not found.
-    private int getIndexOfNote(int id) {
-        for(int i = 0; i < notes.size(); ++i) {
-            if (notes.get(i).getId() == id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public void setEnabled(boolean enable, Note<SpannableString> note) {
-        boolean onHold = notesOnHold.contains(note);
-        if (enable && onHold) {
-            notesOnHold.remove(note);
-            notifyDataSetChanged();
-        } else if (!enable && !onHold){
-            notesOnHold.add(note);
-            notifyDataSetChanged();
-        }
-    }
-
-    private class NoteFilter extends Filter {
-
-        private ArrayList<Note<SpannableString>> sourceNotes;
-
-        public NoteFilter(List<Note<SpannableString>> notes) {
-            sourceNotes = new ArrayList<>();
-            synchronized (this) {
-                sourceNotes.addAll(notes);
-            }
-        }
+    private final Filter filter = new Filter() {
 
         @Override
         protected FilterResults performFiltering(CharSequence chars) {
-            String filterSeq = chars.toString().toLowerCase();
             FilterResults result = new FilterResults();
-            if (filterSeq != null && !filterSeq.isEmpty()) {
-                ArrayList<Note<SpannableString>> filter = new ArrayList<Note<SpannableString>>();
 
-                for (Note<SpannableString> note : sourceNotes) {
-                    if (note.getTitle().toString().toLowerCase().contains(filterSeq)
-                            || note.getContent().toString().toLowerCase().contains(filterSeq)) {
-                        filter.add(note);
-                    }
-                }
-                result.count = filter.size();
-                result.values = filter;
-            } else {
-                // add all objects
-                synchronized (this) {
-                    result.values = sourceNotes;
-                    result.count = sourceNotes.size();
+            if (chars == null ||chars.length() == 0)  {
+                Log.d(this.getClass().getSimpleName(), "filtering not needed");
+                result.count = lastListSetBySetNotesMethod.size();
+                result.values = lastListSetBySetNotesMethod;
+                return result;
+            }
+
+            Log.d(this.getClass().getSimpleName(), "filtering in progress");
+
+            String filterSeq = chars.toString().toLowerCase();
+            ArrayList<Bucket> filtered = new ArrayList<>();
+
+            for (int i = 0; i < getCount(); ++i) {
+                Bucket bucket = getItem(i);
+
+                if (titleContainsFilter(bucket, filterSeq)
+                        || contentContainsFilter(bucket, filterSeq))
+                {
+                    filtered.add(bucket);
                 }
             }
+            result.count = filtered.size();
+            result.values = filtered;
+
             return result;
         }
 
+        boolean titleContainsFilter(Bucket bucket, String filterSeq) {
+            return bucket.note
+                    .getTitle()
+                    .toString()
+                    .toLowerCase()
+                    .contains(filterSeq);
+        }
+        boolean contentContainsFilter(Bucket bucket, String filterSeq) {
+            return bucket.note.getContent()
+                    .toString()
+                    .toLowerCase()
+                    .contains(filterSeq);
+        }
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
             // NOTE: this function is *always* called from the UI thread.
-            ArrayList<Note<SpannableString>> filtered =
-                    (ArrayList<Note<SpannableString>>) results.values;
-            notes.clear();
-            for (int i = 0, l = filtered.size(); i < l; i++)
-                notes.add(filtered.get(i));
-            notifyDataSetInvalidated();
+            Log.d(this.getClass().getSimpleName(), "publishingResults");
+            clear();
+            addAll((List<Bucket>)results.values);
+
+            notifyDataSetChanged();
         }
-    }
-*/
+    };
 }

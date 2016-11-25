@@ -1,16 +1,16 @@
 package icynote.ui.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import icynote.note.Note;
@@ -32,7 +32,7 @@ public class NotesList extends Fragment
     /** The attached contractor implementing this fragment's contract. */
     private Contract contractor;
 
-    /** Indicates whether receivedNote was called or not */
+    /** Indicates whether the notes were received */
     private boolean notesReceived = false;
 
     //-------------------------------------------------------------------------------------
@@ -46,21 +46,6 @@ public class NotesList extends Fragment
         super.onCreate(savedInstanceState);
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        contractor = (Contract) getActivity();
-        notesAdapter = new NotesAdapter(
-                getActivity(),
-                new NotesAdapter.BucketClickedListener() {
-            @Override
-            public void onClick(NotesAdapter.Bucket b) {
-                contractor.openNote(b.note.getId(), NotesList.this);
-            }
-        });
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -70,11 +55,31 @@ public class NotesList extends Fragment
         viewHolder = new NotesListViewHolder(view);
         registerForContextMenu(viewHolder.getListView());
         setViewListeners();
+        return view;
+    }
 
-        if (notesReceived) {
-            enableView();
-        }
-        return  view;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        enableViewIfNeeded();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        contractor = (Contract) getActivity();
+        getOrCreateAdapter();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewHolder = null;
     }
 
     @Override
@@ -90,9 +95,12 @@ public class NotesList extends Fragment
 
     @Override
     public void receiveNotes(Iterable<Note<SpannableString>> notes) {
-        Toast.makeText(getActivity(), "notes received !", Toast.LENGTH_LONG).show();
-        notesAdapter.setNotes(notes);
-        enableView();
+        log("Received list of notes " + ((notes == null) ? "null" : notes.iterator().hasNext()));
+        //need to create if notes received before fragment is resumed.
+        getOrCreateAdapter().setNotes(notes);
+
+        notesReceived = true;
+        enableViewIfNeeded();
     }
     @Override
     public void onOpenNoteFailure(String message) {
@@ -120,7 +128,21 @@ public class NotesList extends Fragment
     //-------------------------------------------------------------------------------------
     // View listeners
 
-    private void enableView() {
+    private void enableViewIfNeeded() {
+        if (getView() == null || !notesReceived) {
+            /*
+            note: you cannot test if (viewHolder == null),
+            because it can happen that the fragment is currently executing `onCreateView`,
+            and `viewHolder` is created at the beginning of the method, but the view won't
+            be updated until the method returns.
+            Hence, it can happen that : (getView() == null) but (viewHolder != null).
+             */
+            log("not enabling view"
+            + ((getView() == null) ? " getView is null" : "")
+            + ((notesAdapter == null) ? " notesAdapter is null" : "" ));
+            return;
+        }
+        log("enabling view");
         viewHolder.enableAll();
         viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
         viewHolder.getSearchBar().setHint("Enter text to find");
@@ -128,24 +150,22 @@ public class NotesList extends Fragment
         viewHolder.getListView().setAdapter(notesAdapter);
     }
     private void setViewListeners() {
-        /*viewHolder.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        viewHolder.getSearchBar().addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(NotesList.this.getActivity(), "clicked", Toast.LENGTH_SHORT).show();
-                Note<SpannableString> clickedNote = notesAdapter.getItem(position).note;
-                userOpenedNoteListener(clickedNote.getId());
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
-        });*/
-        viewHolder.getSearchBar().setOnEditorActionListener(
-                new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            userFilteredNotesListener();
-                        }
-                        return false;
-                    }
-                });
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                userFilteredNotesListener();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         viewHolder.getBtAdd().setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -164,6 +184,7 @@ public class NotesList extends Fragment
     }
     private void userFilteredNotesListener() {
         if (notesAdapter != null) {
+            Log.d(LOG_TAG, "filtering list: " + viewHolder.getSearchBar().getText());
             notesAdapter.getFilter().filter(viewHolder.getSearchBar().getText());
         }
     }
@@ -179,11 +200,22 @@ public class NotesList extends Fragment
             }
         }
     }
-    private void userOpenedNoteListener(int id) {
-        contractor.openNote(id, this);
-    }
     private void numNotesChanged() {
         viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
+    }
+
+    private NotesAdapter getOrCreateAdapter() {
+        if (notesAdapter == null) {
+            notesAdapter = new NotesAdapter(
+                    getActivity(),
+                    new NotesAdapter.BucketClickedListener() {
+                        @Override
+                        public void onClick(NotesAdapter.Bucket b) {
+                            contractor.openNote(b.note.getId(), NotesList.this);
+                        }
+                    });
+        }
+        return notesAdapter;
     }
     private void log(String msg) {
         Log.d(this.getClass().getSimpleName(), msg);
