@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -78,10 +79,13 @@ public class MainActivity  extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        /*
         int nbFragmentInStack = getSupportFragmentManager().getBackStackEntryCount();
         if (nbFragmentInStack > 1) {
             getSupportFragmentManager().popBackStack();
         }
+        */
+        Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -187,7 +191,12 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void optionPresenterFinished(NoteOptionsPresenter finished) {
+        /*
         onBackPressed(); //go back to EditNote.
+        */
+        // todo change this method when onBackPressed is implemented
+        Toast.makeText(this, "Implementation not finished, yet.", Toast.LENGTH_SHORT).show();
+        openListOfNotes(null);
     }
 
     //********************************************************************************************

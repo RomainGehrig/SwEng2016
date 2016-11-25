@@ -43,7 +43,8 @@ import static android.R.attr.minHeight;
 import static android.R.attr.minWidth;
 
 class ImageFormatter implements FormatterPlugin {
-
+    private static String TAG = ImageFormatter.class.getSimpleName();
+    
     private final int mRequestCodeCamera;
     private final int mRequestCodeGallery;
 
@@ -106,7 +107,7 @@ class ImageFormatter implements FormatterPlugin {
 
         @Override
         public SpannableString getContent() {
-            //Log.i("ImgFormatter.Decorator", "getContent");
+            //Log.i(TAG, "getContent");
 
             SpannableString contentFromCore = super.getContent();
 
@@ -117,7 +118,7 @@ class ImageFormatter implements FormatterPlugin {
                 int start = m.start();
                 int end = m.end();
                 String uri = contentFromCore.subSequence(m.start() + 5, m.end() - 1).toString();
-                Log.i("ImageFormatter", "load image " + uri);
+                Log.i(TAG, "load image " + uri);
                 insertSpan(appState, resS, uri, start, end);
             }
             return resS;
@@ -133,14 +134,14 @@ class ImageFormatter implements FormatterPlugin {
 
             SpannableString translatedContent = new SpannableString(newContent);
             for (ImageSpanWithId span : spans) {
-                Log.i("ImgFormatter.setContent", "replacing " + span.getName());
+                Log.i(TAG, "replacing " + span.getName());
                 translatedContent.removeSpan(span);
                 translatedContent.setSpan("[img=" + span.getName() + "]",
                         newContent.getSpanStart(span),
                         newContent.getSpanEnd(span),
                         newContent.getSpanFlags(span));
             }
-            Log.i("ImgFormatter.setContent", "translated text : " +
+            Log.i(TAG, "translated text : " +
                     "\n" + newContent.toString());
             return super.setContent(translatedContent);
         }
@@ -214,7 +215,7 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     /* ---------------------------------------------------------------------------------------------
-     * METHODS TO TAKE PROCESS A NEWLY TAKEN PHOTO
+     * METHODS TO PROCESS A NEWLY TAKEN PHOTO
      * ---------------------------------------------------------------------------------------------
      */
 
@@ -225,10 +226,10 @@ class ImageFormatter implements FormatterPlugin {
 
     @Override
     public void handle(int requestCode, int resultCode, Intent data, ApplicationState state) {
-        Log.i("imageFormatter", "handling " + requestCode);
+        Log.i(TAG, "handling " + requestCode);
 
         if (!canHandle(requestCode)) {
-            Log.i("imageFormatter", "aborting: unknown request code " + requestCode);
+            Log.i(TAG, "aborting: unknown request code " + requestCode);
             return;
         }
         if (requestCode == mRequestCodeCamera) {
@@ -238,8 +239,8 @@ class ImageFormatter implements FormatterPlugin {
                 return;
             }
             //the picture is written in the previously provided uri
-            if (state.getTempFileUri() == null) {
-                Log.i("imageFormatter", "ignoring requestCode because uri is null");
+            if (state == null || state.getTempFileUri() == null) {
+                Log.i(TAG, "ignoring requestCode because uri is null");
                 Toast.makeText(state.getActivity(),
                         "file URI is null. Aborted.",
                         Toast.LENGTH_SHORT).show();
@@ -257,6 +258,14 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     private void writeUriToNote(ApplicationState state, Uri uri) {
+        boolean temporaryFixFinished = false;
+
+        Toast.makeText(state.getActivity(), "Not implemented, yet.", Toast.LENGTH_SHORT).show();
+        if (temporaryFixFinished) {
+            writeUriToNoteREAL(state, uri);
+        }
+    }
+    private void writeUriToNoteREAL(ApplicationState state, Uri uri) {
 
         int selectionStart = state.getSelectionStart();
         int selectionEnd = state.getSelectionEnd();
@@ -269,13 +278,13 @@ class ImageFormatter implements FormatterPlugin {
 
         SpannableStringBuilder text = new SpannableStringBuilder(state.getLastOpenedNoteContent());
         text.replace(start, end, "[img=" + uri.toString() + "]");
-        Log.i("ImgFormatter", "text with uri : " + text);
+        Log.i(TAG, "text with uri : " + text);
         Note<SpannableString> note = state.getLastOpenedNote();
         Response r1 = note.setContent(new SpannableString(text));
         Response r2 = state.getNoteProvider().persist(note);
 
         if (!r1.isPositive() || !r2.isPositive()) {
-            Log.i("BIG MISTAKE", r1.isPositive() + " / " + r2.isPositive());
+            Log.i(TAG, r1.isPositive() + " / " + r2.isPositive());
         }
     }
 
