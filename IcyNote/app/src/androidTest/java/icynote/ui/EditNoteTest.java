@@ -1,79 +1,122 @@
 package icynote.ui;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.rule.ActivityTestRule;
+import android.text.SpannableString;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import java.util.concurrent.CountDownLatch;
 
 import icynote.note.Note;
+import icynote.note.impl.NoteData2;
+import icynote.ui.contracts.NotePresenter;
 import icynote.ui.fragments.EditNote;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by kl on 09.11.2016.
  */
-@RunWith(AndroidJUnit4.class)
-public class EditNoteTest extends ActivityInstrumentationTestCase2<BlankActivity> {
 
-    /********** DIRTY HACK FOR TEST *********/
-    Note<String> note;
+public class EditNoteTest {
 
-    private BlankActivity mActivity;
+    @Rule
+    public ActivityTestRule<MockEditNote> main = new ActivityTestRule<>(MockEditNote.class);
 
-    public EditNoteTest() {
-        super(BlankActivity.class);
-    }
+    private MockEditNote mActivity;
+    private EditNote fragment;
+    private Note<SpannableString> note;
 
 
     @Before
-    @Override
     public void setUp() throws Exception {
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        final Context context = InstrumentationRegistry.getTargetContext();
-        mActivity = getActivity();
+        mActivity = main.getActivity();
 
-        Bundle bundle = new Bundle();
-        bundle.putInt("id",0);
+        // instantiate fragment EditNote into MainActivity
+        fragment = new EditNote();
+        mActivity.openFragment(fragment);
 
-        note = mock(Note.class);
+        note = new NoteData2();
+        note.setTitle(new SpannableString("someTitle"));
+        note.setContent(new SpannableString("someContent"));
+    }
 
-        // instanciate fragment EditNote into MainActivity
-        Fragment fragment = (Fragment) EditNote.class.newInstance();
-        fragment.setArguments(bundle);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragmentFrame, fragment).commit();
 
+    public void enableFragment() throws InterruptedException {
+        //initalise a 1 = se debloque apres 1 countDown
+        final CountDownLatch latch = new CountDownLatch(1);
+        mActivity.runOnUiThread(
+                new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        latch.countDown(); // fait passer a 0
+                        fragment.receiveNote(note);
+                    }// end of run
+                } // end of runnable
+        ); //end of runOnUiThread
+
+        // dans le thread du test, attend qu elle passe a 0 = attend que receiveNote soit appele
+        latch.await();
+    }
+
+
+    @Test
+    public void receiveNoteTest() throws InterruptedException {
+        enableFragment();
+        fragment.receiveNote(note);
+        onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
+        onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
+    }
+
+    @Test
+    public void goToMetadataTest() throws InterruptedException {
+        enableFragment();
+        fragment.receiveNote(note);
+        onView(withId(R.id.note_open_metadata)).perform(click());
+        assertTrue(mActivity.openMetadata);
+    }
+
+    @Test
+    public void writeTitleTest() throws InterruptedException {
+        enableFragment();
+        fragment.receiveNote(note);
+        onView(withId(R.id.noteDisplayTitleText)).perform(typeText("someTitle"));
+        assertTrue(mActivity.saveNote);
+    }
+
+    @Test
+    public void writeContentTest() throws InterruptedException {
+        enableFragment();
+        fragment.receiveNote(note);
+        onView(withId(R.id.noteDisplayBodyText)).perform(typeText("someText"));
+        assertTrue(mActivity.saveNote);
     }
 
     /*@Test
-    public void goToMetadataTest() {
-        onView(withId(R.id.noteDisplaySettingsButton)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.noteTitle));
+    public void saveNoteTest() throws InterruptedException { // TODO more checks
+        enableFragment();
+        mActivity.saveNote(note, EditNoteTest.this);
+        onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
+        onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
     }*/
 
     @Test
-    public void writeTitleTest() {
-        onView(withId(R.id.noteDisplayTitleText)).perform(typeText("someTitle"));
-        verify(note).setTitle("someTitle");
+    public void onSaveNoteFailureTest() {
+        fragment.receiveNote(note);
+        fragment.onSaveNoteFailure("fail to save");
+        onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
+        onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
     }
 
-    @Test
-    public void writeContentTest() {
-        onView(withId(R.id.noteDisplayBodyText)).perform(typeText("someText"));
-        verify(note).setContent("someText");
-    }
 
 }
