@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import icynote.note.Note;
 import icynote.ui.R;
 import icynote.ui.contracts.NotesPresenter;
@@ -192,12 +194,20 @@ public class NotesList extends Fragment
         contractor.createNote(this);
     }
     private void userDeletedNotesListener() {
-        for(int i = 0; i < notesAdapter.getCount(); ++i) {
+        ArrayList<Note<SpannableString>> toDelete = new ArrayList();
+
+        //first make a copy to avoid concurrency issues
+        for (int i = 0; i < notesAdapter.getCount(); ++i) {
             NotesAdapter.Bucket bucket = notesAdapter.getItem(i);
             if (bucket != null && bucket.checked) {
                 bucket.enabled = false;
-                contractor.deleteNote(bucket.note, this);
+                toDelete.add(bucket.note);
             }
+        }
+        notesAdapter.notifyDataSetChanged();
+
+        for (Note<SpannableString> n : toDelete) {
+            contractor.deleteNote(n, this);
         }
     }
     private void numNotesChanged() {
