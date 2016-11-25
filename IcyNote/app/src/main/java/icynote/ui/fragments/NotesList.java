@@ -146,7 +146,7 @@ public class NotesList extends Fragment
         }
         log("enabling view");
         viewHolder.enableAll();
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
+        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
         viewHolder.getSearchBar().setHint("Enter text to find");
         viewHolder.getListView().setAdapter(null); //reset
         viewHolder.getListView().setAdapter(notesAdapter);
