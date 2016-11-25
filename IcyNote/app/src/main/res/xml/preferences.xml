@@ -6,11 +6,6 @@
     <PreferenceCategory
         android:title="General"
         android:key="general_group">
-        <SwitchPreference
-            android:key="dark_theme"
-            android:summary="enable dark theme"
-            android:defaultValue="false"
-            android:title="Dark Theme"/>
         <ListPreference
             android:key="select_sort_by"
             android:summary="set sorting for list of notes"

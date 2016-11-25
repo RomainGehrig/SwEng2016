@@ -30,7 +30,7 @@ public class EditNote extends Fragment implements NotePresenter {
     private Contract activity;
 
     private TagGroup mDefaultTagGroup;
-    private String[] tags = {"1", "2", "3"}; // initialize tags here
+    private String[] tags = {}; // initialize tags here
     private NoteViewHolder viewHolder;
 
     public EditNote() {
@@ -56,6 +56,7 @@ public class EditNote extends Fragment implements NotePresenter {
             mDefaultTagGroup.setTags(tags);
         }
 
+        /*
         mDefaultTagGroup.setOnTagChangeListener(new TagGroup.OnTagChangeListener() {
             @Override
             public void onAppend(TagGroup tagGroup, String tag) {
@@ -86,6 +87,7 @@ public class EditNote extends Fragment implements NotePresenter {
                 return false;
             }
         });
+        */
 
         return view;
     }
@@ -178,6 +180,7 @@ public class EditNote extends Fragment implements NotePresenter {
         });
     }
 
+    /*
     private boolean containsNotLast(String[] l, String t) {
         List<String> e = Arrays.asList(l).subList(0, l.length - 1);
         for (String s : e) {
@@ -187,6 +190,7 @@ public class EditNote extends Fragment implements NotePresenter {
         }
         return false;
     }
+    */
 
     @Override
     public void onOpenOptPresenterFailure(String message) {
