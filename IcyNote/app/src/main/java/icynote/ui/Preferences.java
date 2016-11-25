@@ -7,6 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +108,12 @@ public class Preferences extends PreferenceActivity {
             });
             pluginPref.addPreference(curr);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "Actions not implemented, yet.", Toast.LENGTH_LONG).show();
     }
 
     public void updateButton() {

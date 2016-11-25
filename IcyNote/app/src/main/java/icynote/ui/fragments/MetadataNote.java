@@ -78,7 +78,7 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
 
     @Override
     public void receiveNote(Note<SpannableString> note) {
-        Log.d("NOTE", "RECEIVED");
+        Log.d(this.getClass().getSimpleName(), "RECEIVED");
         if (receivedData == null) {
             receivedData = new ReceivedData();
         }
