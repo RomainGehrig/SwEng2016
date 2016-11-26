@@ -80,31 +80,36 @@ public class AdaptedNoteTest {
     @Test
     public void setIdTest() {
         int newId = 2;
-        assertEquals(note.setId(newId).isPositive(),adaptedNote.setId(newId).isPositive());
+        adaptedNote.setId(newId);
+        assertEquals(note.getId(),newId);
     }
 
     @Test
     public void setTitleTest() {
         String newTitle = "newTitle";
-        assertEquals(note.setTitle(new SpannableString(newTitle)).isPositive(),adaptedNote.setTitle(newTitle).isPositive());
+        adaptedNote.setTitle(newTitle);
+        assertEquals(""+note.getTitle(), newTitle);
     }
 
     @Test
     public void setContentTest() {
         String newContent = "newContent";
-        assertEquals(note.setContent(new SpannableString(newContent)).isPositive(),adaptedNote.setContent(newContent).isPositive());
+        adaptedNote.setContent(newContent);
+        assertEquals(""+note.getContent(),newContent);
     }
 
     @Test
     public void setCreationTest() {
         GregorianCalendar newCreation = new GregorianCalendar();
-        assertEquals(note.setCreation(newCreation).isPositive(),adaptedNote.setCreation(newCreation).isPositive());
+        adaptedNote.setCreation(newCreation);
+        assertEquals(note.getCreation(), newCreation);
     }
 
     @Test
     public void setLastUpdateTest() {
         GregorianCalendar newLastUpdate = new GregorianCalendar();
-        assertEquals(note.setLastUpdate(newLastUpdate).isPositive(),adaptedNote.setLastUpdate(newLastUpdate).isPositive());
+        adaptedNote.setLastUpdate(newLastUpdate);
+        assertEquals(note.getLastUpdate(), newLastUpdate);
     }
 
 }
