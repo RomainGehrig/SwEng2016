@@ -36,6 +36,7 @@ import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.fragments.NotesList;
+import icynote.ui.fragments.Preferences;
 import icynote.ui.utils.ApplicationState;
 import util.Optional;
 
@@ -120,8 +121,7 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that opens the settings */
     public void openSettings(MenuItem item) {
-        Intent intent = new Intent(this, Preferences.class);
-        startActivity(intent);
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new Preferences()).commit();
     }
 
     /** menu's on click listener that logs the current user out */

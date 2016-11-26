@@ -16,6 +16,8 @@ public class NotesListViewHolder {
     private EditText searchBar;
     private Button btAdd;
     private Button btDelete;
+    private TextView emptyText;
+
 
     public NotesListViewHolder(View notesList) {
         listView = (ListView) notesList.findViewById(R.id.lvNotes);
@@ -23,6 +25,8 @@ public class NotesListViewHolder {
         searchBar = (EditText) notesList.findViewById(R.id.searchBar);
         btAdd = (Button) notesList.findViewById(R.id.btAdd);
         btDelete = (Button) notesList.findViewById(R.id.btDelete);
+        emptyText = (TextView) notesList.findViewById(R.id.emptyText);
+
     }
 
     public void enableAll() {
@@ -50,5 +54,9 @@ public class NotesListViewHolder {
 
     public Button getBtDelete() {
         return btDelete;
+    }
+
+    public TextView getEmptyText() {
+        return emptyText;
     }
 }

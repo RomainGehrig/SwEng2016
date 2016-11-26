@@ -36,7 +36,7 @@
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".Preferences"/>
+        <activity android:name=".fragments.Preferences"/>
 
 
 

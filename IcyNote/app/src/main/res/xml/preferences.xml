@@ -3,6 +3,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="settings_main">
 
+    <Preference
+        android:enabled="false" />
+
     <PreferenceCategory
         android:title="General"
         android:key="general_group">

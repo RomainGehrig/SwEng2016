@@ -150,7 +150,18 @@ public class NotesList extends Fragment
         viewHolder.getSearchBar().setHint("Enter text to find");
         viewHolder.getListView().setAdapter(null); //reset
         viewHolder.getListView().setAdapter(notesAdapter);
+        setPlaceholderText();
     }
+    private void setPlaceholderText() {
+        if(notesAdapter.getCount() == 0){
+            viewHolder.getListView().setVisibility(View.GONE);
+            viewHolder.getEmptyText().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getListView().setVisibility(View.VISIBLE);
+            viewHolder.getEmptyText().setVisibility(View.GONE);
+        }
+    }
+
     private void setViewListeners() {
         viewHolder.getSearchBar().addTextChangedListener(new TextWatcher() {
             @Override
@@ -212,6 +223,7 @@ public class NotesList extends Fragment
     }
     private void numNotesChanged() {
         viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
+        setPlaceholderText();
     }
 
     private NotesAdapter getOrCreateAdapter() {
