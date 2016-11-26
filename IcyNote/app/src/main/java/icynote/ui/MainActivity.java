@@ -122,6 +122,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** menu's on click listener that opens the settings */
     public void openSettings(MenuItem item) {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new Preferences()).commit();
+        //openFragment(Preferences.class, null);
     }
 
     /** menu's on click listener that logs the current user out */

@@ -165,26 +165,24 @@ public class Preferences extends PreferenceFragment {
         pluginPref = (PreferenceScreen) findPreference("plugin_settings");
         Iterable<Plugin> allPlugins = (new PluginsProvider()).getPlugins();
         for(Plugin plugin: allPlugins) {
-            Iterable<String> currentPlugin = plugin.getNames();
-            for(String pluginName: currentPlugin) {
-                final SwitchPreference thisPlugin = new SwitchPreference(getActivity());
-                thisPlugin.setTitle(pluginName);
-                thisPlugin.setKey(pluginName);
-                thisPlugin.setDefaultValue(true);
-                thisPlugin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        if(!(Boolean) newValue){
-                            thisPlugin.setSummary("disabled");
-                            // TODO disable / enable plugin
-                        } else {
-                            thisPlugin.setSummary("");
-                        }
-                        return true;
+            String pluginName = plugin.getName();
+            final SwitchPreference thisPlugin = new SwitchPreference(getActivity());
+            thisPlugin.setTitle(pluginName);
+            thisPlugin.setKey(pluginName);
+            thisPlugin.setDefaultValue(true);
+            thisPlugin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if(!(Boolean) newValue){
+                        thisPlugin.setSummary("disabled");
+                        // TODO disable / enable plugin
+                    } else {
+                        thisPlugin.setSummary("");
                     }
-                });
-                pluginPref.addPreference(thisPlugin);
-            }
+                    return true;
+                }
+            });
+            pluginPref.addPreference(thisPlugin);
         }
     }
 
