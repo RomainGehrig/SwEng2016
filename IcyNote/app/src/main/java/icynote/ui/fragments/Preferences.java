@@ -164,7 +164,6 @@ public class Preferences extends PreferenceFragment {
     private void setPlugins() {
         pluginPref = (PreferenceScreen) findPreference("plugin_settings");
         Iterable<Plugin> allPlugins = (new PluginsProvider()).getPlugins();
-        List<String> allPluginNames = new ArrayList<>();
         for(Plugin plugin: allPlugins) {
             Iterable<String> currentPlugin = plugin.getNames();
             for(String pluginName: currentPlugin) {
