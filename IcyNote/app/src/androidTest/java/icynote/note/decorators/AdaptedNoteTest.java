@@ -92,7 +92,7 @@ public class AdaptedNoteTest {
     @Test
     public void setContentTest() {
         String newContent = "newContent";
-        assertEquals(note.setTitle(new SpannableString(newContent)).isPositive(),adaptedNote.setTitle(newContent).isPositive());
+        assertEquals(note.setContent(new SpannableString(newContent)).isPositive(),adaptedNote.setContent(newContent).isPositive());
     }
 
     @Test
