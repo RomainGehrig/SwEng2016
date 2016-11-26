@@ -60,11 +60,8 @@ class ImageFormatter implements FormatterPlugin {
      */
 
     @Override
-    public Iterable<String> getNames(){
-        List<String> namesList = new ArrayList<>();
-        namesList.add("Camera");
-        namesList.add("Gallery");
-        return namesList;
+    public String getName(){
+        return "Image insertion Plugin";
     }
 
     @Override
