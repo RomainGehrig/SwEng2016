@@ -10,9 +10,7 @@ import java.util.GregorianCalendar;
 import icynote.note.Note;
 import icynote.note.impl.NoteData2;
 
-/**
- * Created by kl on 26.11.2016.
- */
+
 public class NoteDecoratorTemplateTest {
     
     Note<SpannableString> note = new NoteData2();
@@ -20,66 +18,124 @@ public class NoteDecoratorTemplateTest {
 
     @Test
     public void getIdTest() {
+        int lastId = note.getId();
         int id = 1;
-        note.setId(id);
-        assertEquals(id, noteDecoratorTemplate.getId());
+
+        if(note.setId(id).isPositive()) {
+            assertEquals(id, noteDecoratorTemplate.getId());
+        }
+        else {
+            assertEquals(lastId, noteDecoratorTemplate.getId());
+        }
     }
 
     @Test
     public void getTitleTest() {
         SpannableString title = new SpannableString("title");
-        note.setTitle(title);
-        assertEquals(title, noteDecoratorTemplate.getTitle()); // return String
+        SpannableString lastTitle = note.getTitle();
+        if(note.setTitle(title).isPositive()) {
+            assertEquals(title, noteDecoratorTemplate.getTitle()); // return String
+        }
+        else  {
+            assertEquals(lastTitle, noteDecoratorTemplate.getTitle()); // return String
+        }
     }
 
     @Test
     public void getContentTest() {
         SpannableString content = new SpannableString("content");
-        note.setContent(content);
-        assertEquals(content, noteDecoratorTemplate.getContent()); // return String
+        SpannableString lastContent = note.getContent();
+        if(note.setContent(content).isPositive()) {
+            assertEquals(content, noteDecoratorTemplate.getContent()); // return String
+        }
+        else {
+            assertEquals(lastContent, noteDecoratorTemplate.getContent()); // return String
+        }
     }
 
     @Test
     public void getCreationTest() {
         GregorianCalendar date = new GregorianCalendar();
-        note.setCreation(date);
-        assertEquals(date, noteDecoratorTemplate.getCreation());
+        GregorianCalendar lastDate = note.getCreation();
+        if(note.setCreation(date).isPositive()) {
+            assertEquals(date, noteDecoratorTemplate.getCreation());
+        }
+        else {
+            assertEquals(lastDate, noteDecoratorTemplate.getCreation());
+        }
     }
 
     @Test
     public void getLastUpdateTest() {
         GregorianCalendar newDate = new GregorianCalendar();
-        note.setLastUpdate(newDate);
-        assertEquals(newDate, noteDecoratorTemplate.getLastUpdate());
+        GregorianCalendar lastDate = note.getLastUpdate();
+        if(note.setLastUpdate(newDate).isPositive()) {
+            assertEquals(newDate, noteDecoratorTemplate.getLastUpdate());
+        }
+        else {
+            assertEquals(lastDate, noteDecoratorTemplate.getLastUpdate());
+        }
     }
 
     @Test
     public void setIdTest() {
         int newId = 2;
-        assertEquals(note.setId(newId).isPositive(),noteDecoratorTemplate.setId(newId).isPositive());
+        int lastId = note.getId();
+        if(noteDecoratorTemplate.setId(newId).isPositive()){
+            assertEquals(note.getId(),newId);
+        }
+        else {
+            assertEquals(note.getId(),lastId);
+        }
     }
 
     @Test
     public void setTitleTest() {
         SpannableString newTitle = new SpannableString("newTitle");
-        assertEquals(note.setTitle(newTitle).isPositive(),noteDecoratorTemplate.setTitle(newTitle).isPositive());
+        SpannableString lastTitle = note.getTitle();
+        if(noteDecoratorTemplate.setTitle(newTitle).isPositive()) {
+            assertEquals(note.getTitle(), newTitle);
+        }
+        else {
+            assertEquals(note.getTitle(), lastTitle);
+        }
     }
+
 
     @Test
     public void setContentTest() {
         SpannableString newContent = new SpannableString("newContent");
-        assertEquals(note.setContent(newContent).isPositive(),noteDecoratorTemplate.setContent(newContent).isPositive());
+        SpannableString lastContent = note.getContent();
+        if(noteDecoratorTemplate.setTitle(newContent).isPositive()) {
+            assertEquals(note.getTitle(), newContent);
+        }
+        else {
+            assertEquals(note.getTitle(), lastContent);
+        }
     }
 
     @Test
     public void setCreationTest() {
         GregorianCalendar newCreation = new GregorianCalendar();
-        assertEquals(note.setCreation(newCreation).isPositive(),noteDecoratorTemplate.setCreation(newCreation).isPositive());
+        GregorianCalendar lastCreation = note.getCreation();
+        if(noteDecoratorTemplate.setCreation(newCreation).isPositive()) {
+            assertEquals(note.getCreation(), newCreation);
+        }
+        else {
+            assertEquals(note.getCreation(), lastCreation);
+        }
     }
 
     @Test
     public void setLastUpdateTest() {
         GregorianCalendar newLastUpdate = new GregorianCalendar();
-        assertEquals(note.setLastUpdate(newLastUpdate).isPositive(),noteDecoratorTemplate.setLastUpdate(newLastUpdate).isPositive());
+        GregorianCalendar lastLastUpdate = note.getLastUpdate();
+        if(noteDecoratorTemplate.setLastUpdate(newLastUpdate).isPositive()){
+            assertEquals(note.getLastUpdate(), newLastUpdate);
+        }
+        else {
+            assertEquals(note.getLastUpdate(), lastLastUpdate);
+        }
     }
+
 }
