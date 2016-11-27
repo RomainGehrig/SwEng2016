@@ -2,23 +2,29 @@ package icynote.ui;
 
 import android.support.test.rule.ActivityTestRule;
 import android.text.SpannableString;
+import android.view.View;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CountDownLatch;
 
 import icynote.note.Note;
 import icynote.note.impl.NoteData2;
+import icynote.plugins.FormatterPlugin;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.view.MockMetadataNote;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertTrue;
 
 
 public class MetadataNoteTest {
@@ -69,13 +75,39 @@ public class MetadataNoteTest {
     public void receiveNoteTest() throws InterruptedException {
         enableFragment();
         fragment.receiveNote(note);
-        onView(withId(R.id.noteTitle)).check(matches(withText("someTitle")));
-        onView(withId(R.id.noteCreationDate)).check(matches(withText(creation.toString())));
+        onView(withId(R.id.noteTitle)).check(matches(withText(""+note.getTitle())));
     }
-/*
-    @Test
-    public void onSaveNoteFailureTest() {
 
+    /*@Test // FIXME toast failure ?
+    public void onSaveNoteFailureTest() throws InterruptedException {
+        enableFragment();
+        fragment.receiveNote(note);
+        fragment.onSaveNoteFailure("save error");
+        onView(withId(R.id.noteTitle)).check(matches(withText(""+note.getTitle())));
     }*/
 
+    @Test
+    public void saveNoteWhenTypingTitleTest() throws InterruptedException {
+        enableFragment();
+        onView(withId(R.id.noteTitle)).perform(typeText("a new title"));
+        assertTrue(mActivity.saveNote);
+    }
+
+    /*@Test // FIXME
+    public void getBackToNoteTest() throws InterruptedException {
+        enableFragment();
+        fragment.receiveNote(note);
+        onView(withId(R.id.backButton)).perform(click());
+        assertTrue(mActivity.openEditNote);
+    }*/
+
+    /*@Test // TODO to complete
+    public void receivePluginDataTest() throws InterruptedException {
+        enableFragment();
+        fragment.receiveNote(note);
+
+        ArrayList<View> buttons = new ArrayList<>();
+        fragment.receivePluginData(buttons);
+    }
+*/
 }

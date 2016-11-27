@@ -10,8 +10,9 @@ import icynote.ui.fragments.MetadataNote;
 
 public class MockMetadataNote extends BlankActivity implements MetadataNote.Contract {
 
-    private boolean saveNote = false;
-    private boolean optionPresenterFinished = false;
+    public boolean saveNote = false;
+    public boolean optionPresenterFinished = false;
+    public boolean openEditNote = false;
 
     public MockMetadataNote() {}
 
@@ -24,4 +25,9 @@ public class MockMetadataNote extends BlankActivity implements MetadataNote.Cont
     public void saveNote(Note<SpannableString> note, NotePresenterBase requester) {
         saveNote = true;
     }
+
+
+    /*public void reOpenEditNote() {
+        openEditNote = true;
+    }*/
 }
