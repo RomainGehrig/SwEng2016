@@ -16,6 +16,7 @@ public class MockEditNote extends BlankActivity implements EditNote.Contract {
 
     public boolean saveNote = false;
     public boolean openMetadata = false;
+    public boolean openOptionalPresenter = false;
 
     public MockEditNote() {}
 
@@ -26,7 +27,7 @@ public class MockEditNote extends BlankActivity implements EditNote.Contract {
 
     @Override
     public void openOptionalPresenter(NotePresenter requester) {
-
+        openOptionalPresenter = true;
     }
 
     @Override
