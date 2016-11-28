@@ -46,7 +46,7 @@
             android:id="@+id/emptyText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="To start click on ADD in the bottom right corner"
+            android:text="You don't have any trashed note."
             android:gravity="center"
             android:layout_weight="1"
             android:visibility="gone"/>
@@ -67,16 +67,6 @@
             android:layout_below="@id/lvNotes"
             android:layout_alignParentRight="true" >
 
-            <Button
-                android:text="Add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btAdd"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:enabled="false"/>
-
             <TextView
                 android:id="@+id/tvNumNotes"
                 android:text="Loading..."
@@ -86,10 +76,10 @@
                 android:layout_centerHorizontal="true"/>
 
             <Button
-                android:text="Delete selected"
+                android:text="Restore selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btDelete"
+                android:id="@+id/btRestore"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"

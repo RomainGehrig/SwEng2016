@@ -32,10 +32,13 @@ import icynote.ui.contracts.NoteOptionsPresenter;
 import icynote.ui.contracts.NotePresenter;
 import icynote.ui.contracts.NotePresenterBase;
 import icynote.ui.contracts.NotesPresenter;
+import icynote.ui.contracts.TrashedNotesPresenter;
 import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.fragments.NotesList;
+import icynote.ui.fragments.Preferences;
+import icynote.ui.fragments.TrashedNotes;
 import icynote.ui.utils.ApplicationState;
 import util.Optional;
 
@@ -43,7 +46,8 @@ import util.Optional;
 public class MainActivity  extends AppCompatActivity implements
         NotesList.Contract,
         EditNote.Contract,
-        MetadataNote.Contract
+        MetadataNote.Contract,
+        TrashedNotes.Contract
 {
     private static final String TAG = "MainActivity";
     private static final String BUNDLE_NOTE_ID = "note_id";
@@ -56,6 +60,10 @@ public class MainActivity  extends AppCompatActivity implements
     private NotePresenterBase singleNotePresenter = null;
     private NotesPresenter listOfNotesPresenter = null;
     private NoteOpenerBase singleNoteOpener = null;
+    private TrashedNotesPresenter trashedNotesPresenter = null;
+
+    ////
+    private ArrayList<Note<SpannableString>> trashedNotes;
 
 
     @Override
@@ -67,6 +75,9 @@ public class MainActivity  extends AppCompatActivity implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDelegate().setContentView(R.layout.activity_main);
         drawer = (DrawerLayout) findViewById(R.id.main_layout);
+
+        ////
+        trashedNotes = new ArrayList<>();
     }
 
     @Override
@@ -115,13 +126,15 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that opens the list of deleted notes */
     public void openListOfDeletedNotes(MenuItem item) {
-        openFragment(NotesList.class, null);
+        ////
+        trashedNotesPresenter = openFragment(TrashedNotes.class, null);
+        trashedNotesPresenter.receiveNotes(trashedNotes);
     }
 
     /** menu's on click listener that opens the settings */
     public void openSettings(MenuItem item) {
-        Intent intent = new Intent(this, Preferences.class);
-        startActivity(intent);
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new Preferences()).commit();
+        //openFragment(Preferences.class, null);
     }
 
     /** menu's on click listener that logs the current user out */
@@ -150,6 +163,8 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void deleteNote(Note<SpannableString> note, NotesPresenter requester) {
+        ////
+        trashedNotes.add(note);
         Response r = applicationState.getNoteProvider().delete(note.getId());
         if (requester != null) {
             if (r.isPositive()) {
@@ -166,6 +181,23 @@ public class MainActivity  extends AppCompatActivity implements
         Response r = applicationState.getNoteProvider().persist(note);
         if (!r.isPositive() && requester != null) {
             requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
+        }
+    }
+
+    ////
+    /** fragment contract */
+    @Override
+    public void deleteTrashedNote(Note<SpannableString> note, TrashedNotesPresenter requester) {
+        boolean isRemoved = trashedNotes.remove(note);
+        if (requester != null) {
+            if (isRemoved) {
+                Note n = applicationState.getNoteProvider().createNote().get();
+                n.setTitle(note.getTitle());
+                n.setContent(note.getContent());
+                requester.onTrashedNoteDeletionSuccess(note);
+            } else {
+                requester.onTrashedNoteDeletionFailure(note, "could not delete note");
+            }
         }
     }
 
