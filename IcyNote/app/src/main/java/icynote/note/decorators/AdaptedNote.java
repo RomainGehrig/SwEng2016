@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 
 import icynote.note.Note;
 import icynote.note.Response;
+import icynote.note.impl.NoteData;
 import util.Adapter;
 
 public class AdaptedNote<S, T> implements Note<S> {
@@ -15,10 +16,19 @@ public class AdaptedNote<S, T> implements Note<S> {
         adapter = usingAdapter;
     }
 
-    public Note<T> getAdaptedNote() {
-        return delegate;
-    }
     //-------------------------------------
+
+    @Override
+    public NoteData<S> getRaw() {
+        NoteData<T> raw = delegate.getRaw();
+        NoteData<S> adapted = new NoteData<>(null, null);
+        adapted.setId(raw.getId());
+        adapted.setTitle(adapter.to(raw.getTitle()));
+        adapted.setContent(adapter.to(raw.getContent()));
+        adapted.setCreation(raw.getCreation());
+        adapted.setLastUpdate(raw.getLastUpdate());
+        return adapted;
+    }
 
     @Override
     public int getId() {

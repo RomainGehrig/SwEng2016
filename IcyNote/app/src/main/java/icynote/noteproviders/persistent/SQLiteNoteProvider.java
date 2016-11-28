@@ -117,6 +117,7 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
 
     @Override
     public Response persist(Note<String> n) {
+        n = n.getRaw(); //unwind the decorator stack, if there is one
 
         ContentValues values = new ContentValues();
         values.put(Notes.COL_TITLE, n.getTitle());
@@ -197,7 +198,7 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
 
     @NonNull
     private static Note<String> createNote(long id, GregorianCalendar now) {
-        NoteData data = new NoteData();
+        NoteData<String> data = new NoteData<String>("", "");
         data.setId((int) id);
         data.setCreation(now);
         data.setLastUpdate(now);

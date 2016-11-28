@@ -2,6 +2,8 @@ package icynote.note;
 
 import java.util.GregorianCalendar;
 
+import icynote.note.impl.NoteData;
+
 /**
  * Gives access to a note's attributes.
  * <p>
@@ -12,6 +14,12 @@ import java.util.GregorianCalendar;
  * @version 1.0
  */
 public interface Note<S> {
+
+    /**
+     * Returns a data-object with no behaviour containing the data of the note.
+     */
+    NoteData<S> getRaw();
+
     /**
      * Returns the unique id of this note.
      */

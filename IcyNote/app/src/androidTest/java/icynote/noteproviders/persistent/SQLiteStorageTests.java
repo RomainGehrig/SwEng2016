@@ -35,6 +35,6 @@ public class SQLiteStorageTests extends StorageTests {
 
     @Override
     protected Note<String> makeNewNote() {
-        return new NoteData();
+        return new NoteData<String>("", "");
     }
 }

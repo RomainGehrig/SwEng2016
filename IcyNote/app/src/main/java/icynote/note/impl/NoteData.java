@@ -16,23 +16,29 @@ import icynote.note.common.ResponseFactory;
  * @version 1.0
  */
 @SuppressWarnings("UseOfClone")
-public class NoteData implements Note<String> {
+public class NoteData<S> implements Note<S> {
     private int id = 0;
-    private String title = "";
-    private String content = "";
+    private S title;
+    private S content;
     private GregorianCalendar creation = new GregorianCalendar();
     private GregorianCalendar lastUpdate = new GregorianCalendar();
 
-    public NoteData() {
-
+    public NoteData(S defaultTitle, S defaultContent) {
+        title = defaultTitle;
+        content = defaultContent;
     }
 
-    public NoteData(Note<String> toCopy) {
+    public NoteData(Note<S> toCopy) {
         id = toCopy.getId();
         title = toCopy.getTitle();
         content = toCopy.getContent();
         creation = toCopy.getCreation();
         lastUpdate = toCopy.getLastUpdate();
+    }
+
+    @Override
+    public NoteData<S> getRaw() {
+        return this;
     }
 
     @Override
@@ -47,23 +53,23 @@ public class NoteData implements Note<String> {
     }
 
     @Override
-    public String getTitle() {
+    public S getTitle() {
         return title;
     }
 
     @Override
-    public Response setTitle(String newTitle) {
+    public Response setTitle(S newTitle) {
         title = newTitle;
         return ResponseFactory.positiveResponse();
     }
 
     @Override
-    public String getContent() {
+    public S getContent() {
         return content;
     }
 
     @Override
-    public Response setContent(String newContent) {
+    public Response setContent(S newContent) {
         content = newContent;
         return ResponseFactory.positiveResponse();
     }

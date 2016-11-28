@@ -33,7 +33,7 @@ public class DateInteractorTests extends NoteTests {
 
     @Override
     protected Note<String> makeData() {
-        return new NoteData();
+        return new NoteData<String>("", "");
     }
 
     @Override
@@ -75,7 +75,7 @@ public class DateInteractorTests extends NoteTests {
     }
 
     private Note<String> getBlockedNote() {
-        NoteData data = new NoteData();
+        NoteData<String> data = new NoteData<String>("", "");
         data.setTitle(originalTitle);
         data.setContent(originalContent);
         data.setCreation(originalCreation);
