@@ -25,6 +25,7 @@ import icynote.loaders.NoteLoader;
 import icynote.loaders.NotesLoader;
 import icynote.note.Note;
 import icynote.note.Response;
+import icynote.note.impl.NoteData;
 import icynote.plugins.FormatterPlugin;
 import icynote.plugins.Plugin;
 import icynote.ui.contracts.NoteOpenerBase;
@@ -62,7 +63,6 @@ public class MainActivity  extends AppCompatActivity implements
     private NoteOpenerBase singleNoteOpener = null;
     private TrashedNotesPresenter trashedNotesPresenter = null;
 
-    ////
     private ArrayList<Note<SpannableString>> trashedNotes;
 
 
@@ -76,7 +76,6 @@ public class MainActivity  extends AppCompatActivity implements
         getDelegate().setContentView(R.layout.activity_main);
         drawer = (DrawerLayout) findViewById(R.id.main_layout);
 
-        ////
         trashedNotes = new ArrayList<>();
     }
 
@@ -125,8 +124,7 @@ public class MainActivity  extends AppCompatActivity implements
     }
 
     /** menu's on click listener that opens the list of deleted notes */
-    public void openListOfDeletedNotes(MenuItem item) {
-        ////
+    public void openListOfTrashedNotes(MenuItem item) {
         trashedNotesPresenter = openFragment(TrashedNotes.class, null);
         trashedNotesPresenter.receiveNotes(trashedNotes);
     }
@@ -163,11 +161,10 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void deleteNote(Note<SpannableString> note, NotesPresenter requester) {
-        ////
-        trashedNotes.add(note);
         Response r = applicationState.getNoteProvider().delete(note.getId());
         if (requester != null) {
             if (r.isPositive()) {
+                trashedNotes.add(note);
                 requester.onNoteDeletionSuccess(note);
             } else {
                 requester.onNoteDeletionFailure(note, "could not delete note");
@@ -187,17 +184,29 @@ public class MainActivity  extends AppCompatActivity implements
     ////
     /** fragment contract */
     @Override
-    public void deleteTrashedNote(Note<SpannableString> note, TrashedNotesPresenter requester) {
-        boolean isRemoved = trashedNotes.remove(note);
-        if (requester != null) {
-            if (isRemoved) {
-                Note n = applicationState.getNoteProvider().createNote().get();
-                n.setTitle(note.getTitle());
-                n.setContent(note.getContent());
-                requester.onTrashedNoteDeletionSuccess(note);
+    public void restoreTrashedNote(Note<SpannableString> note, TrashedNotesPresenter requester) {
+        if (!trashedNotes.contains(note)) {
+            Log.i(TAG, "attempt to restore a non deleted note: (id=" + note.getId() + ")");
+            requester.onTrashedNoteRestoredSuccess(note);
+            return;
+        }
+        Optional<Note<SpannableString>>
+                created = applicationState.getNoteProvider().createNote();
+
+        if (created.isPresent()) {
+            NoteData<SpannableString> rawNote = note.getRaw();
+            rawNote.setId(created.get().getId());
+            Response r = applicationState.getNoteProvider().persist(rawNote);
+            if (r.isPositive()) {
+                trashedNotes.remove(note);
+                requester.onTrashedNoteRestoredSuccess(note);
             } else {
-                requester.onTrashedNoteDeletionFailure(note, "could not delete note");
+                requester.onTrashedNoteRestoredFailure(note,
+                        "Sorry, unable to persist the note");
             }
+        } else {
+            requester.onTrashedNoteRestoredFailure(note,
+                    "Sorry, unable to create a new holder for your note");
         }
     }
 

@@ -29,6 +29,8 @@ import icynote.ui.R;
  */
 
 public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
+    private static final String TAG = NotesAdapter.class.getSimpleName();
+
     private Context context;
     private BucketClickedListener onClickListener;
     private List<Bucket> lastListSetBySetNotesMethod = new ArrayList<>();
@@ -146,8 +148,14 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
     }
 
     public void setEnabled(boolean enabled, Note<SpannableString> note) {
-        find(note).enabled = enabled;
-        super.notifyDataSetChanged();
+        Bucket toEnable = find(note);
+        if (toEnable == null) {
+            Log.e(TAG, "unable to " + (enabled ? "enable" : "disable")
+                    + " null bucket for id: " + note.getId());
+        } else {
+            toEnable.enabled = enabled;
+            super.notifyDataSetChanged();
+        }
     }
 
     public void deleteNote(Note<SpannableString> note) {
