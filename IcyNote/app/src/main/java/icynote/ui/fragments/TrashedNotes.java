@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import icynote.note.Note;
 import icynote.ui.R;
@@ -35,7 +36,7 @@ public class TrashedNotes extends Fragment
     private Contract contractor;
 
     /** Indicates whether the notes were received */
-    private boolean notesReceived = false;
+    private ArrayList<Note<SpannableString>> notesReceived;
 
     //-------------------------------------------------------------------------------------
 
@@ -70,7 +71,6 @@ public class TrashedNotes extends Fragment
     public void onResume() {
         super.onResume();
         contractor = (Contract) getActivity();
-        getOrCreateAdapter();
     }
 
     @Override
@@ -96,12 +96,11 @@ public class TrashedNotes extends Fragment
     // NotePresenter callbacks
 
     @Override
-    public void receiveNotes(Iterable<Note<SpannableString>> notes) {
+    public void receiveNotes(Collection<Note<SpannableString>> notes) {
         log("Received list of notes " + ((notes == null) ? "null" : notes.iterator().hasNext()));
         //need to create if notes received before fragment is resumed.
-        getOrCreateAdapter().setNotes(notes);
 
-        notesReceived = true;
+        notesReceived = new ArrayList<>(notes);
         enableViewIfNeeded();
     }
     @Override
@@ -110,15 +109,15 @@ public class TrashedNotes extends Fragment
     }
 
     @Override
-    public void onTrashedNoteDeletionFailure(Note<SpannableString> note, String message) {
+    public void onTrashedNoteRestoredFailure(Note<SpannableString> note, String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        log("note could not be deleted: " + note.getId());
+        log("note could not be restore: " + note.getId());
         notesAdapter.setEnabled(true, note);
     }
 
     @Override
-    public void onTrashedNoteDeletionSuccess(Note<SpannableString> note) {
-        log("note deleted: " + note.getId());
+    public void onTrashedNoteRestoredSuccess(Note<SpannableString> note) {
+        log("note restored: " + note.getId());
         notesAdapter.deleteNote(note);
         numNotesChanged();
     }
@@ -127,7 +126,7 @@ public class TrashedNotes extends Fragment
     // View listeners
 
     private void enableViewIfNeeded() {
-        if (getView() == null || !notesReceived) {
+        if (getView() == null || notesReceived == null) {
             /*
             note: you cannot test if (viewHolder == null),
             because it can happen that the fragment is currently executing `onCreateView`,
@@ -141,6 +140,10 @@ public class TrashedNotes extends Fragment
             return;
         }
         log("enabling view");
+        notesAdapter = getOrCreateAdapter();
+        notesAdapter.setNotes(notesReceived);
+        notesReceived = null; //not needed anymore.
+
         viewHolder.enableAll();
         viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
         viewHolder.getSearchBar().setHint("Enter text to find");
@@ -204,7 +207,7 @@ public class TrashedNotes extends Fragment
         notesAdapter.notifyDataSetChanged();
 
         for (Note<SpannableString> n : toDelete) {
-            contractor.deleteTrashedNote(n, this);
+            contractor.restoreTrashedNote(n, this);
         }
     }
     private void numNotesChanged() {
@@ -219,7 +222,8 @@ public class TrashedNotes extends Fragment
                     new NotesAdapter.BucketClickedListener() {
                         @Override
                         public void onClick(NotesAdapter.Bucket b) {
-                            contractor.deleteTrashedNote(b.note, TrashedNotes.this);
+                            b.checked = !b.checked;
+                            notesAdapter.notifyDataSetChanged();
                         }
                     });
         }
