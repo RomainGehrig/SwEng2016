@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,6 +58,11 @@ class ImageFormatter implements FormatterPlugin {
      * METHODS RELATIVE TO THE PLUGIN BEHAVIOR
      * ---------------------------------------------------------------------------------------------
      */
+
+    @Override
+    public String getName(){
+        return "Image insertion Plugin";
+    }
 
     @Override
     public NoteDecoratorFactory<SpannableString> getInteractorFactory(ApplicationState state) {

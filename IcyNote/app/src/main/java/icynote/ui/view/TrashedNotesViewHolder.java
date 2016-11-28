@@ -10,21 +10,19 @@ import android.widget.TextView;
 import icynote.ui.R;
 
 
-public class NotesListViewHolder {
+public class TrashedNotesViewHolder {
     private ListView listView;
     private TextView tvNumNotes;
     private EditText searchBar;
-    private Button btAdd;
-    private Button btDelete;
+    private Button btRestore;
     private TextView emptyText;
 
 
-    public NotesListViewHolder(View notesList) {
+    public TrashedNotesViewHolder(View notesList) {
         listView = (ListView) notesList.findViewById(R.id.lvNotes);
         tvNumNotes = (TextView)notesList.findViewById(R.id.tvNumNotes);
         searchBar = (EditText) notesList.findViewById(R.id.searchBar);
-        btAdd = (Button) notesList.findViewById(R.id.btAdd);
-        btDelete = (Button) notesList.findViewById(R.id.btDelete);
+        btRestore = (Button) notesList.findViewById(R.id.btRestore);
         emptyText = (TextView) notesList.findViewById(R.id.emptyText);
 
     }
@@ -32,8 +30,7 @@ public class NotesListViewHolder {
     public void enableAll() {
         tvNumNotes.setEnabled(true);
         searchBar.setEnabled(true);
-        btAdd.setEnabled(true);
-        btDelete.setEnabled(true);
+        btRestore.setEnabled(true);
     }
 
     public ListView getListView() {
@@ -48,12 +45,8 @@ public class NotesListViewHolder {
         return searchBar;
     }
 
-    public Button getBtAdd() {
-        return btAdd;
-    }
-
-    public Button getBtDelete() {
-        return btDelete;
+    public Button getBtRestore() {
+        return btRestore;
     }
 
     public TextView getEmptyText() {

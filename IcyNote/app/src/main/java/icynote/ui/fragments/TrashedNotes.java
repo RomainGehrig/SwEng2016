@@ -17,16 +17,16 @@ import java.util.ArrayList;
 
 import icynote.note.Note;
 import icynote.ui.R;
-import icynote.ui.contracts.NotesPresenter;
+import icynote.ui.contracts.TrashedNotesPresenter;
 import icynote.ui.utils.NotesAdapter;
-import icynote.ui.view.NotesListViewHolder;
+import icynote.ui.view.TrashedNotesViewHolder;
 
-public class NotesList extends Fragment
-        implements NotesPresenter {
-    private static final String LOG_TAG = NotesList.class.getSimpleName();
+public class TrashedNotes extends Fragment
+        implements TrashedNotesPresenter {
+    private static final String LOG_TAG = TrashedNotes.class.getSimpleName();
 
     /** Utility class to hold the view items such as the buttons, text fields, etc. */
-    private NotesListViewHolder viewHolder;
+    private TrashedNotesViewHolder viewHolder;
 
     /** The listView adapter containing the list of notes. */
     private NotesAdapter notesAdapter;
@@ -39,7 +39,7 @@ public class NotesList extends Fragment
 
     //-------------------------------------------------------------------------------------
 
-    public NotesList() {
+    public TrashedNotes() {
         // Required empty public constructor
     }
 
@@ -53,8 +53,8 @@ public class NotesList extends Fragment
                              ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
-        viewHolder = new NotesListViewHolder(view);
+        View view = inflater.inflate(R.layout.fragment_trashed_notes, container, false);
+        viewHolder = new TrashedNotesViewHolder(view);
         registerForContextMenu(viewHolder.getListView());
         setViewListeners();
         return view;
@@ -108,20 +108,16 @@ public class NotesList extends Fragment
     public void onOpenNoteFailure(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
-    @Override
-    public void onCreateNoteFailure(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
-    public void onNoteDeletionFailure(Note<SpannableString> note, String message) {
+    public void onTrashedNoteDeletionFailure(Note<SpannableString> note, String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         log("note could not be deleted: " + note.getId());
         notesAdapter.setEnabled(true, note);
     }
 
     @Override
-    public void onNoteDeletionSuccess(Note<SpannableString> note) {
+    public void onTrashedNoteDeletionSuccess(Note<SpannableString> note) {
         log("note deleted: " + note.getId());
         notesAdapter.deleteNote(note);
         numNotesChanged();
@@ -179,19 +175,11 @@ public class NotesList extends Fragment
 
             }
         });
-        viewHolder.getBtAdd().setOnClickListener(
+        viewHolder.getBtRestore().setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        userCreatedNoteListener();
-                    }
-                });
-
-        viewHolder.getBtDelete().setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        userDeletedNotesListener();
+                        userRestoreNotesListener();
                     }
                 });
     }
@@ -201,10 +189,8 @@ public class NotesList extends Fragment
             notesAdapter.getFilter().filter(viewHolder.getSearchBar().getText());
         }
     }
-    private void userCreatedNoteListener() {
-        contractor.createNote(this);
-    }
-    private void userDeletedNotesListener() {
+    ////
+    private void userRestoreNotesListener() {
         ArrayList<Note<SpannableString>> toDelete = new ArrayList();
 
         //first make a copy to avoid concurrency issues
@@ -218,7 +204,7 @@ public class NotesList extends Fragment
         notesAdapter.notifyDataSetChanged();
 
         for (Note<SpannableString> n : toDelete) {
-            contractor.deleteNote(n, this);
+            contractor.deleteTrashedNote(n, this);
         }
     }
     private void numNotesChanged() {
@@ -233,12 +219,13 @@ public class NotesList extends Fragment
                     new NotesAdapter.BucketClickedListener() {
                         @Override
                         public void onClick(NotesAdapter.Bucket b) {
-                            contractor.openNote(b.note.getId(), NotesList.this);
+                            contractor.deleteTrashedNote(b.note, TrashedNotes.this);
                         }
                     });
         }
         return notesAdapter;
     }
+
     private void log(String msg) {
         Log.d(this.getClass().getSimpleName(), msg);
     }
