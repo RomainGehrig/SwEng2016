@@ -57,7 +57,7 @@ public class CoreFactoryFaultyTests {
 
     @Test
     public void persist() {
-        core.persist(new NoteData());
+        core.persist(new NoteData<String>("", ""));
     }
 
     @Test

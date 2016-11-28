@@ -27,7 +27,7 @@ public class BoundaryCheckerUtilTests {
 
     @Test
     public void whenArgIsNotNull() {
-        Note<String> i = new NoteData();
+        Note<String> i = new NoteData<String>("", "");
         Note<String> j = BoundaryCheckerUtil.checkNotNull(i);
         assertSame(i, j);
     }

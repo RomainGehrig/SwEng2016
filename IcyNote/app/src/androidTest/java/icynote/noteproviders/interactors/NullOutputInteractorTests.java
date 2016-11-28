@@ -14,7 +14,7 @@ import icynote.note.decorators.NullOutput;
 @RunWith(AndroidJUnit4.class)
 public class NullOutputInteractorTests {
     private final Note<String> toTest_Null = new NullOutput<String>(new NullNoteData());
-    private final Note<String> toTest_NotNull = new NullOutput<String>(new NoteData());
+    private final Note<String> toTest_NotNull = new NullOutput<String>(new NoteData<String>("", ""));
 
     //-----------------------------------------------------------------------------
 
@@ -60,7 +60,11 @@ public class NullOutputInteractorTests {
         toTest_NotNull.getLastUpdate();
     }
 
-    private static class NullNoteData extends NoteData {
+    private static class NullNoteData extends NoteData<String> {
+        private NullNoteData() {
+            super("", "");
+        }
+
         @Override
         public String getTitle() {
             return null;
