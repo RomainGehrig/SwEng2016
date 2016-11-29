@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -28,7 +27,6 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,14 +36,15 @@ import icynote.note.Response;
 import icynote.note.decorators.NoteDecoratorFactory;
 import icynote.note.decorators.NoteDecoratorTemplate;
 import icynote.ui.R;
-import icynote.ui.utils.ApplicationState;
+import util.Callback;
 
 import static android.R.attr.minHeight;
 import static android.R.attr.minWidth;
 
 class ImageFormatter implements FormatterPlugin {
     private static String TAG = ImageFormatter.class.getSimpleName();
-    
+    private static Uri lastUri;
+
     private final int mRequestCodeCamera;
     private final int mRequestCodeGallery;
 
@@ -65,21 +64,20 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     @Override
-    public NoteDecoratorFactory<SpannableString> getInteractorFactory(ApplicationState state) {
+    public NoteDecoratorFactory<SpannableString> getInteractorFactory(PluginData state) {
         return new FormatterFactory(state);
     }
 
     @Override
-    public Iterable<View> getMetaButtons(final ApplicationState state) {
+    public Iterable<View> getMetaButtons(final PluginData state) {
 
-        final AppCompatActivity a = state.getActivity();
+        final Activity a = state.getActivity();
         Button takePictureButton = new Button(a.getBaseContext());
         takePictureButton.setBackgroundResource(R.drawable.meta_photo);
         takePictureButton.setAlpha(0.5f);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(a, "starting camera", Toast.LENGTH_SHORT).show();
                 takeAndInsertNewPhoto(state);
             }
         });
@@ -91,8 +89,8 @@ class ImageFormatter implements FormatterPlugin {
         usePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(a.getBaseContext(), "starting gallery", Toast.LENGTH_SHORT).show();
-                //todo
+                Toast.makeText(a.getBaseContext(), "Gallery not implemented, yet.",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -104,9 +102,9 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     private static class FormatterDecorator extends NoteDecoratorTemplate<SpannableString> {
-        private final ApplicationState appState;
+        private final PluginData appState;
 
-        FormatterDecorator(Note<SpannableString> delegateInteractor, ApplicationState appState) {
+        FormatterDecorator(Note<SpannableString> delegateInteractor, PluginData appState) {
             super(delegateInteractor);
             this.appState = appState;
         }
@@ -124,7 +122,7 @@ class ImageFormatter implements FormatterPlugin {
                 int start = m.start();
                 int end = m.end();
                 String uri = contentFromCore.subSequence(m.start() + 5, m.end() - 1).toString();
-                Log.i(TAG, "load image " + uri);
+                //Log.i(TAG, "load image " + uri);
                 insertSpan(appState, resS, uri, start, end);
             }
             return resS;
@@ -154,9 +152,9 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     private static class FormatterFactory extends NoteDecoratorFactory<SpannableString> {
-        private ApplicationState appState;
+        private PluginData appState;
 
-        FormatterFactory(ApplicationState state) {
+        FormatterFactory(PluginData state) {
             appState = state;
         }
 
@@ -171,15 +169,15 @@ class ImageFormatter implements FormatterPlugin {
      * ---------------------------------------------------------------------------------------------
      */
 
-    private void takeAndInsertNewPhoto(ApplicationState state) {
-        state.setTempFileUri(getTempFileUri(state.getActivity()));
-        assert (state.getTempFileUri() != null);
+    private void takeAndInsertNewPhoto(PluginData state) {
+        lastUri = getTempFileUri(state.getActivity());
+        assert (lastUri != null);
         startCamera(state);
     }
 
-    private void startCamera(ApplicationState state) {
+    private void startCamera(PluginData state) {
         Activity a = state.getActivity();
-        Uri destUri = state.getTempFileUri();
+        Uri destUri = lastUri;
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (camera.resolveActivity(a.getPackageManager()) == null) {
@@ -231,7 +229,7 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     @Override
-    public void handle(int requestCode, int resultCode, Intent data, ApplicationState state) {
+    public void handle(int requestCode, int resultCode, Intent data, final PluginData state) {
         Log.i(TAG, "handling " + requestCode);
 
         if (!canHandle(requestCode)) {
@@ -241,19 +239,24 @@ class ImageFormatter implements FormatterPlugin {
         if (requestCode == mRequestCodeCamera) {
             if (resultCode != Activity.RESULT_OK) {
                 Toast.makeText(state.getActivity()
-                        , "an error happened", Toast.LENGTH_SHORT).show();
+                        , "Sorry, an unexpected error happened.",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
             //the picture is written in the previously provided uri
-            if (state == null || state.getTempFileUri() == null) {
+            if (lastUri == null) {
                 Log.i(TAG, "ignoring requestCode because uri is null");
                 Toast.makeText(state.getActivity(),
-                        "file URI is null. Aborted.",
+                        "Unexpected error: file URI is null. Aborted.",
                         Toast.LENGTH_SHORT).show();
             } else {
-                writeUriToNote(state, state.getTempFileUri());
-                state.getActivity().onBackPressed();
-                //insertImageInNoteContent(state, state.getTempFileUri());
+                writeUriToNote(state, lastUri);
+                state.getContractor().registerOnStartCallback(new Callback() {
+                    @Override
+                    public void execute() {
+                        state.getContractor().reOpenLastOpenedNote(null);
+                    }
+                });
             }
         } else if (requestCode == mRequestCodeGallery) {
             Toast.makeText(state.getActivity(), "gallery", Toast.LENGTH_SHORT).show();
@@ -263,15 +266,7 @@ class ImageFormatter implements FormatterPlugin {
 
     }
 
-    private void writeUriToNote(ApplicationState state, Uri uri) {
-        boolean temporaryFixFinished = false;
-
-        Toast.makeText(state.getActivity(), "Not implemented, yet.", Toast.LENGTH_SHORT).show();
-        if (temporaryFixFinished) {
-            writeUriToNoteREAL(state, uri);
-        }
-    }
-    private void writeUriToNoteREAL(ApplicationState state, Uri uri) {
+    private void writeUriToNote(PluginData state, Uri uri) {
 
         int selectionStart = state.getSelectionStart();
         int selectionEnd = state.getSelectionEnd();
@@ -282,15 +277,16 @@ class ImageFormatter implements FormatterPlugin {
         int start = Math.min(selectionStart, selectionEnd);
         int end = Math.max(selectionStart, selectionEnd);
 
-        SpannableStringBuilder text = new SpannableStringBuilder(state.getLastOpenedNoteContent());
+        SpannableStringBuilder text = new SpannableStringBuilder(
+                state.getLastOpenedNote().getContent());
         text.replace(start, end, "[img=" + uri.toString() + "]");
         Log.i(TAG, "text with uri : " + text);
         Note<SpannableString> note = state.getLastOpenedNote();
         Response r1 = note.setContent(new SpannableString(text));
-        Response r2 = state.getNoteProvider().persist(note);
+        state.getContractor().saveNote(note, null);
 
-        if (!r1.isPositive() || !r2.isPositive()) {
-            Log.i(TAG, r1.isPositive() + " / " + r2.isPositive());
+        if (!r1.isPositive()) {
+            Log.i(TAG, "" + r1.isPositive());
         }
     }
 
@@ -301,7 +297,7 @@ class ImageFormatter implements FormatterPlugin {
      */
 
     // insert image into ss, at position start to end
-    private static void insertSpan(ApplicationState appState,
+    private static void insertSpan(PluginData appState,
                                    SpannableString ss,
                                    String uri,
                                    int start,
@@ -329,13 +325,13 @@ class ImageFormatter implements FormatterPlugin {
         d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         return new ImageSpanWithId(name, d, ImageSpan.ALIGN_BASELINE);
     }
-    private static Bitmap getImage(String name, ApplicationState appState) {
+    private static Bitmap getImage(String name, PluginData appState) {
         Uri uri = Uri.parse(name);
         //bitmap = MediaStore.Images.Media.getBitmap(
         //        appState.getActivity().getContentResolver(), uri);
         return decodeSampledBitmapFromResource(appState, uri, minWidth, minHeight);
     }
-    private static Bitmap decodeSampledBitmapFromResource(ApplicationState state,
+    private static Bitmap decodeSampledBitmapFromResource(PluginData state,
                                                           Uri uri, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions

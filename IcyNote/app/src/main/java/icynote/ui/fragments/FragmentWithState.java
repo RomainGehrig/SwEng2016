@@ -2,16 +2,16 @@ package icynote.ui.fragments;
 
 import android.support.v4.app.Fragment;
 
-import icynote.ui.utils.ApplicationState;
+import icynote.plugins.PluginData;
 
 public class FragmentWithState extends Fragment {
-    private ApplicationState mState;
+    private PluginData mState;
 
-    public void setState(ApplicationState state) {
+    public void setState(PluginData state) {
         mState = state;
     }
 
-    public ApplicationState appState() {
+    public PluginData appState() {
         return mState;
     }
 }
