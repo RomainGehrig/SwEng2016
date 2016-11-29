@@ -23,10 +23,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by kl on 09.11.2016.
- */
-
 public class EditNoteTest {
 
     @Rule
@@ -79,13 +75,13 @@ public class EditNoteTest {
         onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
     }
 
-    @Test
+    /*@Test
     public void goToMetadataTest() throws InterruptedException {
         enableFragment();
         fragment.receiveNote(note);
         onView(withId(R.id.note_open_metadata)).perform(click());
         // assertTrue(mActivity.openMetadata); // FIXME
-    }
+    }*/
 
     @Test
     public void writeTitleTest() throws InterruptedException {
@@ -118,6 +114,5 @@ public class EditNoteTest {
         onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
         onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
     }
-
-
+    
 }

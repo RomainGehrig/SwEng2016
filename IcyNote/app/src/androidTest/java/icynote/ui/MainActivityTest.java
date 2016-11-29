@@ -98,4 +98,15 @@ public class MainActivityTest {
     }
 */
 
+    // open metadata in editnote
+    @Test
+    public void openMetadataTest() {
+        onView(withId(R.id.btAdd)).perform(click());
+        onView(withId(R.id.note_open_metadata)).perform(click());
+        onView(withId(R.id.backButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.noteTitle)).check(matches(isDisplayed()));
+        onView(withId(R.id.noteCreationDate)).check(matches(isDisplayed()));
+        onView(withId(R.id.noteModificationDate)).check(matches(isDisplayed()));
+    }
+
 }
