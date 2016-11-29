@@ -12,7 +12,7 @@ import icynote.noteproviders.templates.NoteProviderTests;
 /**
  * Created by kl on 24.11.2016.
  */
-public class NoteWithInteractorsProviderTest extends NoteProviderTests {
+public class NoteWithInteractorsProviderTest extends NoteProviderTests<String, Note<String>> {
 
     @Override
     protected NoteProvider makeNew() {
@@ -30,5 +30,25 @@ public class NoteWithInteractorsProviderTest extends NoteProviderTests {
     @Override
     protected Note<String> makeNewNote() {
         return new NoteData("","");
+    }
+
+    @Override
+    protected String makeTitle1() {
+        return "n1";
+    }
+
+    @Override
+    protected String makeTitle2() {
+        return "n2";
+    }
+
+    @Override
+    protected String makeTitle3() {
+        return "n3";
+    }
+
+    @Override
+    protected String makeContent1() {
+        return "c1";
     }
 }

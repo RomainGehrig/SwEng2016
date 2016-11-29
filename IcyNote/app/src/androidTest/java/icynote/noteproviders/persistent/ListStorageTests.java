@@ -12,7 +12,7 @@ import icynote.noteproviders.templates.StorageTests;
 import icynote.note.impl.NoteData;
 
 @RunWith(AndroidJUnit4.class)
-public class ListStorageTests extends StorageTests {
+public class ListStorageTests extends StorageTests<String, Note<String>> {
     @Override
     protected NoteProvider<Note<String>> makeNew() {
         return new ListNoteProvider();
@@ -30,5 +30,25 @@ public class ListStorageTests extends StorageTests {
     @Override
     protected Note<String> makeNewNote() {
         return new NoteData<String>("", "");
+    }
+
+    @Override
+    protected String makeTitle1() {
+        return "n1";
+    }
+
+    @Override
+    protected String makeTitle2() {
+        return "n2";
+    }
+
+    @Override
+    protected String makeTitle3() {
+        return "n3";
+    }
+
+    @Override
+    protected String makeContent1() {
+        return "c1";
     }
 }

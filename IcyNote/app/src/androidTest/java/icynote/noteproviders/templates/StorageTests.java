@@ -23,15 +23,19 @@ import static junit.framework.Assert.assertTrue;
  * @version 1.0
  */
 @RunWith(AndroidJUnit4.class)
-public abstract class StorageTests extends NoteProviderTests {
+public abstract class StorageTests<
+        S extends Comparable<S>,
+        N extends Note<S>>
+        extends NoteProviderTests<S, N>
+{
     @Test
     public void getNoteDefensiveCopyTest() {
-        Note<String> newNote = createNoteAndCheck();
+        N newNote = createNoteAndCheck();
         int id = newNote.getId();
         toTest.persist(newNote);
 
-        Optional<Note<String>> n1 = toTest.getNote(id);
-        Optional<Note<String>> n2 = toTest.getNote(id);
+        Optional<N> n1 = toTest.getNote(id);
+        Optional<N> n2 = toTest.getNote(id);
 
         assertTrue(n1.isPresent());
         assertTrue(n2.isPresent());
@@ -41,25 +45,25 @@ public abstract class StorageTests extends NoteProviderTests {
 
     @Test
     public void getNoteDefensiveCopyTest2() {
-        Note<String> newNote = createNoteAndCheck();
-        newNote.setTitle("Title");
+        N newNote = createNoteAndCheck();
+        newNote.setTitle(makeTitle1());
         int id = newNote.getId();
         toTest.persist(newNote);
 
-        Optional<Note<String>> note = toTest.getNote(id);
-        note.get().setTitle("New title");
+        Optional<N> note = toTest.getNote(id);
+        note.get().setTitle(makeTitle2());
 
-        Optional<Note<String>> noteModified = toTest.getNote(id);
-        assertEquals(noteModified.get().getTitle(), "Title");
+        Optional<N> noteModified = toTest.getNote(id);
+        assertEquals(noteModified.get().getTitle(), makeTitle1());
     }
 
     @Test
     public void getNotesDefensiveTest() {
-        Note<String> newNote1 = createNoteAndCheck();
-        Note<String> newNote2 = createNoteAndCheck();
-        Note<String> newNote3 = createNoteAndCheck();
+        N newNote1 = createNoteAndCheck();
+        N newNote2 = createNoteAndCheck();
+        N newNote3 = createNoteAndCheck();
 
-        String title = "Title";
+        S title = makeTitle1();
         newNote1.setTitle(title);
         newNote2.setTitle(title);
         newNote3.setTitle(title);
@@ -68,14 +72,14 @@ public abstract class StorageTests extends NoteProviderTests {
         toTest.persist(newNote2);
         toTest.persist(newNote3);
 
-        Iterable<Note<String>> notes = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
+        Iterable<N> notes = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
 
-        for (Note<String> n : notes) {
-            n.setTitle("New title");
+        for (N n : notes) {
+            n.setTitle(makeTitle2());
         }
 
-        Iterable<Note<String>> notesModified = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
-        for (Note<String> n : notesModified) {
+        Iterable<N> notesModified = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
+        for (Note<S> n : notesModified) {
             assertEquals(n.getTitle(), title);
         }
     }

@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertTrue;
 
 @SuppressWarnings("ReturnOfInnerClass")
 @RunWith(AndroidJUnit4.class)
-public class NoteWithItrProviderTests extends NoteProviderTests {
+public class NoteWithItrProviderTests extends NoteProviderTests<String, Note<String>> {
 
     @Override
     protected NoteProvider<Note<String>> makeNew() {
@@ -66,5 +66,25 @@ public class NoteWithItrProviderTests extends NoteProviderTests {
 
         assertTrue(note.isPresent());
         assertEquals(note.get().getTitle(), hackedTitle);
+    }
+
+    @Override
+    protected String makeTitle1() {
+        return "n1";
+    }
+
+    @Override
+    protected String makeTitle2() {
+        return "n2";
+    }
+
+    @Override
+    protected String makeTitle3() {
+        return "n3";
+    }
+
+    @Override
+    protected String makeContent1() {
+        return "c1";
     }
 }

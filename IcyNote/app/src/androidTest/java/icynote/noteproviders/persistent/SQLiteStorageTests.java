@@ -11,7 +11,7 @@ import icynote.noteproviders.templates.StorageTests;
 import icynote.note.impl.NoteData;
 
 @RunWith(AndroidJUnit4.class)
-public class SQLiteStorageTests extends StorageTests {
+public class SQLiteStorageTests extends StorageTests<String, Note<String>> {
     private final String testUser = "testUSER_514307856140378641306406134";
     private SQLiteNoteProvider instance =
             new SQLiteNoteProvider(InstrumentationRegistry.getTargetContext(), testUser);
@@ -36,5 +36,25 @@ public class SQLiteStorageTests extends StorageTests {
     @Override
     protected Note<String> makeNewNote() {
         return new NoteData<String>("", "");
+    }
+
+    @Override
+    protected String makeTitle1() {
+        return "n1";
+    }
+
+    @Override
+    protected String makeTitle2() {
+        return "n2";
+    }
+
+    @Override
+    protected String makeTitle3() {
+        return "n3";
+    }
+
+    @Override
+    protected String makeContent1() {
+        return "c1";
     }
 }

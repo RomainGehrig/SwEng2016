@@ -34,28 +34,34 @@ import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("ClassWithTooManyMethods")
-public abstract class NoteProviderTests {
+public abstract class NoteProviderTests<S extends Comparable<S>, N extends Note<S>> {
 
     private static final int YEAR = 2000;
 
     @SuppressWarnings("WeakerAccess") //keep protected because this test class is a template
-    protected NoteProvider toTest = null;
+    protected NoteProvider<N> toTest = null;
 
     /**
-     * Creates a new, empty, NoteProvider instance to be tested.
+     * Creates a new, empty, NoteProvider<N> instance to be tested.
      */
-    protected abstract NoteProvider makeNew();
+    protected abstract NoteProvider<N> makeNew();
 
     /**
-     * Creates a new NoteProvider instance containing the provided notes.
+     * Creates a new NoteProvider<N> instance containing the provided notes.
      * Every field of the note must be preserved.
      */
-    protected abstract NoteProvider makeNewWith(Note<String> n1, Note<String> n2, Note<String> n3);
+    protected abstract NoteProvider<N> makeNewWith(N n1, N n2, N n3);
 
     /**
      * Creates a new note instance, not contained by the NoteProvider.
      */
-    protected abstract Note<String> makeNewNote();
+    protected abstract N makeNewNote();
+
+    protected abstract S makeTitle1();
+    protected abstract S makeTitle2();
+    protected abstract S makeTitle3();
+
+    protected abstract S makeContent1();
 
     //-----------------------------------------------------------------------
 
@@ -73,14 +79,14 @@ public abstract class NoteProviderTests {
 
     @Test
     public void createMultipleNotesTest() {
-        Note<String> n1 = createNoteAndCheck();
-        Note<String> n2 = createNoteAndCheck();
+        N n1 = createNoteAndCheck();
+        N n2 = createNoteAndCheck();
         //Assert.assertThat(n1.getId(), not(equalTo(n2.getId())));
         assertFalse("", n1.getId() == n2.getId());
     }
 
-    Note<String> createNoteAndCheck() {
-        Optional<Note<String>> n = toTest.createNote();
+    N createNoteAndCheck() {
+        Optional<N> n = toTest.createNote();
         assertNotNull(n);
         assertTrue("created note is not empty", n.isPresent());
         return n.get();
@@ -90,12 +96,12 @@ public abstract class NoteProviderTests {
 
     @Test
     public void getExistingNoteTest() {
-        Note<String> created = createNoteAndCheck();
-        created.setContent("hello world");
+        N created = createNoteAndCheck();
+        created.setContent(makeContent1());
         int validId = created.getId();
         toTest.persist(created);
 
-        Optional<Note<String>> n = toTest.getNote(validId);
+        Optional<N> n = toTest.getNote(validId);
         assertNotNull(n);
         assertTrue("returned note is present", n.isPresent());
         assertEquals(created.getContent(), n.get().getContent());
@@ -103,7 +109,7 @@ public abstract class NoteProviderTests {
 
     @Test
     public void getNonExistingNoteTest() {
-        Optional<Note<String>> n = toTest.getNote(0);
+        Optional<N> n = toTest.getNote(0);
         assertNotNull(n);
         assertFalse("returned note is empty", n.isPresent());
     }
@@ -112,40 +118,40 @@ public abstract class NoteProviderTests {
 
     @Test
     public void persistWithoutModification() {
-        Note<String> n = createNoteAndCheck();
+        N n = createNoteAndCheck();
         Response r = toTest.persist(n);
         assertTrue(r.isPositive());
     }
 
     @Test
     public void persistWithTitleModification() {
-        Note<String> n = createNoteAndCheck();
-        n.setTitle("new title");
+        N n = createNoteAndCheck();
+        n.setTitle(makeTitle1());
         Response r = toTest.persist(n);
         assertNotNull(r);
         assertTrue(r.isPositive());
 
-        Optional<Note<String>> m = toTest.getNote(n.getId());
+        Optional<N> m = toTest.getNote(n.getId());
         assertTrue("cannot retrieve note", m.isPresent());
         assertEquals(n.getTitle(), m.get().getTitle());
     }
 
     @Test
     public void persistWithContentModification() {
-        Note<String> n = createNoteAndCheck();
-        n.setContent("new content");
+        N n = createNoteAndCheck();
+        n.setContent(makeContent1());
         Response r = toTest.persist(n);
         assertNotNull(r);
         assertTrue(r.isPositive());
 
-        Optional<Note<String>> m = toTest.getNote(n.getId());
+        Optional<N> m = toTest.getNote(n.getId());
         assertTrue("cannot retrieve note", m.isPresent());
         assertEquals(n.getContent(), m.get().getContent());
     }
 
     @Test
     public void persistANonExistingNote() {
-        Note<String> n = makeNewNote();
+        N n = makeNewNote();
         Response r = toTest.persist(n);
         assertNotNull(r);
         assertFalse(r.isPositive());
@@ -153,48 +159,49 @@ public abstract class NoteProviderTests {
 
     @Test
     public void persistThenModifyNote() {
-        Note<String> newNote = createNoteAndCheck();
-        newNote.setTitle("Title");
+        N newNote = createNoteAndCheck();
+        newNote.setTitle(makeTitle1());
         int id = newNote.getId();
         toTest.persist(newNote);
 
-        newNote.setTitle("New title");
+        newNote.setTitle(makeTitle2());
 
-        Optional<Note<String>> noteModified = toTest.getNote(id);
+        Optional<N> noteModified = toTest.getNote(id);
         assertTrue(noteModified.isPresent());
-        assertEquals(noteModified.get().getTitle(), "Title");
+        assertEquals(noteModified.get().getTitle(), makeTitle1());
     }
 
 
     // FIXME
-    /*@Test
+    /*
+    @Test
     public void noteCreatedButNotPersisted() {
-        Note<String> n1 = createNoteAndCheck();
-        n1.setTitle("new title");
+        N n1 = createNoteAndCheck();
+        n1.setTitle(makeTitle1());
 
-        Optional<Note<String>> n2 = toTest.getNote(n1.getId());
+        Optional<N> n2 = toTest.getNote(n1.getId());
 
         assertTrue("the note should be obtainable with get after creation",
                 n2.isPresent());
 
         assertFalse("but if we don't persist it, modifications shouldn't be registered",
                 n1.getTitle().equals(n2.get().getTitle()));
-    }*/
+    }//*/
 
     //-----------------------------------------------------------------------
 
 
     @Test
     public void deleteAnExistingNote() {
-        Note<String> created = createNoteAndCheck();
-        created.setContent("hello world");
+        N created = createNoteAndCheck();
+        created.setContent(makeContent1());
         int validId = created.getId();
         toTest.persist(created);
 
         Response response = toTest.delete(validId);
         assertTrue(response.isPositive());
 
-        Optional<Note<String>> note = toTest.getNote(validId);
+        Optional<N> note = toTest.getNote(validId);
         assertFalse("returned note is not present", note.isPresent());
     }
 
@@ -209,11 +216,11 @@ public abstract class NoteProviderTests {
 
     @Test
     public void deleteDoesNotAffectOtherNotes() {
-        Note<String> n1 = makeNewNote();
+        N n1 = makeNewNote();
         n1.setId(0);
-        Note<String> n2 = makeNewNote();
+        N n2 = makeNewNote();
         n2.setId(1);
-        Note<String> n3 = makeNewNote();
+        N n3 = makeNewNote();
         n3.setId(2);
         toTest = makeNewWith(n1, n2, n3);
 
@@ -239,14 +246,15 @@ public abstract class NoteProviderTests {
         assertTrue(toTest.createNote().isPresent());
         assertTrue(toTest.createNote().isPresent());
 
-        Iterable<Note<String>> notes = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
-        Iterable<Note<String>> notes2 = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
+        Iterable<N> notes = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
+        Iterable<N> notes2 = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
 
         assertNotSame(notes, notes2);
     }
 
     // FIXME
-    /*@Test
+    /*
+    @Test
     public void getNotesIterable() {
         //create a few notes
         assertTrue("note created", toTest.createNote().isPresent());
@@ -254,11 +262,11 @@ public abstract class NoteProviderTests {
         assertTrue("note3 created", toTest.createNote().isPresent());
 
 
-        Iterable<Note<String>> notes = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
+        Iterable<N> notes = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
 
         int sizeBeforeRemove = size(notes);
 
-        Iterator<Note<String>> it = notes.iterator();
+        Iterator<N> it = notes.iterator();
         assertTrue("it has next", it.hasNext());
 
         it.next();
@@ -267,15 +275,15 @@ public abstract class NoteProviderTests {
         int sizeAfterRemove = size(notes);
         assertEquals(sizeBeforeRemove, sizeAfterRemove + 1);
 
-        Iterable<Note<String>> notes2 = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
+        Iterable<N> notes2 = toTest.getNotes(OrderBy.TITLE, OrderType.ASC);
         assertEquals(sizeBeforeRemove, size(notes2));
-    }*/
+    }//*/
 
     @Test
     public void getNotesByTitleAscTest() {
-        getNotes(OrderBy.TITLE, new FieldExtractor() {
+        getNotes(OrderBy.TITLE, new FieldExtractor<S, N>() {
             @Override
-            public Comparable<String> getField(Note<String> n) {
+            public Comparable<S> getField(N n) {
                 return n.getTitle();
             }
         }, true);
@@ -283,9 +291,9 @@ public abstract class NoteProviderTests {
 
     @Test
     public void getNotesByTitleDscTest() {
-        getNotes(OrderBy.TITLE, new FieldExtractor() {
+        getNotes(OrderBy.TITLE, new FieldExtractor<S, N>() {
             @Override
-            public Comparable<String> getField(Note<String> n) {
+            public Comparable<S> getField(N n) {
                 return n.getTitle();
             }
         }, false);
@@ -293,9 +301,9 @@ public abstract class NoteProviderTests {
 
     @Test
     public void getNotesByCreationAscTest() {
-        getNotes(OrderBy.CREATION, new FieldExtractor() {
+        getNotes(OrderBy.CREATION, new FieldExtractor<S,N>() {
             @Override
-            public Comparable<Calendar> getField(Note<String> n) {
+            public Comparable<Calendar> getField(N n) {
                 return n.getCreation();
             }
         }, true);
@@ -303,9 +311,9 @@ public abstract class NoteProviderTests {
 
     @Test
     public void getNotesByCreationDscTest() {
-        getNotes(OrderBy.CREATION, new FieldExtractor() {
+        getNotes(OrderBy.CREATION, new FieldExtractor<S, N>() {
             @Override
-            public Comparable<Calendar> getField(Note<String> n) {
+            public Comparable<Calendar> getField(N n) {
                 return n.getCreation();
             }
         }, false);
@@ -313,9 +321,9 @@ public abstract class NoteProviderTests {
 
     @Test
     public void getNotesByUpdateAscTest() {
-        getNotes(OrderBy.LAST_UPDATE, new FieldExtractor() {
+        getNotes(OrderBy.LAST_UPDATE, new FieldExtractor<S, N>() {
             @Override
-            public Comparable<Calendar> getField(Note<String> n) {
+            public Comparable<Calendar> getField(N n) {
                 return n.getLastUpdate();
             }
         }, true);
@@ -323,9 +331,9 @@ public abstract class NoteProviderTests {
 
     @Test
     public void getNotesByUpdateDscTest() {
-        getNotes(OrderBy.LAST_UPDATE, new FieldExtractor() {
+        getNotes(OrderBy.LAST_UPDATE, new FieldExtractor<S, N>() {
             @Override
-            public Comparable<Calendar> getField(Note<String> n) {
+            public Comparable<Calendar> getField(N n) {
                 return n.getLastUpdate();
             }
         }, false);
@@ -333,16 +341,16 @@ public abstract class NoteProviderTests {
 
     //-----------------------------------------------------------------------
 
-    private void getNotes(OrderBy by, final FieldExtractor get, final boolean asc) {
-        Note<String> n1 = makeNewNote();
-        Note<String> n2 = makeNewNote();
-        Note<String> n3 = makeNewNote();
+    private void getNotes(OrderBy by, final FieldExtractor<S, N> get, final boolean asc) {
+        N n1 = makeNewNote();
+        N n2 = makeNewNote();
+        N n3 = makeNewNote();
 
         GregorianCalendar d = new GregorianCalendar(YEAR, 1, 1);
 
-        n1.setTitle("n1");
-        n2.setTitle("n2");
-        n3.setTitle("n3");
+        n1.setTitle(makeTitle1());
+        n2.setTitle(makeTitle2());
+        n3.setTitle(makeTitle3());
 
         n3.setCreation(add(d, 1));
         n2.setCreation(add(d, 2));
@@ -356,12 +364,12 @@ public abstract class NoteProviderTests {
 
 
         OrderType tpe = (asc) ? OrderType.ASC : OrderType.DSC;
-        Iterable<Note<String>> notes = toTest.getNotes(by, tpe);
+        Iterable<N> notes = toTest.getNotes(by, tpe);
         assertNotNull("note iterable should not be null", notes);
 
-        checkOrder(notes.iterator(), new OrderPredicate<Note<String>>() {
+        checkOrder(notes.iterator(), new OrderPredicate<N>() {
             @Override
-            public boolean ordered(Note<String> lhs, Note<String> rhs) {
+            public boolean ordered(N lhs, N rhs) {
 
                 @SuppressWarnings("unchecked")
                 int comp = get.getField(lhs).compareTo(get.getField(rhs));
@@ -398,17 +406,17 @@ public abstract class NoteProviderTests {
         return n;
     }
 
-    private int size(Iterable<Note<String>> collection) {
+    private int size(Iterable<N> collection) {
         int sz = 0;
-        for (Note<String> n : collection) {
+        for (N n : collection) {
             ++sz;
         }
         return sz;
     }
 
-    private interface FieldExtractor {
+    private interface FieldExtractor<S, N extends Note<S>> {
         @SuppressWarnings("rawtypes") //to use both String and Calendar
-        Comparable getField(Note<String> n);
+        Comparable getField(N n);
     }
 
     private interface OrderPredicate<T> {
