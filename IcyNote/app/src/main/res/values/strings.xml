@@ -6,6 +6,7 @@
     <string name="noteDisplayTextHint">enter text…</string>
 
     <string name="listAllNotes">List all Notes</string>
+    <string name="openLastNote">Reopen last note</string>
     <string name="editTags">Edit tags</string>
     <string name="trash">Trash</string>
     <string name="settings">Settings</string>

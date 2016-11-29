@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/menuGroup">
         <item
             android:id="@+id/menuAllNotes"
             android:icon="@drawable/drawer_list"
             android:alpha="0.5"
             android:title="@string/listAllNotes"
             android:onClick="openListOfNotes"/>
+        <item
+            android:id="@+id/menuLastNote"
+            android:alpha="0.5"
+            android:title="@string/openLastNote"
+            android:onClick="openLastOpenedNote"/>
         <item
             android:id="@+id/menuTagEdition"
             android:icon="@drawable/drawer_tags"

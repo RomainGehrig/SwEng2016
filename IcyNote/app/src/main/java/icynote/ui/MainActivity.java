@@ -3,6 +3,7 @@ package icynote.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,11 +14,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,9 +54,10 @@ public class MainActivity  extends AppCompatActivity implements
     private static final String TAG = "MainActivity";
     private static final String BUNDLE_NOTE_ID = "note_id";
 
-    private ApplicationState applicationState;
     private DrawerLayout drawer;
+    private MenuItem lastOpenedNoteMenuItem;
 
+    private ApplicationState applicationState;
     private NotePresenterBase singleNotePresenter = null;
     private NotesPresenter listOfNotesPresenter = null;
     private Integer lastOpenedNoteId;
@@ -71,9 +73,26 @@ public class MainActivity  extends AppCompatActivity implements
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDelegate().setContentView(R.layout.activity_main);
-        drawer = (DrawerLayout) findViewById(R.id.main_layout);
 
+        drawer = (DrawerLayout) findViewById(R.id.main_layout);
+        Menu menu = ((NavigationView) findViewById(R.id.menu)).getMenu();
+        menu.findItem(R.id.menuAllNotes).setChecked(true);
+        lastOpenedNoteMenuItem = menu.findItem(R.id.menuLastNote);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_NOTE_ID)) {
+            lastOpenedNoteId = savedInstanceState.getInt(BUNDLE_NOTE_ID);
+        }
         trashedNotes = new ArrayList<>();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (lastOpenedNoteId != null) {
+            savedInstanceState.putInt(BUNDLE_NOTE_ID, lastOpenedNoteId);
+        }
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
@@ -84,13 +103,7 @@ public class MainActivity  extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        /*
-        int nbFragmentInStack = getSupportFragmentManager().getBackStackEntryCount();
-        if (nbFragmentInStack > 1) {
-            getSupportFragmentManager().popBackStack();
-        }
-        */
-        Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+        toggleMenu(null);
     }
 
 
@@ -115,6 +128,12 @@ public class MainActivity  extends AppCompatActivity implements
         loadListOfNotes();
     }
 
+    /** menu's on click listener that opens the list of notes */
+    public void openLastOpenedNote(MenuItem item) {
+        singleNotePresenter = openFragment(EditNote.class, null);
+        lastOpenedNoteMenuItem.setChecked(true);
+        reloadNote();
+    }
     /** menu's on click listener that opens the list of tags */
     public void openListOfTags(MenuItem item) {
         openFragment(EditTags.class, null);
@@ -128,7 +147,9 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that opens the settings */
     public void openSettings(MenuItem item) {
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new Preferences()).commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new Preferences())
+                .commit();
         //openFragment(Preferences.class, null);
     }
 
@@ -145,6 +166,7 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     public void openNote(int id, NoteOpenerBase requester) {
         singleNotePresenter = openFragment(EditNote.class, null);
+        lastOpenedNoteMenuItem.setChecked(true);
         loadNote(id);
     }
 
@@ -152,6 +174,7 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     public void createNote(NotesPresenter requester) {
         singleNotePresenter = openFragment(EditNote.class, null);
+        lastOpenedNoteMenuItem.setChecked(true);
         loadNewNote();
     }
 
@@ -227,14 +250,13 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void optionPresenterFinished(NoteOptionsPresenter finished) {
-        singleNotePresenter = openFragment(EditNote.class, null);
-        reloadNote();
+        openLastOpenedNote(null);
     }
 
     //********************************************************************************************
     //*  FRAGMENTS
     //**
-    
+
     private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
         F f = getFragment(toOpen);
         listOfNotesPresenter = null;
@@ -264,7 +286,6 @@ public class MainActivity  extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction t = fragmentManager.beginTransaction();
         t.replace(R.id.content_frame, fragment, fragmentTag);
-        t.addToBackStack(null);
         t.commit();
     }
 
