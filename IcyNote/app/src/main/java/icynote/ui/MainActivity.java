@@ -56,12 +56,9 @@ public class MainActivity  extends AppCompatActivity implements
     private ApplicationState applicationState;
     private DrawerLayout drawer;
 
-    private boolean mustReloadListOfNotes = true;
-    private boolean mustReloadSingleNote = true;
     private NotePresenterBase singleNotePresenter = null;
     private NotesPresenter listOfNotesPresenter = null;
-    private NoteOpenerBase singleNoteOpener = null;
-    private TrashedNotesPresenter trashedNotesPresenter = null;
+    private Integer lastOpenedNoteId;
 
     private ArrayList<Note<SpannableString>> trashedNotes;
 
@@ -125,7 +122,7 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that opens the list of deleted notes */
     public void openListOfTrashedNotes(MenuItem item) {
-        trashedNotesPresenter = openFragment(TrashedNotes.class, null);
+        TrashedNotesPresenter trashedNotesPresenter = openFragment(TrashedNotes.class, null);
         trashedNotesPresenter.receiveNotes(trashedNotes);
     }
 
@@ -230,23 +227,14 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void optionPresenterFinished(NoteOptionsPresenter finished) {
-        /*
-        onBackPressed(); //go back to EditNote.
-        */
-        // todo change this method when onBackPressed is implemented
-        Toast.makeText(this, "Implementation not finished, yet.", Toast.LENGTH_SHORT).show();
-        openListOfNotes(null);
+        singleNotePresenter = openFragment(EditNote.class, null);
+        reloadNote();
     }
 
     //********************************************************************************************
     //*  FRAGMENTS
     //**
-
-
-    public EditNote getEditNote() {
-        return (EditNote) getFragment(EditNote.class);
-    }
-
+    
     private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
         F f = getFragment(toOpen);
         listOfNotesPresenter = null;
@@ -293,8 +281,10 @@ public class MainActivity  extends AppCompatActivity implements
         getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
     }
     private void reloadNote() {
-        Log.d(TAG, "reloadingNote");
-        getSupportLoaderManager().initLoader(NoteLoader.LOADER_ID, null, noteLoaderCallback);
+        Bundle args = new Bundle();
+        args.putInt(BUNDLE_NOTE_ID, lastOpenedNoteId); //if loader was reset for whatever reasons
+        Log.d(TAG, "reloadingNote (lastOpenedId is " + lastOpenedNoteId + ")");
+        getSupportLoaderManager().initLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
     }
 
     //********************************************************************************************
@@ -343,6 +333,7 @@ public class MainActivity  extends AppCompatActivity implements
                         Note<SpannableString> note = data.get();
                         Log.i(TAG, "Received note: " + note.getId());
                         if (singleNotePresenter != null) {
+                            lastOpenedNoteId = note.getId();
                             singleNotePresenter.receiveNote(note);
                         }
                     }
