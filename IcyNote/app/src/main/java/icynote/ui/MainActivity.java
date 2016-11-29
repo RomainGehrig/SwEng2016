@@ -19,21 +19,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import icynote.loaders.NoteLoader;
 import icynote.loaders.NotesLoader;
+import icynote.login.LoginManager;
+import icynote.login.LoginManagerFactory;
 import icynote.note.Note;
 import icynote.note.Response;
+import icynote.note.decorators.NoteDecoratorFactory;
 import icynote.note.impl.NoteData;
+import icynote.noteproviders.NoteProvider;
+import icynote.noteproviders.impl.Factory;
 import icynote.plugins.FormatterPlugin;
 import icynote.plugins.Plugin;
+import icynote.plugins.PluginsProvider;
 import icynote.ui.contracts.NoteOpenerBase;
 import icynote.ui.contracts.NoteOptionsPresenter;
 import icynote.ui.contracts.NotePresenter;
 import icynote.ui.contracts.NotePresenterBase;
 import icynote.ui.contracts.NotesPresenter;
+import icynote.ui.contracts.PluginPresenter;
 import icynote.ui.contracts.TrashedNotesPresenter;
 import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
@@ -41,7 +49,8 @@ import icynote.ui.fragments.MetadataNote;
 import icynote.ui.fragments.NotesList;
 import icynote.ui.fragments.Preferences;
 import icynote.ui.fragments.TrashedNotes;
-import icynote.ui.utils.ApplicationState;
+import icynote.plugins.PluginData;
+import util.Callback;
 import util.Optional;
 
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
@@ -49,27 +58,54 @@ public class MainActivity  extends AppCompatActivity implements
         NotesList.Contract,
         EditNote.Contract,
         MetadataNote.Contract,
-        TrashedNotes.Contract
+        TrashedNotes.Contract,
+        PluginPresenter.Contract
 {
     private static final String TAG = "MainActivity";
     private static final String BUNDLE_NOTE_ID = "note_id";
+    private static final String BUNDLE_SEL_START = "sel_start";
+    private static final String BUNDLE_SEL_STOP = "sel_stop";
 
     private DrawerLayout drawer;
     private MenuItem lastOpenedNoteMenuItem;
 
-    private ApplicationState applicationState;
+    private PluginData pluginData;
+    private PluginsProvider pluginProvider;
+    private NoteProvider<Note<SpannableString>> noteProvider;
+    private LoginManager loginManager;
+
     private NotePresenterBase singleNotePresenter = null;
     private NotesPresenter listOfNotesPresenter = null;
     private Integer lastOpenedNoteId;
 
     private ArrayList<Note<SpannableString>> trashedNotes;
 
+    private util.Callback executeOnStart;
+    private final util.Callback executeOnStartDefault = new Callback() {
+        @Override
+        public void execute() {
+            openListOfNotes(null);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applicationState = new ApplicationState(getIntent().getExtras().getString("userUID"), this);
-        applicationState.setLoaderManager(getSupportLoaderManager());
+
+        Log.i(TAG, "onCreate");
+
+        pluginData = new PluginData(this);
+        pluginData.setContractor(this);
+
+        loginManager = LoginManagerFactory.getInstance();
+        pluginProvider = new PluginsProvider();
+        NoteDecoratorFactory<SpannableString> temp = new NoteDecoratorFactory<>();
+        for(FormatterPlugin p : pluginProvider.getFormatters()) {
+            temp = temp.andThen(p.getInteractorFactory(pluginData));
+        }
+        noteProvider = Factory.make(this, getIntent().getExtras().getString("userUID"), temp);
+        pluginProvider = new PluginsProvider();
+        trashedNotes = new ArrayList<>();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDelegate().setContentView(R.layout.activity_main);
@@ -79,10 +115,15 @@ public class MainActivity  extends AppCompatActivity implements
         menu.findItem(R.id.menuAllNotes).setChecked(true);
         lastOpenedNoteMenuItem = menu.findItem(R.id.menuLastNote);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_NOTE_ID)) {
-            lastOpenedNoteId = savedInstanceState.getInt(BUNDLE_NOTE_ID);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(BUNDLE_NOTE_ID)) {
+                lastOpenedNoteId = savedInstanceState.getInt(BUNDLE_NOTE_ID);
+            }
+            pluginData.setSelectionStart(savedInstanceState.getInt(BUNDLE_SEL_START));
+            pluginData.setSelectionEnd(savedInstanceState.getInt(BUNDLE_SEL_STOP));
         }
-        trashedNotes = new ArrayList<>();
+
+        executeOnStart = executeOnStartDefault;
     }
 
     @Override
@@ -90,6 +131,8 @@ public class MainActivity  extends AppCompatActivity implements
         if (lastOpenedNoteId != null) {
             savedInstanceState.putInt(BUNDLE_NOTE_ID, lastOpenedNoteId);
         }
+        savedInstanceState.putInt(BUNDLE_SEL_START, pluginData.getSelectionStart());
+        savedInstanceState.putInt(BUNDLE_SEL_STOP, pluginData.getSelectionEnd());
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -98,7 +141,15 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        openListOfNotes(null);
+
+        Log.i(TAG, "onStart");
+        executeOnStart.execute(); //execute last registered callback
+        executeOnStart = executeOnStartDefault; //go back to default strategy
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -130,6 +181,7 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that opens the list of notes */
     public void openLastOpenedNote(MenuItem item) {
+        Log.e(TAG, "openLastOpenedNote menu item");
         singleNotePresenter = openFragment(EditNote.class, null);
         lastOpenedNoteMenuItem.setChecked(true);
         reloadNote();
@@ -155,7 +207,7 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that logs the current user out */
     public void logout(MenuItem item) {
-        applicationState.getLoginManager().logout();
+        loginManager.logout();
     }
 
     //********************************************************************************************
@@ -172,6 +224,13 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** fragment contract */
     @Override
+    public void reOpenLastOpenedNote(NoteOpenerBase requester) {
+        Log.e(TAG, "reopening note");
+        openLastOpenedNote((MenuItem)null);
+    }
+
+    /** fragment contract */
+    @Override
     public void createNote(NotesPresenter requester) {
         singleNotePresenter = openFragment(EditNote.class, null);
         lastOpenedNoteMenuItem.setChecked(true);
@@ -181,7 +240,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void deleteNote(Note<SpannableString> note, NotesPresenter requester) {
-        Response r = applicationState.getNoteProvider().delete(note.getId());
+        Response r = noteProvider.delete(note.getId());
         if (requester != null) {
             if (r.isPositive()) {
                 trashedNotes.add(note);
@@ -195,13 +254,25 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void saveNote(Note<SpannableString> note, NotePresenterBase requester) {
-        Response r = applicationState.getNoteProvider().persist(note);
-        if (!r.isPositive() && requester != null) {
-            requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
+        Response r = noteProvider.persist(note);
+        if (!r.isPositive()) {
+            if (requester != null) {
+                requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
+            } else {
+                Toast.makeText(this, "Unexpected error: unable to perist the note",
+                        Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Unexpected error: unable to perist the note" + note.getId());
+            }
         }
     }
 
-    ////
+    /** fragment contract */
+    @Override
+    public void updateSelection(int start, int end) {
+        pluginData.setSelectionStart(start);
+        pluginData.setSelectionEnd(end);
+    }
+
     /** fragment contract */
     @Override
     public void restoreTrashedNote(Note<SpannableString> note, TrashedNotesPresenter requester) {
@@ -211,12 +282,12 @@ public class MainActivity  extends AppCompatActivity implements
             return;
         }
         Optional<Note<SpannableString>>
-                created = applicationState.getNoteProvider().createNote();
+                created = noteProvider.createNote();
 
         if (created.isPresent()) {
             NoteData<SpannableString> rawNote = note.getRaw();
             rawNote.setId(created.get().getId());
-            Response r = applicationState.getNoteProvider().persist(rawNote);
+            Response r = noteProvider.persist(rawNote);
             if (r.isPositive()) {
                 trashedNotes.remove(note);
                 requester.onTrashedNoteRestoredSuccess(note);
@@ -237,8 +308,8 @@ public class MainActivity  extends AppCompatActivity implements
         singleNotePresenter = n;
 
         ArrayList<View> buttons = new ArrayList<>();
-        for(FormatterPlugin plugin : applicationState.getPluginProvider().getFormatters()) {
-            for(View pluginAction : plugin.getMetaButtons(applicationState)) {
+        for(FormatterPlugin plugin : pluginProvider.getFormatters()) {
+            for(View pluginAction : plugin.getMetaButtons(pluginData)) {
                 buttons.add(pluginAction);
             }
         }
@@ -251,6 +322,12 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     public void optionPresenterFinished(NoteOptionsPresenter finished) {
         openLastOpenedNote(null);
+    }
+
+    /** fragment contract */
+    @Override
+    public void registerOnStartCallback(util.Callback executeOnActivityStart) {
+        executeOnStart = executeOnActivityStart;
     }
 
     //********************************************************************************************
@@ -316,9 +393,9 @@ public class MainActivity  extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        for (Plugin p : applicationState.getPluginProvider().getPlugins()) {
+        for (Plugin p : pluginProvider.getPlugins()) {
             if (p.canHandle(requestCode)) {
-                p.handle(requestCode, resultCode, data, applicationState);
+                p.handle(requestCode, resultCode, data, pluginData);
                 return;
             }
         }
@@ -341,7 +418,7 @@ public class MainActivity  extends AppCompatActivity implements
                     }
                     return new NoteLoader(
                             getApplicationContext(),
-                            applicationState.getNoteProvider(),
+                            noteProvider,
                             noteId);
                 }
 
@@ -355,6 +432,7 @@ public class MainActivity  extends AppCompatActivity implements
                         Log.i(TAG, "Received note: " + note.getId());
                         if (singleNotePresenter != null) {
                             lastOpenedNoteId = note.getId();
+                            pluginData.setLastOpenedNote(note);
                             singleNotePresenter.receiveNote(note);
                         }
                     }
@@ -376,7 +454,7 @@ public class MainActivity  extends AppCompatActivity implements
                 public Loader<Iterable<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
                     return new NotesLoader(
                             getApplicationContext(),
-                            applicationState.getNoteProvider());
+                            noteProvider);
                 }
 
                 @Override
