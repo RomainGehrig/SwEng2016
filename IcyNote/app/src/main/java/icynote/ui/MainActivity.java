@@ -69,7 +69,11 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applicationState = new ApplicationState(getIntent().getExtras().getString("userUID"), this);
+        applicationState = new ApplicationState(
+                (getIntent() == null || getIntent().getExtras() == null)
+                        ? "anonymousUserId"
+                        : getIntent().getExtras().getString("userUID")
+                , this);
         applicationState.setLoaderManager(getSupportLoaderManager());
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
