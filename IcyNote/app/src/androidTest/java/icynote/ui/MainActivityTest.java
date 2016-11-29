@@ -1,87 +1,87 @@
 package icynote.ui;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-
-/**
- * Created by kl on 20.10.2016.
- */
-@RunWith(AndroidJUnit4.class)
-public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MainActivityTest {
 
     private MainActivity mActivity;
 
-    public MainActivityTest() {
-        super(MainActivity.class);
-    }
-
+    @Rule
+    public ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    @Override
     public void setUp() throws Exception {
-        super.setUp();
-
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        final Context context = InstrumentationRegistry.getTargetContext();
-        mActivity = getActivity();
+        mActivity = main.getActivity();
     }
 
+
+    // start app with notes list
     @Test
     public void startingViewTest() {
-        assertNotNull(mActivity.findViewById(R.id.noteDisplayTitleText));
-        assertNotNull(mActivity.findViewById(R.id.note_open_metadata));
-        assertNotNull(mActivity.findViewById(R.id.noteDisplaySettingsButton));
-        assertNotNull(mActivity.findViewById(R.id.noteDisplayBodyText));
-        assertNotNull(mActivity.findViewById(R.id.noteDisplayTagsText));
-        assertNotNull(mActivity.findViewById(R.id.menuButton));
-        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+        onView(withId(R.id.menuButtonImage)).check(matches(isDisplayed()));
+        onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
+        onView(withId(R.id.btAdd)).check(matches(isDisplayed()));
+        onView(withId(R.id.btDelete)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void openFragmentListNotesTest() { // @TODO complete
-        onView(withId(R.id.menuButton)).perform(click());
+    public void menuContainsAllButtonsTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).check(matches(isDisplayed()));
+        onView(withText(R.string.trash)).check(matches(isDisplayed()));
+        onView(withText(R.string.settings)).check(matches(isDisplayed()));
+        onView(withText(R.string.logout)).check(matches(isDisplayed()));
+    }
+
+    // Open fragment tests
+    @Test
+    public void openFragmentListNotesTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.menuButton));
-        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
-    }
-
-    @Test
-    public void openFragmentEditTagsTest() {
-        assertNull(mActivity.findViewById(R.id.editTagsView));
-        onView(withId(R.id.menuButton)).perform(click());
-        onView(withText(R.string.editTags)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.editTagsView));
-        assertNotNull(mActivity.findViewById(R.id.menuButton));
-        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+        onView(withId(R.id.menuButtonImage)).check(matches(isDisplayed()));
+        onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
+        onView(withId(R.id.btAdd)).check(matches(isDisplayed()));
+        onView(withId(R.id.btDelete)).check(matches(isDisplayed()));
     }
 
     @Test
     public void openFragmentTrashTest() {
-
-        onView(withId(R.id.menuButton)).perform(click());
+        onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.trash)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.noteDisplayTitleText));
-        assertNotNull(mActivity.findViewById(R.id.note_open_metadata));
-        assertNotNull(mActivity.findViewById(R.id.noteDisplaySettingsButton));
-        assertNotNull(mActivity.findViewById(R.id.noteDisplayBodyText));
-        assertNotNull(mActivity.findViewById(R.id.noteDisplayTagsText));
-        assertNotNull(mActivity.findViewById(R.id.menuButton));
-        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+        onView(withId(R.id.menuButtonImage)).check(matches(isDisplayed()));
+        onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
+        onView(withId(R.id.btRestore)).check(matches(isDisplayed()));
     }
 
-    /*
+    /*@Test // TODO
+    public void openFragmentSettingsTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.settings)).perform(click());
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }*/
+
+    /*@Test
+    public void openFragmentEditTagsTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.editTags)).perform(click());
+        assertNotNull(mActivity.findViewById(R.id.editTagsView));
+        assertNotNull(mActivity.findViewById(R.id.menuButton));
+        assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
+    }*/
+
+
+/*
     TODO
     Settings are new in Preferences.java and xml.preferences
     !! Preferences is a PreferenceActivity, not a Fragment
@@ -96,16 +96,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertNotNull(mActivity.findViewById(R.id.menuButton));
         assertNotNull(mActivity.findViewById(R.id.menuButtonImage));
     }
-    */
+*/
 
-    @Test
-    public void openFragmentMetadatasTest() {
-        assertNull(mActivity.findViewById(R.id.noteTitle));
-        assertNull(mActivity.findViewById(R.id.noteCreationDate));
-        assertNull(mActivity.findViewById(R.id.backButton));
-        onView(withId(R.id.noteDisplaySettingsButton)).perform(click());
-        assertNotNull(mActivity.findViewById(R.id.noteTitle));
-        assertNotNull(mActivity.findViewById(R.id.noteCreationDate));
-        assertNotNull(mActivity.findViewById(R.id.backButton));
-    }
 }
