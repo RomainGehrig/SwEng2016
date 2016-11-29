@@ -34,17 +34,18 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
 
     public ListNoteProvider(Iterable<Note<String>> memory) {
         for (Note<String> n : memory) {
-            notes.add(new NoteData(n));
+            notes.add(new NoteData<String>(n));
         }
     }
 
     @Override
     public Optional<Note<String>> createNote() {
 
-        Note<String> created = new NoteData();
+        Note<String> created = new NoteData<String>("", "");
         created.setId(nextId);
+
         ++nextId;
-        Note<String> defensiveCopy = new NoteData(created);
+        Note<String> defensiveCopy = new NoteData<String>(created);
         notes.add(defensiveCopy);
 
         Note<String> validator = new ConstId<String>(created);
@@ -56,7 +57,7 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
     public Optional<Note<String>> getNote(int id) {
         for (Note<String> note : notes) {
             if (note.getId() == id) {
-                Note<String> defensiveCopy = new NoteData(note);
+                Note<String> defensiveCopy = new NoteData<String>(note);
                 return Optional.of((Note<String>) new ConstId<String>(defensiveCopy));
             }
         }
@@ -67,7 +68,7 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
     public Iterable<Note<String>> getNotes(final OrderBy index, final OrderType order) {
         List<Note<String>> unsorted = new ArrayList<>();
         for (Note<String> n : notes) {
-            Note<String> defensiveCopy = new NoteData(n);
+            Note<String> defensiveCopy = new NoteData<String>(n);
             unsorted.add(new ConstId<String>(defensiveCopy));
         }
         Collections.sort(unsorted, new Comparator<Note<String>>() {
@@ -98,9 +99,11 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
 
     @Override
     public Response persist(Note<String> n) {
+        n = n.getRaw(); //unwind the decorator stack, if there is one
+
         for (int i = 0; i < notes.size(); ++i) {
             if (notes.get(i).getId() == n.getId()) {
-                Note<String> defensiveCopy = new NoteData(n);
+                Note<String> defensiveCopy = new NoteData<String>(n);
                 notes.set(i, defensiveCopy);
                 return ResponseFactory.positiveResponse();
             }

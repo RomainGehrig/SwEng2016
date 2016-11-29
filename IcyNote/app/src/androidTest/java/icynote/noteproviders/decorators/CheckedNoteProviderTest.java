@@ -8,7 +8,6 @@ import icynote.note.impl.NoteData;
 import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.persistent.ListNoteProvider;
 import icynote.noteproviders.templates.NoteProviderTests;
-import icynote.ui.utils.NotesAdapter;
 
 /**
  * Created by kl on 24.11.2016.
@@ -30,6 +29,6 @@ public class CheckedNoteProviderTest extends NoteProviderTests {
 
     @Override
     protected Note<String> makeNewNote() {
-        return new NoteData();
+        return new NoteData("", "");
     }
 }

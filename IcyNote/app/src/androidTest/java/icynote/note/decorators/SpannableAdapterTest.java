@@ -2,7 +2,6 @@ package icynote.note.decorators;
 
 import android.text.SpannableString;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.GregorianCalendar;
@@ -10,13 +9,16 @@ import java.util.GregorianCalendar;
 import icynote.note.Note;
 import icynote.note.impl.NoteData;
 
+import static icynote.noteproviders.impl.Factory.strAdapter;
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by kl on 27.11.2016.
  */
 public class SpannableAdapterTest {
     
-    Note<String> note = new NoteData();
-    SpannableAdapter spannableAdapter = new SpannableAdapter(note);
+    Note<String> note = new NoteData("", "");
+    Note<SpannableString> spannableAdapter = new AdaptedNote<>(note, strAdapter);
 
     @Test
     public void getIdTest() {

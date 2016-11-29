@@ -5,9 +5,6 @@ import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 import android.text.SpannableString;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import icynote.note.Note;
 import icynote.note.decorators.AdaptedNote;
 import icynote.note.decorators.DateDecorator;
@@ -111,7 +108,7 @@ public final class Factory {
 
     //------------------------------------------------------------------------------------------
 
-    private final static Adapter<SpannableString, String> strAdapter =
+    public final static Adapter<SpannableString, String> strAdapter =
             new Adapter<SpannableString, String>() {
         @Override
         public SpannableString to(String b) {
@@ -123,27 +120,27 @@ public final class Factory {
         }
     };
 
-    private static class NoteAdapter implements Adapter<Note<SpannableString>, Note<String>> {
-        private Map<Integer, AdaptedNote<SpannableString, String>> cache = new TreeMap<>();
-
+    public static class NoteAdapter implements Adapter<Note<SpannableString>, Note<String>> {
         @Override
         public Note<SpannableString> to(Note<String> b) {
+            //from the provider to the app
+            //just add a wrapper
             return new AdaptedNote<>(b, strAdapter);
         }
 
         @Override
         public Note<String> from(Note<SpannableString> a) {
-            return Factory.trim(a, strAdapter);
+            //from the app to the provider
+            //remove decorators with `getRaw` and convert.
+            NoteData<SpannableString> raw = a.getRaw();
+            NoteData<String> converted = new NoteData<>("", "");
+            converted.setId(raw.getId());
+            converted.setTitle(strAdapter.from(raw.getTitle()));
+            converted.setContent(strAdapter.from(raw.getContent()));
+            converted.setLastUpdate(raw.getLastUpdate());
+            converted.setCreation(raw.getCreation());
+            return converted;
         }
     }
 
-    public static <S> NoteData trim(Note<S> note, Adapter<S, String> strAdapter) {
-        NoteData trimmed = new NoteData();
-        trimmed.setId(note.getId());
-        trimmed.setTitle(strAdapter.from(note.getTitle()));
-        trimmed.setContent(strAdapter.from(note.getContent()));
-        trimmed.setLastUpdate(note.getLastUpdate());
-        trimmed.setCreation(note.getCreation());
-        return trimmed;
-    }
 }

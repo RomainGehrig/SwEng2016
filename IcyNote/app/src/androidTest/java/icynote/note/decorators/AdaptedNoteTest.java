@@ -2,7 +2,6 @@ package icynote.note.decorators;
 
 import android.text.SpannableString;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.GregorianCalendar;
@@ -29,12 +28,6 @@ public class AdaptedNoteTest {
 
     private Note<SpannableString> note = new NoteData2();
     private AdaptedNote<String, SpannableString> adaptedNote = new AdaptedNote<>(note, adapter);
-
-
-    @Test
-    public void getAdaptedNoteTest() {
-        assertEquals(note, adaptedNote.getAdaptedNote());
-    }
 
     @Test
     public void getIdTest() {

@@ -36,10 +36,6 @@
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".fragments.Preferences"/>
-
-
-
         <activity android:name=".view.MockEditNote">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -42,7 +42,7 @@ public class NoteWithItrProviderTests extends NoteProviderTests {
 
     @Override
     protected Note<String> makeNewNote() {
-        return new NoteData();
+        return new NoteData<String>("", "");
     }
 
     @Test

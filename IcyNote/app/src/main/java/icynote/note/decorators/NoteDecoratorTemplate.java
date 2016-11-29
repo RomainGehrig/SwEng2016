@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 
 import icynote.note.Note;
 import icynote.note.Response;
+import icynote.note.impl.NoteData;
 
 /**
  * Delegates every method to a delegate {@code Note};
@@ -23,6 +24,12 @@ public class NoteDecoratorTemplate<S> implements Note<S> {
     }
 
     //-------------------------------------
+
+
+    @Override
+    public NoteData<S> getRaw() {
+        return delegate.getRaw();
+    }
 
     @Override
     public int getId() {

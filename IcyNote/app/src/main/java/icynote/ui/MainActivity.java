@@ -25,6 +25,7 @@ import icynote.loaders.NoteLoader;
 import icynote.loaders.NotesLoader;
 import icynote.note.Note;
 import icynote.note.Response;
+import icynote.note.impl.NoteData;
 import icynote.plugins.FormatterPlugin;
 import icynote.plugins.Plugin;
 import icynote.ui.contracts.NoteOpenerBase;
@@ -32,11 +33,13 @@ import icynote.ui.contracts.NoteOptionsPresenter;
 import icynote.ui.contracts.NotePresenter;
 import icynote.ui.contracts.NotePresenterBase;
 import icynote.ui.contracts.NotesPresenter;
+import icynote.ui.contracts.TrashedNotesPresenter;
 import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.fragments.NotesList;
 import icynote.ui.fragments.Preferences;
+import icynote.ui.fragments.TrashedNotes;
 import icynote.ui.utils.ApplicationState;
 import util.Optional;
 
@@ -44,7 +47,8 @@ import util.Optional;
 public class MainActivity  extends AppCompatActivity implements
         NotesList.Contract,
         EditNote.Contract,
-        MetadataNote.Contract
+        MetadataNote.Contract,
+        TrashedNotes.Contract
 {
     private static final String TAG = "MainActivity";
     private static final String BUNDLE_NOTE_ID = "note_id";
@@ -57,6 +61,9 @@ public class MainActivity  extends AppCompatActivity implements
     private NotePresenterBase singleNotePresenter = null;
     private NotesPresenter listOfNotesPresenter = null;
     private NoteOpenerBase singleNoteOpener = null;
+    private TrashedNotesPresenter trashedNotesPresenter = null;
+
+    private ArrayList<Note<SpannableString>> trashedNotes;
 
 
     @Override
@@ -68,6 +75,8 @@ public class MainActivity  extends AppCompatActivity implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDelegate().setContentView(R.layout.activity_main);
         drawer = (DrawerLayout) findViewById(R.id.main_layout);
+
+        trashedNotes = new ArrayList<>();
     }
 
     @Override
@@ -115,8 +124,9 @@ public class MainActivity  extends AppCompatActivity implements
     }
 
     /** menu's on click listener that opens the list of deleted notes */
-    public void openListOfDeletedNotes(MenuItem item) {
-        openFragment(NotesList.class, null);
+    public void openListOfTrashedNotes(MenuItem item) {
+        trashedNotesPresenter = openFragment(TrashedNotes.class, null);
+        trashedNotesPresenter.receiveNotes(trashedNotes);
     }
 
     /** menu's on click listener that opens the settings */
@@ -154,6 +164,7 @@ public class MainActivity  extends AppCompatActivity implements
         Response r = applicationState.getNoteProvider().delete(note.getId());
         if (requester != null) {
             if (r.isPositive()) {
+                trashedNotes.add(note);
                 requester.onNoteDeletionSuccess(note);
             } else {
                 requester.onNoteDeletionFailure(note, "could not delete note");
@@ -167,6 +178,35 @@ public class MainActivity  extends AppCompatActivity implements
         Response r = applicationState.getNoteProvider().persist(note);
         if (!r.isPositive() && requester != null) {
             requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
+        }
+    }
+
+    ////
+    /** fragment contract */
+    @Override
+    public void restoreTrashedNote(Note<SpannableString> note, TrashedNotesPresenter requester) {
+        if (!trashedNotes.contains(note)) {
+            Log.i(TAG, "attempt to restore a non deleted note: (id=" + note.getId() + ")");
+            requester.onTrashedNoteRestoredSuccess(note);
+            return;
+        }
+        Optional<Note<SpannableString>>
+                created = applicationState.getNoteProvider().createNote();
+
+        if (created.isPresent()) {
+            NoteData<SpannableString> rawNote = note.getRaw();
+            rawNote.setId(created.get().getId());
+            Response r = applicationState.getNoteProvider().persist(rawNote);
+            if (r.isPositive()) {
+                trashedNotes.remove(note);
+                requester.onTrashedNoteRestoredSuccess(note);
+            } else {
+                requester.onTrashedNoteRestoredFailure(note,
+                        "Sorry, unable to persist the note");
+            }
+        } else {
+            requester.onTrashedNoteRestoredFailure(note,
+                    "Sorry, unable to create a new holder for your note");
         }
     }
 

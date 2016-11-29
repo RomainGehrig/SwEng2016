@@ -9,8 +9,6 @@ import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.persistent.ListNoteProvider;
 import icynote.noteproviders.templates.NoteProviderTests;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by kl on 24.11.2016.
  */
@@ -31,6 +29,6 @@ public class NoteWithInteractorsProviderTest extends NoteProviderTests {
 
     @Override
     protected Note<String> makeNewNote() {
-        return new NoteData();
+        return new NoteData("","");
     }
 }
