@@ -15,6 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import icynote.note.Note;
 import icynote.note.impl.NoteData2;
 import icynote.plugins.FormatterPlugin;
+import icynote.plugins.PluginsProvider;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.view.MockMetadataNote;
 
@@ -101,13 +102,12 @@ public class MetadataNoteTest {
         assertTrue(mActivity.openEditNote);
     }*/
 
-    /*@Test // TODO to complete
+    /*@Test // TODO to complete -> last to test to have almost 100% coverage
     public void receivePluginDataTest() throws InterruptedException {
         enableFragment();
         fragment.receiveNote(note);
 
-        ArrayList<View> buttons = new ArrayList<>();
-        fragment.receivePluginData(buttons);
-    }
-*/
+        PluginsProvider pluginProvider = new PluginsProvider();
+        fragment.receivePluginData(pluginProvider.getPlugins());
+    }*/
 }
