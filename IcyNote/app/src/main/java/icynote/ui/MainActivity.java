@@ -91,6 +91,9 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String userId = (getIntent() == null || getIntent().getExtras() == null)
+                ? "anonymousUserId"
+                : getIntent().getExtras().getString("userUID");
 
         Log.i(TAG, "onCreate");
 
@@ -103,7 +106,7 @@ public class MainActivity  extends AppCompatActivity implements
         for(FormatterPlugin p : pluginProvider.getFormatters()) {
             temp = temp.andThen(p.getInteractorFactory(pluginData));
         }
-        noteProvider = Factory.make(this, getIntent().getExtras().getString("userUID"), temp);
+        noteProvider = Factory.make(this, userId, temp);
         pluginProvider = new PluginsProvider();
         trashedNotes = new ArrayList<>();
 
