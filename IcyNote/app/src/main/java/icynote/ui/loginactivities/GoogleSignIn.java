@@ -10,7 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import util.Callback2;
 
 public class GoogleSignIn extends GoogleClient {
-    private static final int RC_GOOGLE_SIGN_IN = 9001;
+    public static final int RC_GOOGLE_SIGN_IN = 9001;
 
     @Override
     public void onStart() {
