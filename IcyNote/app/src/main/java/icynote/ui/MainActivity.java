@@ -185,9 +185,15 @@ public class MainActivity  extends AppCompatActivity implements
     /** menu's on click listener that opens the list of notes */
     public void openLastOpenedNote(MenuItem item) {
         Log.e(TAG, "openLastOpenedNote menu item");
-        singleNotePresenter = openFragment(EditNote.class, null);
-        lastOpenedNoteMenuItem.setChecked(true);
-        reloadNote();
+        if (lastOpenedNoteId == null) {
+            Toast.makeText(this, "There is no last opened note.",
+                    Toast.LENGTH_SHORT).show();
+            toggleMenu(null);
+        } else {
+            singleNotePresenter = openFragment(EditNote.class, null);
+            lastOpenedNoteMenuItem.setChecked(true);
+            reloadNote();
+        }
     }
     /** menu's on click listener that opens the list of tags */
     public void openListOfTags(MenuItem item) {
@@ -247,6 +253,10 @@ public class MainActivity  extends AppCompatActivity implements
         if (requester != null) {
             if (r.isPositive()) {
                 trashedNotes.add(note);
+                if (lastOpenedNoteId == note.getId()) {
+                    lastOpenedNoteId = null;
+                    pluginData.setLastOpenedNote(null);
+                }
                 requester.onNoteDeletionSuccess(note);
             } else {
                 requester.onNoteDeletionFailure(note, "could not delete note");
