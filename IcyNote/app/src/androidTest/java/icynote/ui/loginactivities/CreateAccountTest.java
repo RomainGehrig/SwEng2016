@@ -1,12 +1,14 @@
-package icynote.ui;
+package icynote.ui.loginactivities;
 
 import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import icynote.ui.R;
 import icynote.ui.loginactivities.LoginMenu;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -18,7 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class LocalLogInTest {
+public class CreateAccountTest {
 
     private LoginMenu mActivity;
 
@@ -32,38 +34,38 @@ public class LocalLogInTest {
 
 
     @Test
-    public void localLogInSuccessTest() throws InterruptedException {
+    public void createAccountSuccessTest() throws InterruptedException {
         logOutIfAlreadyLogInTest();
-        onView(withId(R.id.local_sign_in_button)).perform(click());
+        onView(ViewMatchers.withId(R.id.local_sign_in_button)).perform(click());
 
         // bad input first
         badMailTest();
         badPassWordTest();
 
-        // then success login
-        successfulLogIn();
+        // then success account creation
+        //successfulCreateAccount();
 
         // logout to be able to continue login test
         logOutIfAlreadyLogInTest();
     }
 
-    private void successfulLogIn() throws InterruptedException {
+    /*private void successfulCreateAccount() throws InterruptedException { // TODO create new account
         onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
         onView(withId(R.id.field_password)).perform(replaceText("icynote")).perform(closeSoftKeyboard());
         Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email_create_account_button)).perform(click());
         Thread.sleep(2000);
 
         // check a view in mainactivity is shown
         onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
-    }
+    }*/
 
 
     public void badMailTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText("somemail"));
-        onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.field_password)).perform(replaceText("pw")).perform(closeSoftKeyboard());
         Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email_create_account_button)).perform(click());
 
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
@@ -71,10 +73,10 @@ public class LocalLogInTest {
 
 
     public void badPassWordTest() throws InterruptedException {
-        onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
-        onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.field_email)).perform(replaceText("test1@icynote.ch"));
+        onView(withId(R.id.field_password)).perform(replaceText("pw1")).perform(closeSoftKeyboard());
         Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email_create_account_button)).perform(click());
 
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
