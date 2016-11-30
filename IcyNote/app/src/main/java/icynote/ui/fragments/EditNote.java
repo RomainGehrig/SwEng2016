@@ -5,21 +5,18 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import java.util.Arrays;
-import java.util.List;
 
 import icynote.note.Note;
 import icynote.ui.R;
 import icynote.ui.contracts.NotePresenter;
 import icynote.ui.view.NoteViewHolder;
 import me.gujun.android.taggroup.TagGroup;
+
+import static java.lang.Math.min;
 
 public class EditNote extends Fragment implements NotePresenter {
 
@@ -48,6 +45,9 @@ public class EditNote extends Fragment implements NotePresenter {
         viewHolder.getOptionButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                activity.updateSelection(viewHolder.getContent().getSelectionStart(),
+                        viewHolder.getContent().getSelectionEnd());
+
                 activity.openOptionalPresenter(EditNote.this);
             }
         });
@@ -173,8 +173,16 @@ public class EditNote extends Fragment implements NotePresenter {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                note.setContent(new SpannableString(s));
+            public void afterTextChanged(Editable s) {note.setContent(new SpannableString(s));
+                viewHolder.getContent().removeTextChangedListener(this);
+                int start = viewHolder.getContent().getSelectionStart();
+                int end = viewHolder.getContent().getSelectionEnd();
+                viewHolder.getContent().setText(note.getContent());
+                int length = viewHolder.getContent().getText().length();
+                if (start > 0 && end > 0) {
+                    viewHolder.getContent().setSelection(min(start, length), min(end, length));
+                }
+                viewHolder.getContent().addTextChangedListener(this);
                 activity.saveNote(note, EditNote.this);
             }
         });
