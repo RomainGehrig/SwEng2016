@@ -41,6 +41,8 @@ public class LocalLogInTest {
         // bad input first
         badMailTest();
         badPassWordTest();
+        mailRequiredTest();
+        passwordRequiredTest();
 
         // then success login
         successfulLogIn();
@@ -58,6 +60,28 @@ public class LocalLogInTest {
 
         // check a view in mainactivity is shown
         onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
+    }
+
+
+    public void mailRequiredTest() throws InterruptedException {
+        onView(withId(R.id.field_email)).perform(replaceText(""));
+        onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
+        Thread.sleep(100);
+        onView(withId(R.id.email_sign_in_button)).perform(click());
+
+        // check a view in local log in is shown
+        onView(withId(R.id.field_email)).check(matches(isDisplayed()));
+    }
+
+
+    public void passwordRequiredTest() throws InterruptedException {
+        onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
+        onView(withId(R.id.field_password)).perform(replaceText("")).perform(closeSoftKeyboard());
+        Thread.sleep(100);
+        onView(withId(R.id.email_sign_in_button)).perform(click());
+
+        // check a view in local log in is shown
+        onView(withId(R.id.field_email)).check(matches(isDisplayed()));
     }
 
 
