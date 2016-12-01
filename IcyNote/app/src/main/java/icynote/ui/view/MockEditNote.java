@@ -20,11 +20,6 @@ public class MockEditNote extends BlankActivity implements EditNote.Contract {
 
     public MockEditNote() {}
 
-
-    public void openMetadata(View view) {
-        openMetadata = true;
-    }
-
     @Override
     public void openOptionalPresenter(NotePresenter requester) {
         openOptionalPresenter = true;
