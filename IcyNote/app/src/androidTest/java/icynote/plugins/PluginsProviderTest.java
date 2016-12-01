@@ -1,7 +1,6 @@
 package icynote.plugins;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -11,23 +10,17 @@ import org.junit.Test;
  */
 public class PluginsProviderTest {
 
-    PluginsProvider p = new PluginsProvider();
-
-    /*@Test
-    public void getFormattersTest() {
-
-        FormatterPlugin imageFormatterf = new ImageFormatter(1, 2);
-        List<FormatterPlugin> list = new ArrayList<>();
-        list.add(imageFormatterf);
-        assertEquals(p.getFormatters(), list.size());
-    }
+    PluginsProvider provider = new PluginsProvider();
 
     @Test
     public void getPluginsTest() {
-        FormatterPlugin imageFormatterf = new ImageFormatter(1, 2);
-        List<Plugin> list = new ArrayList<>();
-        list.add(imageFormatterf);
-        assertEquals(p.getFormatters(), list);
-    }*/
+
+        FormatterPlugin refImageFormatter = new ImageFormatter(1, 2);
+        Iterator<Plugin> pluginsIter = provider.getPlugins().iterator();
+        assertTrue(pluginsIter.hasNext());
+        assertEquals(pluginsIter.next().getName(), refImageFormatter.getName());
+
+    }
+
 
 }
