@@ -1,7 +1,11 @@
 package icynote.ui;
 
+import android.os.IBinder;
+import android.support.test.espresso.Root;
+import android.support.test.espresso.matcher.RootMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 import org.hamcrest.Description;
@@ -14,10 +18,13 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static org.hamcrest.CoreMatchers.not;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.anything;
 
@@ -132,12 +139,87 @@ public class MainActivityTest {
         assertEquals(2, getNotesCount());
     }*/
 
+    @Test
+    public void deletionTest()
+    {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+
+        deleteAllNotes();
+        assertEquals(0, getNotesCount());
+        onView(withId(R.id.tvNumNotes)).check(matches(withText("0 notes")));
+
+        addNote("note1", "body1");
+        addNote("note2", "body2");
+        addNote("note3", "body3");
+        assertEquals(3, getNotesCount());
+        onView(withId(R.id.tvNumNotes)).check(matches(withText("3 notes")));
+
+        deleteNote(1);
+        assertEquals(2, getNotesCount());
+        onView(withId(R.id.tvNumNotes)).check(matches(withText("2 notes")));
+        onView(withText("note2")).check(doesNotExist());
+        onView(withText("note1")).check(matches(isDisplayed()));
+        onView(withText("note3")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void reopenLastNoteWhenThereIsNoneTest()
+    {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.openLastNote)).perform(click());
+        onView(withText("There is no last opened note.")).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void reopenLastNoteDoNotOpenDeletedNoteTest()
+    {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        addNote("note1", "body1");
+        deleteAllNotes();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.openLastNote)).perform(click());
+        onView(withText("There is no last opened note.")).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void reopenLastNoteOpenCorrectNoteTest()
+    {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        addNote("note1", "body1");
+        addNote("note2", "body2");
+        addNote("note3", "body3");
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.openLastNote)).perform(click());
+
+        onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("note3")));
+        onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("body3")));
+    }
+
+
     private void addNote(String title, String body) {
         onView(withId(R.id.btAdd)).perform(click());
         onView(withId(R.id.noteDisplayTitleText)).perform(replaceText(title));
         onView(withId(R.id.noteDisplayBodyText)).perform(replaceText(body));
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
+    }
+
+    private void deleteNote(int indexNote) {
+        onData(anything()).inAdapterView(withId(R.id.lvNotes))
+                .atPosition(indexNote)
+                .onChildView(withId(R.id.checkBox))
+                .perform(click());
+        onView(withId(R.id.btDelete)).perform(click());
     }
 
     private void deleteAllNotes() {
@@ -170,5 +252,24 @@ public class MainActivityTest {
         }));
 
         return counts[0];
+    }
+
+    public class ToastMatcher extends TypeSafeMatcher<Root> {
+        @Override public void describeTo(Description description) {
+            description.appendText("is toast");
+        }
+
+        @Override public boolean matchesSafely(Root root) {
+            int type = root.getWindowLayoutParams().get().type;
+            if ((type == WindowManager.LayoutParams.TYPE_TOAST)) {
+                IBinder windowToken = root.getDecorView().getWindowToken();
+                IBinder appToken = root.getDecorView().getApplicationWindowToken();
+                if (windowToken == appToken) {
+                    //means this window isn't contained by any other windows.
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
