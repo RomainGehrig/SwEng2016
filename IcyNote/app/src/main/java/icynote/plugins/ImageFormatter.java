@@ -47,6 +47,7 @@ class ImageFormatter implements FormatterPlugin {
 
     private final int mRequestCodeCamera;
     private final int mRequestCodeGallery;
+    private boolean isEnabled = false;
 
     private static final String ERROR_GALLERY_NOT_IMPLEMENTED = "Gallery not implemented, yet.";
     private static final String ERROR_UNABLE_TO_CREATE_FILE = "unable to create image file";
@@ -75,6 +76,17 @@ class ImageFormatter implements FormatterPlugin {
     @Override
     public String getName(){
         return INSERTION_PLUGIN ;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        Log.e(TAG, "setEnabled = " + enabled);
+        isEnabled = enabled;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
     }
 
     @Override
@@ -115,7 +127,7 @@ class ImageFormatter implements FormatterPlugin {
         return buttonList;
     }
 
-    private static class FormatterDecorator extends NoteDecoratorTemplate<SpannableString> {
+    private class FormatterDecorator extends NoteDecoratorTemplate<SpannableString> {
         private final PluginData appState;
 
         FormatterDecorator(Note<SpannableString> delegateInteractor, PluginData appState) {
@@ -125,7 +137,12 @@ class ImageFormatter implements FormatterPlugin {
 
         @Override
         public SpannableString getContent() {
-            //Log.i(TAG, "getContent");
+            if (!isEnabled) {
+                //Log.i(TAG, "getContent —> plugin not enabled");
+                return super.getContent();
+            }
+
+            //Log.i(TAG, "getContent —> plugin enabled");
 
             SpannableString contentFromCore = super.getContent();
 
@@ -145,6 +162,10 @@ class ImageFormatter implements FormatterPlugin {
 
         @Override
         public Response setContent(SpannableString newContent) {
+            if (!isEnabled){
+                return super.setContent(newContent);
+            }
+
             ImageSpanWithId[] spans = newContent.getSpans(
                     0,
                     newContent.length(),
@@ -165,7 +186,7 @@ class ImageFormatter implements FormatterPlugin {
         }
     }
 
-    private static class FormatterFactory extends NoteDecoratorFactory<SpannableString> {
+    private class FormatterFactory extends NoteDecoratorFactory<SpannableString> {
         private PluginData appState;
 
         FormatterFactory(PluginData state) {

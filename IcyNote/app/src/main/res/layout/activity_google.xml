@@ -26,7 +26,6 @@
         android:orientation="vertical">
 
         <ImageView
-            style="@style/ThemeOverlay.IcynoteIcon"
             android:id="@+id/google_icon"
             android:contentDescription="@string/desc_icynote_lockup"
             android:src="@drawable/icynote_lockup_400"
@@ -39,16 +38,18 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/title_bottom_margin"
             android:text="@string/google_title_text"
-            android:theme="@style/ThemeOverlay.MyTitleText"/>
+            />
 
         <TextView
             android:id="@+id/status"
-            style="@style/ThemeOverlay.MyTextDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/signed_out"/>
 
         <TextView
             android:id="@+id/detail"
-            style="@style/ThemeOverlay.MyTextDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             tools:text="Icynote User ID: 123456789abc"/>
 
     </LinearLayout>
@@ -83,16 +84,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/sign_out"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
+                android:text="@string/sign_out" />
 
             <Button
                 android:id="@+id/disconnect_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/disconnect"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
+                android:text="@string/disconnect"/>
         </LinearLayout>
 
     </RelativeLayout>

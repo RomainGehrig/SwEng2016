@@ -35,8 +35,8 @@
         <activity android:name=".loginactivities.GoogleUnLinkCredentials"/>
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden" />
-
-        <activity android:name=".fragments.Preferences"/>
+        <activity android:name=".Preferences"
+            android:windowSoftInputMode="stateHidden" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

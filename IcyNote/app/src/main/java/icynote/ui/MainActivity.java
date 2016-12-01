@@ -3,6 +3,7 @@ package icynote.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,6 +36,7 @@ import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.impl.Factory;
 import icynote.plugins.FormatterPlugin;
 import icynote.plugins.Plugin;
+import icynote.plugins.PluginData;
 import icynote.plugins.PluginsProvider;
 import icynote.ui.contracts.NoteOpenerBase;
 import icynote.ui.contracts.NoteOptionsPresenter;
@@ -47,9 +49,8 @@ import icynote.ui.fragments.EditNote;
 import icynote.ui.fragments.EditTags;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.fragments.NotesList;
-import icynote.ui.fragments.Preferences;
 import icynote.ui.fragments.TrashedNotes;
-import icynote.plugins.PluginData;
+import icynote.ui.utils.PreferencesHolder;
 import util.Callback;
 import util.Optional;
 
@@ -65,9 +66,13 @@ public class MainActivity  extends AppCompatActivity implements
     private static final String BUNDLE_NOTE_ID = "note_id";
     private static final String BUNDLE_SEL_START = "sel_start";
     private static final String BUNDLE_SEL_STOP = "sel_stop";
+    private static final String BUNDLE_CURRENT_USER = "current_user";
 
+    private String currentUserId;
     private DrawerLayout drawer;
     private MenuItem lastOpenedNoteMenuItem;
+    private MenuItem listAllNotesMenuItem;
+    private PreferencesHolder prefHolder;
 
     private PluginData pluginData;
     private PluginsProvider pluginProvider;
@@ -84,6 +89,7 @@ public class MainActivity  extends AppCompatActivity implements
     private final util.Callback executeOnStartDefault = new Callback() {
         @Override
         public void execute() {
+            listAllNotesMenuItem.setChecked(true);
             openListOfNotes(null);
         }
     };
@@ -91,23 +97,30 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String userId = (getIntent() == null || getIntent().getExtras() == null)
-                ? getString(R.string.extra_anonymous_user_id)
-                : getIntent().getExtras().getString(getString(R.string.extra_user_uid));
 
-        Log.i(TAG, "onCreate");
+        currentUserId = getString(R.string.extra_anonymous_user_id);
+    
+        if (savedInstanceState != null && savedInstanceState.get(BUNDLE_CURRENT_USER) != null) {
+            currentUserId = savedInstanceState.getString(BUNDLE_CURRENT_USER);
+        }
+        if (getIntent() != null || getIntent().getExtras() != null) {
+            currentUserId = getIntent().getExtras().getString(getString(R.string.extra_user_uid));
+        }
 
+        Log.i(TAG, "onCreate (user = " + currentUserId + ")");
+
+        prefHolder = new PreferencesHolder(PreferenceManager.getDefaultSharedPreferences(this));
         pluginData = new PluginData(this);
         pluginData.setContractor(this);
 
         loginManager = LoginManagerFactory.getInstance();
-        pluginProvider = new PluginsProvider();
+        pluginProvider = PluginsProvider.getInstance();
         NoteDecoratorFactory<SpannableString> temp = new NoteDecoratorFactory<>();
         for(FormatterPlugin p : pluginProvider.getFormatters()) {
             temp = temp.andThen(p.getInteractorFactory(pluginData));
         }
-        noteProvider = Factory.make(this, userId, temp);
-        pluginProvider = new PluginsProvider();
+        noteProvider = Factory.make(this, currentUserId, temp);
+        pluginProvider = PluginsProvider.getInstance();
         trashedNotes = new ArrayList<>();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -115,7 +128,7 @@ public class MainActivity  extends AppCompatActivity implements
 
         drawer = (DrawerLayout) findViewById(R.id.main_layout);
         Menu menu = ((NavigationView) findViewById(R.id.menu)).getMenu();
-        menu.findItem(R.id.menuAllNotes).setChecked(true);
+        listAllNotesMenuItem = menu.findItem(R.id.menuAllNotes);
         lastOpenedNoteMenuItem = menu.findItem(R.id.menuLastNote);
 
         if (savedInstanceState != null) {
@@ -134,6 +147,7 @@ public class MainActivity  extends AppCompatActivity implements
         if (lastOpenedNoteId != null) {
             savedInstanceState.putInt(BUNDLE_NOTE_ID, lastOpenedNoteId);
         }
+        savedInstanceState.putString(BUNDLE_CURRENT_USER, currentUserId);
         savedInstanceState.putInt(BUNDLE_SEL_START, pluginData.getSelectionStart());
         savedInstanceState.putInt(BUNDLE_SEL_STOP, pluginData.getSelectionEnd());
 
@@ -146,6 +160,10 @@ public class MainActivity  extends AppCompatActivity implements
         super.onStart();
 
         Log.i(TAG, "onStart");
+        for (Plugin p : pluginProvider.getPlugins()) {
+            p.setEnabled(prefHolder.isPluginEnabled(p.getName()));
+            Log.e(TAG, p.getName() + " is enabled = " + p.isEnabled());
+        }
         executeOnStart.execute(); //execute last registered callback
         executeOnStart = executeOnStartDefault; //go back to default strategy
     }
@@ -208,10 +226,9 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that opens the settings */
     public void openSettings(MenuItem item) {
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new Preferences())
-                .commit();
-        //openFragment(Preferences.class, null);
+        Intent i = new Intent(this, Preferences.class);
+        startActivity(i);
+        //Toast.makeText(this, "We don't have settings, yet !", Toast.LENGTH_SHORT).show();
     }
 
     /** menu's on click listener that logs the current user out */
@@ -386,16 +403,18 @@ public class MainActivity  extends AppCompatActivity implements
         getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, null, noteLoaderCallback);
     }
     private void loadNote(int noteId) {
+        Log.d(TAG, "loadNote(" + noteId + ")");
         Bundle args = new Bundle();
         args.putInt(BUNDLE_NOTE_ID, noteId);
-        Log.d(TAG, "loadNote(" + noteId + ")");
         getSupportLoaderManager().restartLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
     }
     private void reloadNote() {
-        Bundle args = new Bundle();
-        args.putInt(BUNDLE_NOTE_ID, lastOpenedNoteId); //if loader was reset for whatever reasons
-        Log.d(TAG, "reloadingNote (lastOpenedId is " + lastOpenedNoteId + ")");
-        getSupportLoaderManager().initLoader(NoteLoader.LOADER_ID, args, noteLoaderCallback);
+        if (lastOpenedNoteId == null) {
+            Toast.makeText(this, "Previous note was not recorded", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d(TAG, "reloadingNote (lastOpenedId is " + lastOpenedNoteId + ")");
+            loadNote(lastOpenedNoteId);
+        }
     }
 
     //********************************************************************************************
@@ -443,9 +462,11 @@ public class MainActivity  extends AppCompatActivity implements
                     } else {
                         Note<SpannableString> note = data.get();
                         Log.i(TAG, "Received note: " + note.getId());
+
+                        lastOpenedNoteId = note.getId();
+                        pluginData.setLastOpenedNote(note);
+
                         if (singleNotePresenter != null) {
-                            lastOpenedNoteId = note.getId();
-                            pluginData.setLastOpenedNote(note);
                             singleNotePresenter.receiveNote(note);
                         }
                     }
@@ -467,7 +488,9 @@ public class MainActivity  extends AppCompatActivity implements
                 public Loader<Iterable<Note<SpannableString>>> onCreateLoader(int id, Bundle args) {
                     return new NotesLoader(
                             getApplicationContext(),
-                            noteProvider);
+                            noteProvider,
+                            prefHolder.getSortIndex(),
+                            prefHolder.getOrderType());
                 }
 
                 @Override

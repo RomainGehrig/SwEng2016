@@ -20,28 +20,27 @@ import icynote.noteproviders.OrderType;
  */
 public class NotesLoader extends AsyncTaskLoader<Iterable<Note<SpannableString>>> {
     public static final int LOADER_ID = 1;
+    
+    private static final String ERROR_ADD_NOTE_DECORATOR_NULL = "addNoteDecorators is null";
+    
     private final NoteProvider<Note<SpannableString>> core;
     private Iterable<Note<SpannableString>> notes;
-    private OrderBy orderBy = OrderBy.CREATION;
-    private OrderType orderType = OrderType.DSC;
+    private OrderBy orderBy;
+    private OrderType orderType;
 
-    private static final String ERROR_ADD_NOTE_DECORATOR_NULL = "addNoteDecorators is null";
-
-    public NotesLoader(Context context, NoteProvider<Note<SpannableString>> core) {
+    
+    public NotesLoader(Context context,
+                       NoteProvider<Note<SpannableString>> core,
+                       OrderBy by,
+                       OrderType tpe) {
         super(context);
         if (core == null)
             throw new IllegalArgumentException(ERROR_ADD_NOTE_DECORATOR_NULL);
         this.core = core;
 
         Log.i("NotesLoader", "NotesLoader created");
-    }
-
-    public void setOrderBy(OrderBy newOrderBy) {
-        orderBy = newOrderBy;
-    }
-
-    public void setOrderType(OrderType newOrderType) {
-        orderType = newOrderType;
+        orderBy = by;
+        orderType = tpe;
     }
 
     @Override
