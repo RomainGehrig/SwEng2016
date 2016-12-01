@@ -253,7 +253,7 @@ public class MainActivity  extends AppCompatActivity implements
         if (requester != null) {
             if (r.isPositive()) {
                 trashedNotes.add(note);
-                if (lastOpenedNoteId == note.getId()) {
+                if (lastOpenedNoteId != null && lastOpenedNoteId == note.getId()) {
                     lastOpenedNoteId = null;
                     pluginData.setLastOpenedNote(null);
                 }
