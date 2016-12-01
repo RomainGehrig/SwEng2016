@@ -211,7 +211,7 @@ public class TrashedNotes extends Fragment
         }
     }
     private void numNotesChanged() {
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
+        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
         setPlaceholderText();
     }
 
