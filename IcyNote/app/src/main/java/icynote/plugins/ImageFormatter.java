@@ -78,6 +78,7 @@ class ImageFormatter implements FormatterPlugin {
         Button takePictureButton = new Button(a.getBaseContext());
         takePictureButton.setBackgroundResource(R.drawable.meta_photo);
         takePictureButton.setAlpha(0.5f);
+        takePictureButton.setContentDescription("make a new picture with the camera");
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +90,7 @@ class ImageFormatter implements FormatterPlugin {
         Button usePictureButton = new Button(a.getBaseContext());
         usePictureButton.setBackgroundResource(R.drawable.meta_gallery);
         usePictureButton.setAlpha(0.5f);
+        usePictureButton.setContentDescription("insert a picture from the gallery");
         usePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

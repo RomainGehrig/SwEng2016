@@ -1,8 +1,16 @@
 package icynote.plugins;
 
-/**
- * Created by r11 on 01.12.16.
- */
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class ImageFormatterTest {
+
+    ImageFormatter formatter = new ImageFormatter(1, 2);
+
+    @Test
+    public void getNameTest() {
+        assertEquals(formatter.getName(), "Image insertion Plugin");
+    }
+
+
 }
