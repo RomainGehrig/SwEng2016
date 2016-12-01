@@ -124,7 +124,7 @@ public class MainActivityTest {
         onView(withId(R.id.noteModificationDate)).check(matches(isDisplayed()));
     }
 
-    // TODO This test is correct, but fails, a bug needs to be fixed
+    // TODO These two test are correct, but fail, a bug needs to be fixed
     /*@Test
     public void findNoteUpdatesListCorrectlyTest() {
         onView(withId(R.id.menuButtonImage)).perform(click());
@@ -137,6 +137,18 @@ public class MainActivityTest {
         assertEquals(0, getNotesCount());
         onView(withId(R.id.searchBar)).perform(replaceText("note"));
         assertEquals(2, getNotesCount());
+    }
+
+    public void findNoteUpdatesListCorrectlyTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        addNote("note1", "body1");
+        assertEquals(1, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note1-"));
+        assertEquals(0, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note1"));
+        assertEquals(1, getNotesCount());
     }*/
 
     @Test
@@ -205,6 +217,21 @@ public class MainActivityTest {
         onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("body3")));
     }
 
+    @Test
+    public void titleModifiedInMetadatasAppearsInListTest()
+    {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        onView(withId(R.id.btAdd)).perform(click());
+        onView(withId(R.id.note_open_metadata)).perform(click());
+        onView(withId(R.id.noteTitle)).perform(replaceText("note1"));
+        onView(withId(R.id.backButton)).perform(click());
+        onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("note1")));
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        assertEquals(1, getNotesCount());
+    }
+
 
     private void addNote(String title, String body) {
         onView(withId(R.id.btAdd)).perform(click());
@@ -232,7 +259,7 @@ public class MainActivityTest {
         onView(withId(R.id.btDelete)).perform(click());
     }
 
-    public int getNotesCount()
+    private int getNotesCount()
     {
         final int[] counts = new int[1];
         onView(withId(R.id.lvNotes)).check(matches(new TypeSafeMatcher<View>() {
@@ -254,7 +281,7 @@ public class MainActivityTest {
         return counts[0];
     }
 
-    public class ToastMatcher extends TypeSafeMatcher<Root> {
+    private class ToastMatcher extends TypeSafeMatcher<Root> {
         @Override public void describeTo(Description description) {
             description.appendText("is toast");
         }
