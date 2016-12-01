@@ -31,6 +31,11 @@ public class MockEditNote extends BlankActivity implements EditNote.Contract {
     }
 
     @Override
+    public void updateSelection(int start, int end) {
+
+    }
+
+    @Override
     public void saveNote(Note<SpannableString> note, NotePresenterBase requester) {
         saveNote = true;
     }

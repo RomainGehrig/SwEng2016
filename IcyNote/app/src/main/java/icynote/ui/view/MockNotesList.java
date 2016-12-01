@@ -35,4 +35,9 @@ public class MockNotesList extends BlankActivity implements NotesList.Contract {
     public void openNote(int id, NoteOpenerBase requester) {
         openNote = true;
     }
+
+    @Override
+    public void reOpenLastOpenedNote(NoteOpenerBase requester) {
+
+    }
 }
