@@ -33,14 +33,43 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
 
     private Context context;
     private BucketClickedListener onClickListener;
-    private List<Bucket> lastListSetBySetNotesMethod = new ArrayList<>();
 
-    public static class Bucket {
-        public Note<SpannableString> note;
-        public boolean checked = false;
-        public boolean enabled = true;
+    /** used by the filter to retrieve the full list of notes */
+    private NotesBackup fullListBackup = new NotesBackup();
+
+    public class Bucket {
+        private Note<SpannableString> note;
+        private boolean checked = false;
+        private boolean enabled = true;
         public Bucket(Note<SpannableString> n) {
-            note = n;
+            setNote(n);
+        }
+
+        public Note<SpannableString> getNote() {
+            return note;
+        }
+
+        public void setNote(Note<SpannableString> note) {
+            this.note = note;
+            NotesAdapter.this.notifyDataSetChanged();
+        }
+
+        public boolean isChecked() {
+            return checked;
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+            NotesAdapter.this.notifyDataSetChanged();
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+            NotesAdapter.this.notifyDataSetChanged();
         }
     }
 
@@ -66,13 +95,7 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         if (bucket == null) {
             throw new Resources.NotFoundException("NotesAdapter: no item at position " + position);
         }
-        /*
-        Log.d(this.getClass().getSimpleName(),
-                "getItem(" + position + ")  -> " +
-                "Bucket (enabled=" + bucket.enabled + ", " +
-                "id=`" + bucket.note.getId() + "` " +
-                "title=`" + bucket.note.getTitle() + "`)");
-        */
+
         // Item Content: where the text (title/date/content) goes
         View itemContent = convertView.findViewById(R.id.item_content);
         itemContent.setTag(position);
@@ -81,7 +104,7 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
             public void onClick(View v) {
                 Log.i(NotesAdapter.class.getSimpleName(),
                         "item clicked :" +
-                                "\tnoteId is " + bucket.note.getId() + " ," +
+                                "\tnoteId is " + bucket.getNote().getId() + " ," +
                                 "\tposition is " + v.getTag() + "."
                 );
                 onClickListener.onClick(bucket);
@@ -89,30 +112,30 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         });
 
         // Enabled
-        if (!bucket.enabled) {
-            bucket.checked = false;
+        if (!bucket.isEnabled()) {
+            bucket.setChecked(false);
         }
-        itemContent.setEnabled(bucket.enabled);
-        itemContent.setClickable(bucket.enabled);
+        itemContent.setEnabled(bucket.isEnabled());
+        itemContent.setClickable(bucket.isEnabled());
 
         // Title
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        tvTitle.setText(bucket.note.getTitle());
+        tvTitle.setText(bucket.getNote().getTitle());
         tvTitle.setTag(position);
 
         // Checkbox
         CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox);
-        cb.setChecked(bucket.checked);
+        cb.setChecked(bucket.isChecked());
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                bucket.checked = isChecked;
+                bucket.setChecked(isChecked);
             }
         });
 
         // Date
         TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
-        GregorianCalendar tmpDate = bucket.note.getLastUpdate();
+        GregorianCalendar tmpDate = bucket.getNote().getLastUpdate();
         String date = "Last updated: "
                 + tmpDate.get(GregorianCalendar.DATE) + "/"
                 + tmpDate.get(GregorianCalendar.MONTH) + "/"
@@ -120,7 +143,7 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         tvDate.setText(date);
 
         // Content
-        SpannableString content = bucket.note.getContent();
+        SpannableString content = bucket.getNote().getContent();
         int maxLength = 50;
         String strContent = ((content.length() > maxLength)
                 ? content.subSequence(0, maxLength).toString() + "..."
@@ -132,49 +155,47 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         return convertView;
     }
 
-    public void add(Note<SpannableString> note) {
-        Bucket b = new Bucket(note);
-        super.add(b);
-    }
-
     public void setNotes(Iterable<Note<SpannableString>> notes) {
-        super.clear();
-        lastListSetBySetNotesMethod.clear();
+        clear();
+        fullListBackup.clear();
         for (Note<SpannableString> n : notes) {
-            Bucket current = new Bucket(n);
-            super.add(current);
-            lastListSetBySetNotesMethod.add(current);
+            Bucket newBucket = new Bucket(n);
+            add(newBucket);
+            fullListBackup.add(newBucket);
         }
     }
 
     public void setEnabled(boolean enabled, Note<SpannableString> note) {
         Bucket toEnable = find(note);
         if (toEnable == null) {
-            Log.e(TAG, "unable to " + (enabled ? "enable" : "disable")
+            Log.e(TAG, "unable to find for " + (enabled ? "enabling" : "disabling.")
                     + " null bucket for id: " + note.getId());
         } else {
-            toEnable.enabled = enabled;
+            toEnable.setEnabled(enabled);
             super.notifyDataSetChanged();
         }
     }
 
     public void deleteNote(Note<SpannableString> note) {
-        Bucket toDelete = find(note);
-        super.remove(toDelete);
+        Bucket b = find(note);
+        if (b != null) {
+            remove(b);
+            fullListBackup.remove(b);
+            notifyDataSetChanged();
+        }
     }
 
     private Bucket find(Note<SpannableString> note) {
         for (int i = 0; i < super.getCount(); ++i) {
             Bucket b = super.getItem(i);
-            if (b.note.getId() == note.getId()) {
+            if (b.getNote().getId() == note.getId()) {
                 return b;
             }
         }
         return null;
     }
+
     //filter
-
-
     @NonNull
     @Override
     public Filter getFilter() {
@@ -188,20 +209,27 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
             FilterResults result = new FilterResults();
 
             if (chars == null ||chars.length() == 0)  {
-                Log.d(this.getClass().getSimpleName(), "filtering not needed");
-                result.count = lastListSetBySetNotesMethod.size();
-                result.values = lastListSetBySetNotesMethod;
+                /*
+                Log.d(NotesAdapter.class.getSimpleName(),
+                        "filtering not needed"+
+                                "actual adapter size " + getCount() +
+                                "backup size " + fullListBackup.getData().size());
+                                */
+                result.count = fullListBackup.size();
+                result.values = fullListBackup.getData();
                 return result;
             }
-
-            Log.d(this.getClass().getSimpleName(), "filtering in progress");
+            /*
+            Log.d(NotesAdapter.class.getSimpleName(),
+                    "filtering in progress " +
+                    "actual adapter size " + getCount() +
+                    "backup size " + fullListBackup.getData().size());
+            */
 
             String filterSeq = chars.toString().toLowerCase();
             ArrayList<Bucket> filtered = new ArrayList<>();
 
-            for (int i = 0; i < getCount(); ++i) {
-                Bucket bucket = getItem(i);
-
+            for (Bucket bucket : fullListBackup.getData()) {
                 if (titleContainsFilter(bucket, filterSeq)
                         || contentContainsFilter(bucket, filterSeq))
                 {
@@ -215,14 +243,14 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         }
 
         boolean titleContainsFilter(Bucket bucket, String filterSeq) {
-            return bucket.note
+            return bucket.getNote()
                     .getTitle()
                     .toString()
                     .toLowerCase()
                     .contains(filterSeq);
         }
         boolean contentContainsFilter(Bucket bucket, String filterSeq) {
-            return bucket.note.getContent()
+            return bucket.getNote().getContent()
                     .toString()
                     .toLowerCase()
                     .contains(filterSeq);
@@ -232,11 +260,44 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
             // NOTE: this function is *always* called from the UI thread.
-            Log.d(this.getClass().getSimpleName(), "publishingResults");
-            clear();
+            NotesAdapter.super.clear(); //super needed to not clear the backup
             addAll((List<Bucket>)results.values);
-
+            //Log.d(NotesAdapter.class.getSimpleName(), "publishingResults "
+            //+ " actual adapter size " + getCount() +
+            //" backup size " + fullListBackup.getData().size());
             notifyDataSetChanged();
         }
     };
+
+    private static class NotesBackup {
+        private ArrayList<Bucket> backupData = new ArrayList<>();
+
+        public void add(Bucket b) {
+            //Log.i(NotesAdapter.class.getSimpleName(), "add note " + b.getNote().getId() + " to backup");
+            backupData.add(b);
+        }
+
+        public void remove(Bucket b) {
+            //Log.i(NotesAdapter.class.getSimpleName(),
+            //        "remove note "
+            //        + b.getNote().getId()
+            //        + "from backup");
+            backupData.remove(b);
+        }
+
+        public void clear() {
+            //Log.i(NotesAdapter.class.getSimpleName(), "clear backup");
+            backupData.clear();
+        }
+
+        public int size() {
+            //Log.i(NotesAdapter.class.getSimpleName(), "get size of backup " + backupData.size());
+            return backupData.size();
+        }
+
+        public ArrayList<Bucket> getData() {
+            //Log.i(NotesAdapter.class.getSimpleName(), "duplicate backup");
+            return new ArrayList<>(backupData);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package icynote.ui.fragments;
 
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -124,7 +125,6 @@ public class NotesList extends Fragment
     public void onNoteDeletionSuccess(Note<SpannableString> note) {
         log("note deleted: " + note.getId());
         notesAdapter.deleteNote(note);
-        numNotesChanged();
     }
 
     //-------------------------------------------------------------------------------------
@@ -140,8 +140,8 @@ public class NotesList extends Fragment
             Hence, it can happen that : (getView() == null) but (viewHolder != null).
              */
             log("not enabling view"
-            + ((getView() == null) ? " getView is null" : "")
-            + ((notesAdapter == null) ? " notesAdapter is null" : "" ));
+                    + ((getView() == null) ? " getView is null" : "")
+                    + ((notesAdapter == null) ? " notesAdapter is null" : "" ));
             return;
         }
         log("enabling view");
@@ -197,7 +197,7 @@ public class NotesList extends Fragment
     }
     private void userFilteredNotesListener() {
         if (notesAdapter != null) {
-            Log.d(LOG_TAG, "filtering list: " + viewHolder.getSearchBar().getText());
+            //Log.d(LOG_TAG, "filtering list: " + viewHolder.getSearchBar().getText());
             notesAdapter.getFilter().filter(viewHolder.getSearchBar().getText());
         }
     }
@@ -210,20 +210,15 @@ public class NotesList extends Fragment
         //first make a copy to avoid concurrency issues
         for (int i = 0; i < notesAdapter.getCount(); ++i) {
             NotesAdapter.Bucket bucket = notesAdapter.getItem(i);
-            if (bucket != null && bucket.checked) {
-                bucket.enabled = false;
-                toDelete.add(bucket.note);
+            if (bucket != null && bucket.isChecked()) {
+                bucket.setEnabled(false);
+                toDelete.add(bucket.getNote());
             }
         }
-        notesAdapter.notifyDataSetChanged();
 
         for (Note<SpannableString> n : toDelete) {
             contractor.deleteNote(n, this);
         }
-    }
-    private void numNotesChanged() {
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
-        setPlaceholderText();
     }
 
     private NotesAdapter getOrCreateAdapter() {
@@ -233,12 +228,23 @@ public class NotesList extends Fragment
                     new NotesAdapter.BucketClickedListener() {
                         @Override
                         public void onClick(NotesAdapter.Bucket b) {
-                            contractor.openNote(b.note.getId(), NotesList.this);
+                            contractor.openNote(b.getNote().getId(), NotesList.this);
                         }
                     });
         }
+        notesAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                numNotesChanged();
+            }
+        });
         return notesAdapter;
     }
+    private void numNotesChanged() {
+        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
+        setPlaceholderText();
+    }
+
     private void log(String msg) {
         Log.d(this.getClass().getSimpleName(), msg);
     }

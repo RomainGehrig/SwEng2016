@@ -135,8 +135,8 @@ public class TrashedNotes extends Fragment
             Hence, it can happen that : (getView() == null) but (viewHolder != null).
              */
             log("not enabling view"
-            + ((getView() == null) ? " getView is null" : "")
-            + ((notesAdapter == null) ? " notesAdapter is null" : "" ));
+                    + ((getView() == null) ? " getView is null" : "")
+                    + ((notesAdapter == null) ? " notesAdapter is null" : "" ));
             return;
         }
         log("enabling view");
@@ -199,9 +199,9 @@ public class TrashedNotes extends Fragment
         //first make a copy to avoid concurrency issues
         for (int i = 0; i < notesAdapter.getCount(); ++i) {
             NotesAdapter.Bucket bucket = notesAdapter.getItem(i);
-            if (bucket != null && bucket.checked) {
-                bucket.enabled = false;
-                toDelete.add(bucket.note);
+            if (bucket != null && bucket.isChecked()) {
+                bucket.setEnabled(false);
+                toDelete.add(bucket.getNote());
             }
         }
         notesAdapter.notifyDataSetChanged();
@@ -211,7 +211,7 @@ public class TrashedNotes extends Fragment
         }
     }
     private void numNotesChanged() {
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
+        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
         setPlaceholderText();
     }
 
@@ -222,7 +222,7 @@ public class TrashedNotes extends Fragment
                     new NotesAdapter.BucketClickedListener() {
                         @Override
                         public void onClick(NotesAdapter.Bucket b) {
-                            b.checked = !b.checked;
+                            b.setChecked(!b.isChecked());
                             notesAdapter.notifyDataSetChanged();
                         }
                     });
