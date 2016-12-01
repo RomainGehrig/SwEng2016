@@ -18,6 +18,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -124,9 +125,21 @@ public class MainActivityTest {
         onView(withId(R.id.noteModificationDate)).check(matches(isDisplayed()));
     }
 
-    // TODO These two test are correct, but fail, a bug needs to be fixed
-    /*@Test
-    public void findNoteUpdatesListCorrectlyTest() {
+    @Test
+    public void findNoteWithOneNoteTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        addNote("note1", "body1");
+        assertEquals(1, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note1-"));
+        assertEquals(0, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note1"));
+        assertEquals(1, getNotesCount());
+    }
+
+    @Test
+    public void findNoteWithDeleteTest() {
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
         deleteAllNotes();
@@ -138,18 +151,6 @@ public class MainActivityTest {
         onView(withId(R.id.searchBar)).perform(replaceText("note"));
         assertEquals(2, getNotesCount());
     }
-
-    public void findNoteUpdatesListCorrectlyTest() {
-        onView(withId(R.id.menuButtonImage)).perform(click());
-        onView(withText(R.string.listAllNotes)).perform(click());
-        deleteAllNotes();
-        addNote("note1", "body1");
-        assertEquals(1, getNotesCount());
-        onView(withId(R.id.searchBar)).perform(replaceText("note1-"));
-        assertEquals(0, getNotesCount());
-        onView(withId(R.id.searchBar)).perform(replaceText("note1"));
-        assertEquals(1, getNotesCount());
-    }*/
 
     @Test
     public void deletionTest()
@@ -222,6 +223,7 @@ public class MainActivityTest {
     {
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
         onView(withId(R.id.btAdd)).perform(click());
         onView(withId(R.id.note_open_metadata)).perform(click());
         onView(withId(R.id.noteTitle)).perform(replaceText("note1"));
@@ -232,6 +234,156 @@ public class MainActivityTest {
         assertEquals(1, getNotesCount());
     }
 
+    @Test
+    public void titleModifiedInEditNoteAppearsInMetadata()
+    {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        onView(withId(R.id.btAdd)).perform(click());
+        onView(withId(R.id.noteDisplayTitleText)).perform(replaceText("note1"));
+
+        onView(withId(R.id.note_open_metadata)).perform(click());
+        onView(withId(R.id.noteTitle)).check(matches(withText("note1")));
+        onView(withId(R.id.backButton)).perform(click());
+        onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("note1")));
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        assertEquals(1, getNotesCount());
+    }
+
+    //---- Tests for the trash ------
+
+    @Test
+    public void findNoteWithOneNoteTrashTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        addNote("note1", "body1");
+        deleteNote(0);
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(1, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note1-"));
+        assertEquals(0, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note1"));
+        assertEquals(1, getNotesCount());
+    }
+
+    @Test
+    public void findNoteWithDeleteTrashTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        addNote("note1", "body1");
+        addNote("note2", "body2");
+        deleteNote(0);
+        deleteNote(0);
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(2, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note3"));
+        assertEquals(0, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note"));
+        assertEquals(2, getNotesCount());
+    }
+
+    @Test
+    public void deletingANoteAddItToTheTrashTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(0, getNotesCount());
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        addNote("note1", "body1");
+        deleteNote(0);
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(1, getNotesCount());
+    }
+
+    @Test
+    public void deletingThreeNotesAddThemToTheTrashTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(0, getNotesCount());
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        addNote("note1", "body1");
+        addNote("note2", "body2");
+        addNote("note3", "body3");
+        deleteNote(0);
+        deleteNote(0);
+        deleteNote(0);
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(3, getNotesCount());
+    }
+
+    @Test
+    public void restoringANoteTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        int numberOfNotes = getNotesCount();
+        addNote("note1", "body1");
+        assertEquals(1 + numberOfNotes, getNotesCount());
+        deleteNote(0);
+        assertEquals(0, numberOfNotes);
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(1, getNotesCount());
+        restoreNote(0);
+        assertEquals(0, getNotesCount());
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        assertEquals(1 + numberOfNotes, getNotesCount());
+    }
+
+    @Test
+    public void restoringThreeNotesTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        int numberOfNotes = getNotesCount();
+        addNote("note1", "body1");
+        addNote("note2", "body2");
+        addNote("note3", "body3");
+        assertEquals(3+numberOfNotes, getNotesCount());
+        deleteNote(0);
+        deleteNote(0);
+        deleteNote(0);
+        assertEquals(numberOfNotes, getNotesCount());
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.trash)).perform(click());
+        assertEquals(3, getNotesCount());
+        onData(anything()).inAdapterView(withId(R.id.lvNotes))
+                .atPosition(0)
+                .onChildView(withId(R.id.checkBox))
+                .perform(click());
+        onData(anything()).inAdapterView(withId(R.id.lvNotes))
+                .atPosition(1)
+                .onChildView(withId(R.id.checkBox))
+                .perform(click());
+        onData(anything()).inAdapterView(withId(R.id.lvNotes))
+                .atPosition(2)
+                .onChildView(withId(R.id.checkBox))
+                .perform(click());
+        onView(withId(R.id.btRestore)).perform(click());
+        assertEquals(0, getNotesCount());
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        assertEquals(3+numberOfNotes, getNotesCount());
+    }
+
+
+    //---- Helper methods -----------
 
     private void addNote(String title, String body) {
         onView(withId(R.id.btAdd)).perform(click());
@@ -247,6 +399,14 @@ public class MainActivityTest {
                 .onChildView(withId(R.id.checkBox))
                 .perform(click());
         onView(withId(R.id.btDelete)).perform(click());
+    }
+
+    private void restoreNote(int indexNote) {
+        onData(anything()).inAdapterView(withId(R.id.lvNotes))
+                .atPosition(indexNote)
+                .onChildView(withId(R.id.checkBox))
+                .perform(click());
+        onView(withId(R.id.btRestore)).perform(click());
     }
 
     private void deleteAllNotes() {
