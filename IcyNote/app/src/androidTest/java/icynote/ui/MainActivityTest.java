@@ -1,17 +1,25 @@
 package icynote.ui;
 
 import android.support.test.rule.ActivityTestRule;
+import android.view.View;
+import android.widget.ListView;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.Matchers.anything;
 
 public class MainActivityTest {
 
@@ -109,4 +117,58 @@ public class MainActivityTest {
         onView(withId(R.id.noteModificationDate)).check(matches(isDisplayed()));
     }
 
+    // TODO This test is correct, but fails, a bug needs to be fixed
+    /*@Test
+    public void findNoteUpdatesListCorrectlyTest() {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        addNote("note1", "body1");
+        addNote("note2", "body2");
+        assertEquals(2, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note3"));
+        assertEquals(0, getNotesCount());
+        onView(withId(R.id.searchBar)).perform(replaceText("note"));
+        assertEquals(2, getNotesCount());
+    }*/
+
+    private void addNote(String title, String body) {
+        onView(withId(R.id.btAdd)).perform(click());
+        onView(withId(R.id.noteDisplayTitleText)).perform(replaceText(title));
+        onView(withId(R.id.noteDisplayBodyText)).perform(replaceText(body));
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+    }
+
+    private void deleteAllNotes() {
+        for (int i = 0 ; i < getNotesCount() ; ++i) {
+            onData(anything()).inAdapterView(withId(R.id.lvNotes))
+                    .atPosition(i)
+                    .onChildView(withId(R.id.checkBox))
+                    .perform(click());
+        }
+        onView(withId(R.id.btDelete)).perform(click());
+    }
+
+    public int getNotesCount()
+    {
+        final int[] counts = new int[1];
+        onView(withId(R.id.lvNotes)).check(matches(new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(View view) {
+                ListView listView = (ListView) view;
+
+                counts[0] = listView.getCount();
+
+                return true;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        }));
+
+        return counts[0];
+    }
 }
