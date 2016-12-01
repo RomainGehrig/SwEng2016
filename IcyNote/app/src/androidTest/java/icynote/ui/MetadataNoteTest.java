@@ -2,26 +2,21 @@ package icynote.ui;
 
 import android.support.test.rule.ActivityTestRule;
 import android.text.SpannableString;
-import android.view.View;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CountDownLatch;
 
 import icynote.note.Note;
 import icynote.note.impl.NoteData2;
-import icynote.plugins.FormatterPlugin;
-import icynote.plugins.PluginsProvider;
 import icynote.ui.fragments.MetadataNote;
 import icynote.ui.view.MockMetadataNote;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -90,7 +85,7 @@ public class MetadataNoteTest {
     @Test
     public void saveNoteWhenTypingTitleTest() throws InterruptedException {
         enableFragment();
-        onView(withId(R.id.noteTitle)).perform(typeText("a new title"));
+        onView(withId(R.id.noteTitle)).perform(replaceText("a new title"));
         assertTrue(mActivity.saveNote);
     }
 
