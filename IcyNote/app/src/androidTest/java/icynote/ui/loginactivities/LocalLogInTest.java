@@ -1,15 +1,19 @@
 package icynote.ui.loginactivities;
 
+import android.os.IBinder;
 import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.Root;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
+import android.view.WindowManager;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import icynote.ui.R;
-import icynote.ui.loginactivities.LoginMenu;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -90,9 +94,11 @@ public class LocalLogInTest {
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_sign_in_button)).perform(click());
-
+        Thread.sleep(1000);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
+        onView(withText("The email address is badly formatted.")).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
     }
 
 
@@ -101,9 +107,11 @@ public class LocalLogInTest {
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_sign_in_button)).perform(click());
-
+        Thread.sleep(1000);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
+        onView(withText("The password is invalid or the user does not have a password.")).inRoot(new ToastMatcher())
+                .check(matches(isDisplayed()));
     }
 
 
@@ -115,6 +123,25 @@ public class LocalLogInTest {
         }
         catch (NoMatchingViewException e) {
             // was already logged out
+        }
+    }
+
+    private class ToastMatcher extends TypeSafeMatcher<Root> {
+        @Override public void describeTo(Description description) {
+            description.appendText("is toast");
+        }
+
+        @Override public boolean matchesSafely(Root root) {
+            int type = root.getWindowLayoutParams().get().type;
+            if ((type == WindowManager.LayoutParams.TYPE_TOAST)) {
+                IBinder windowToken = root.getDecorView().getWindowToken();
+                IBinder appToken = root.getDecorView().getApplicationWindowToken();
+                if (windowToken == appToken) {
+                    //means this window isn't contained by any other windows.
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
