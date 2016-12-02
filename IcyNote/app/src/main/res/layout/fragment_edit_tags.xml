@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="NOT IMPLEMENTED YET" />
+        android:text="@string/edit_tags_not_implemented_yet" />
 
     <include layout="@layout/menu_button"/>
 

@@ -58,7 +58,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
             } else {
                 // Note: the onLoginSuccess callback will be notified. It handles the transition
                 //       to the next activity.
-                Toast.makeText(EmailPasswordLogin.this, "local sign in success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmailPasswordLogin.this, R.string.sucess_email_password_login_local_sign_in, Toast.LENGTH_SHORT).show();
             }
 
             hideProgressDialog();
@@ -69,7 +69,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
         log("createAccount:" + email);
         if (validateForm()) {
             showProgressDialog();
-            mLoginManager.createAccount(email, password, new SignInCallback("createUserWithEmail"));
+            mLoginManager.createAccount(email, password, new SignInCallback(getString(R.string.email_password_login_create_user_email)));
         }
     }
 
@@ -77,7 +77,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
         log("signIn:" + email);
         if (validateForm()) {
             showProgressDialog();
-            mLoginManager.login(email, password, new SignInCallback("signInWithEmail"));
+            mLoginManager.login(email, password, new SignInCallback(getString(R.string.email_password_login_sign_in_email)));
         }
     }
 
@@ -86,7 +86,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
 
         String email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Required.");
+            mEmailField.setError(getString(R.string.error_email_password_login_email__required));
             valid = false;
         } else {
             mEmailField.setError(null);
@@ -94,7 +94,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
 
         String password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+            mPasswordField.setError(getString(R.string.error_email_password_login_password_required));
             valid = false;
         } else {
             mPasswordField.setError(null);

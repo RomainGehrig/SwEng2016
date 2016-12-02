@@ -117,7 +117,7 @@ public class EditNote extends Fragment implements NotePresenter {
         try {
             activity = (EditNote.Contract) getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() + " has to implement EditNote.Contract.");
+            throw new ClassCastException(String.format(getString(R.string.error_edit_note_edit_note_contract_not_implemented), getActivity().toString()));
         }
         setupNoteView();
     }

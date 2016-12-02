@@ -93,7 +93,7 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
 
         final Bucket bucket = getItem(position);
         if (bucket == null) {
-            throw new Resources.NotFoundException("NotesAdapter: no item at position " + position);
+            throw new Resources.NotFoundException(context.getString(R.string.error_notes_adapter_no_item_found) + position);
         }
 
         // Item Content: where the text (title/date/content) goes
@@ -136,7 +136,7 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         // Date
         TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
         GregorianCalendar tmpDate = bucket.getNote().getLastUpdate();
-        String date = "Last updated: "
+        String date = context.getString(R.string.notes_adapter_date)
                 + tmpDate.get(GregorianCalendar.DATE) + "/"
                 + tmpDate.get(GregorianCalendar.MONTH) + "/"
                 + tmpDate.get(GregorianCalendar.YEAR);

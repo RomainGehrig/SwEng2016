@@ -35,7 +35,7 @@
                 android:id="@+id/searchBar"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:hint="Loading..."
+                android:hint="@string/loading"
                 android:visibility="visible"
                 android:enabled="false"
                 android:imeOptions="actionDone"/>
@@ -46,7 +46,7 @@
             android:id="@+id/emptyText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="You don't have any trashed note."
+            android:text="@string/trashed_note_empty_text"
             android:gravity="center"
             android:layout_weight="1"
             android:visibility="gone"/>
@@ -69,14 +69,14 @@
 
             <TextView
                 android:id="@+id/tvNumNotes"
-                android:text="Loading..."
+                android:text="@string/loading"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"/>
 
             <Button
-                android:text="Restore selected"
+                android:text="@string/trashed_note_restore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btRestore"

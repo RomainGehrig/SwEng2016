@@ -9,17 +9,15 @@
     android:paddingTop="@dimen/activity_vertical_margin">
     
     <Button
-        android:text="Local Sign In"
+        android:text="@string/activity_chooser_local_sign_in"
         android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:id="@+id/local_sign_in_button"
         android:onClick="localSignIn"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:theme="@style/ThemeOverlay.MyDarkButton" />
+        android:layout_centerHorizontal="true" />
 
     <ImageView
-        style="@style/ThemeOverlay.IcynoteIcon"
         android:id="@+id/google_icon"
         android:contentDescription="@string/desc_icynote_lockup"
         android:src="@drawable/icynote_lockup_400"
@@ -30,13 +28,12 @@
         android:layout_marginBottom="36dp" />
 
     <Button
-        android:text="Google Sign In"
+        android:text="@string/activity_chooser_google_sign_in"
         android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:id="@+id/googe_sign_in_button"
         android:onClick="googleSignIn"
         android:layout_below="@+id/local_sign_in_button"
-        android:layout_centerHorizontal="true"
-        android:theme="@style/ThemeOverlay.MyDarkButton" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

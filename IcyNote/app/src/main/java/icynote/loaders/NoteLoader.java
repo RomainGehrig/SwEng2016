@@ -23,10 +23,12 @@ public class NoteLoader extends AsyncTaskLoader<Optional<Note<SpannableString>>>
     private final NoteProvider<Note<SpannableString>> core;
     private Optional<Integer> noteId;
 
+    private static final String ERROR_ADD_NOTE_DECORATOR_NULL = "addNoteDecorators is null";
+
     public NoteLoader(Context context, NoteProvider<Note<SpannableString>> core, Optional<Integer> noteId) {
         super(context);
         if (core == null)
-            throw new IllegalArgumentException("addNoteDecorators is null");
+            throw new IllegalArgumentException(ERROR_ADD_NOTE_DECORATOR_NULL);
         this.core = requireNonNull(core);
         this.noteId = requireNonNull(noteId);
     }

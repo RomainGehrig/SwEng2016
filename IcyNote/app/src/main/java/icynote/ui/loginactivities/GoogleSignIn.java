@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
+import icynote.ui.R;
 import util.Callback2;
 
 public class GoogleSignIn extends GoogleClient {
@@ -41,14 +42,14 @@ public class GoogleSignIn extends GoogleClient {
             public void execute(Boolean success, String errorMessage) {
                 if (!success) {
                     if (errorMessage == null || errorMessage.equals("")) {
-                        errorMessage = "Google Sign In cancelled";
+                        errorMessage = getString(R.string.error_google_sign_in);
                     }
                     Toast.makeText(GoogleSignIn.this, errorMessage, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(GoogleSignIn.this, LoginMenu.class));
                 } else {
                     // Note: the onLoginSuccess callback will be notified. It handles the transition
                     //       to the next activity.
-                    Toast.makeText(GoogleSignIn.this, "Google Sign In success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GoogleSignIn.this, R.string.sucess_google_sign_in, Toast.LENGTH_SHORT).show();
                 }
             }
         };

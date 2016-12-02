@@ -50,7 +50,7 @@ public class LoginMenu extends AppCompatActivity {
             loginManager.onLogout(SignOut.getSignOutCallback(LoginMenu.this));
 
             Intent intent = new Intent(LoginMenu.this, MainActivity.class);
-            intent.putExtra("userUID", uuid);
+            intent.putExtra(getString(R.string.extra_user_uid), uuid);
             startActivity(intent);
         }
     }

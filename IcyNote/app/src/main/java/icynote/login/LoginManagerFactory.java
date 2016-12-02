@@ -9,6 +9,9 @@ import android.support.annotation.VisibleForTesting;
 public final class LoginManagerFactory {
     private static  LoginManager instance = new LoginManager();
 
+    private final static String ERROR_LOGIN_MANAGER_NULL = "LoginManager can't be null";
+    private final static String ERROR_LOGIN_MANAGER_FACTORY_UTILITY_CLASS = "LoginManagerFactory is an utility class";
+
     /**
      * Returns the current instance of the LoginManager.
      */
@@ -22,7 +25,7 @@ public final class LoginManagerFactory {
      */
     public static void setInstance(LoginManager otherInstance) {
         if (otherInstance == null) {
-            throw new IllegalArgumentException("LoginManager can't be null");
+            throw new IllegalArgumentException(ERROR_LOGIN_MANAGER_NULL);
         }
         instance = otherInstance;
     }
@@ -34,6 +37,6 @@ public final class LoginManagerFactory {
      */
     @VisibleForTesting
     LoginManagerFactory() {
-        throw new AssertionError("LoginManagerFactory is an utility class");
+        throw new AssertionError(ERROR_LOGIN_MANAGER_FACTORY_UTILITY_CLASS);
     }
 }

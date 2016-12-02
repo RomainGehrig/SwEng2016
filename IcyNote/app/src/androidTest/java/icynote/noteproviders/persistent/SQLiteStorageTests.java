@@ -26,7 +26,7 @@ public class SQLiteStorageTests extends StorageTests<String, Note<String>> {
     protected NoteProvider<Note<String>> makeNewWith(Note<String> n1, Note<String> n2, Note<String> n3) {
         instance.deleteUser(testUser);
         for( Note<String> n : new Note[]{n1, n2, n3}){
-            Note<String> c = instance.createNote().get();
+            Note<String> c = instance.createNoteData().get();
             n.setId(c.getId());
             instance.persist(n);
         }

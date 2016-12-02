@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import icynote.note.Note;
+import icynote.ui.R;
 import icynote.ui.contracts.NoteOptionsPresenter;
 import icynote.ui.view.MetadataNoteViewHolder;
 
@@ -151,14 +152,14 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
 
         // set dates
         viewHolder.getDateCreatedTextView()
-                .setText(dateToString(note.getCreation(), "Date Created:  "));
+                .setText(dateToString(note.getCreation(), getString(R.string.metadata_note_date_created)));
 
         viewHolder.getDateModifiedTextView()
-                .setText(dateToString(note.getLastUpdate(), "Date Modified:  "));
+                .setText(dateToString(note.getLastUpdate(), getString(R.string.metadata_note_date_modified)));
     }
 
     private String dateToString(GregorianCalendar date, String description) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy  'at'  HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.metadata_note_date_format));
         return description + dateFormat.format(date.getTime());
     }
 

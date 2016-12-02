@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 
+import icynote.ui.R;
 import util.Callback;
 
 
@@ -24,7 +25,7 @@ public class SignOut extends GoogleClient {
         Auth.GoogleSignInApi.signOut(apiClient());
         loginManager().onLogout(null);
 
-        Toast.makeText(this, "Account closed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.sign_out_account_closed, Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(this, LoginMenu.class);
         startActivity(intent);

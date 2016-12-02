@@ -145,8 +145,9 @@ public class TrashedNotes extends Fragment
         notesReceived = null; //not needed anymore.
 
         viewHolder.enableAll();
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
-        viewHolder.getSearchBar().setHint("Enter text to find");
+        viewHolder.getTvNumNotes().setText(getResources().getQuantityString(R.plurals.trashed_note_tv_num_note,
+                notesAdapter.getCount(), notesAdapter.getCount()));;
+        viewHolder.getSearchBar().setHint(R.string.trashed_note_search_bar_hint);
         viewHolder.getListView().setAdapter(null); //reset
         viewHolder.getListView().setAdapter(notesAdapter);
         setPlaceholderText();
@@ -211,7 +212,8 @@ public class TrashedNotes extends Fragment
         }
     }
     private void numNotesChanged() {
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + "notes");
+        viewHolder.getTvNumNotes().setText(getResources().getQuantityString(R.plurals.trashed_note_tv_num_note,
+                notesAdapter.getCount(), notesAdapter.getCount()));
         setPlaceholderText();
     }
 

@@ -54,8 +54,7 @@ public class GoogleClient extends ActivityWithProgressDialog
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this,
-                "Google Play Services error: unable to connect. "
-                + connectionResult.getErrorMessage(),
+                String.format(getString(R.string.error_google_client_unable_to_connect), connectionResult.getErrorMessage()),
                 Toast.LENGTH_LONG)
                 .show();
         finish();

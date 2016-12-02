@@ -3,20 +3,33 @@ package icynote.plugins;
 import java.util.ArrayList;
 
 public class PluginsProvider {
-    public Iterable<FormatterPlugin> getFormatters() {
-        ArrayList<FormatterPlugin> formatters = new ArrayList<>();
+    private static PluginsProvider instance = null;
+    ArrayList<FormatterPlugin> formatters;
+    ArrayList<Plugin> plugins;
+
+    private PluginsProvider() {
+        formatters = new ArrayList<>();
         formatters.add(new ImageFormatter(1, 2));
+
+        plugins = new ArrayList<>();
+        for(FormatterPlugin fp : formatters) {
+            plugins.add(fp);
+        }
+
+    }
+
+    public static PluginsProvider getInstance() {
+        if  (instance == null) {
+            instance = new PluginsProvider();
+        }
+        return instance;
+    }
+
+    public Iterable<FormatterPlugin> getFormatters() {
         return formatters;
     }
 
     public Iterable<Plugin> getPlugins() {
-        //todo cleanup
-
-        Iterable<FormatterPlugin> f = getFormatters();
-        ArrayList<Plugin> p = new ArrayList<>();
-        for(FormatterPlugin fp : f) {
-            p.add(fp);
-        }
-        return p;
+        return plugins;
     }
 }

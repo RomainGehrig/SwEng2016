@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
+import icynote.ui.R;
 import util.Callback2;
 
 public class GoogleLinkCredentials extends GoogleSignIn {
@@ -16,9 +17,9 @@ public class GoogleLinkCredentials extends GoogleSignIn {
             public void execute(Boolean success, String errorMessage) {
                 Intent data = new Intent();
                 if (!success) {
-                    data.putExtra("googleLink.message", errorMessage);
+                    data.putExtra(getString(R.string.extra_google_link_message), errorMessage);
                 } else {
-                    data.putExtra("googleLink.message", "Success");
+                    data.putExtra(getString(R.string.extra_google_link_message), getString(R.string.sucess_google_link_credentials_put_extra));
                 }
                 setResult(RESULT_OK, data);
                 finish();

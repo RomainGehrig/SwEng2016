@@ -29,10 +29,10 @@ import util.Callback2;
  *
  */
 public class LoginManager {
-
+    private static final String ERROR_NOT_LOGGED_IN = "a user must be logged in before accessing the addNoteDecorators";
     public static class NotLoggedInException extends RuntimeException {
         public NotLoggedInException() {
-            super("a user must be logged in before accessing the addNoteDecorators");
+            super(ERROR_NOT_LOGGED_IN);
         }
     }
 

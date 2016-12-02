@@ -146,8 +146,9 @@ public class NotesList extends Fragment
         }
         log("enabling view");
         viewHolder.enableAll();
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
-        viewHolder.getSearchBar().setHint("Enter text to find");
+        viewHolder.getTvNumNotes().setText(getResources().getQuantityString(R.plurals.notes_list_tv_num_note,
+                notesAdapter.getCount(), notesAdapter.getCount()));
+        viewHolder.getSearchBar().setHint(R.string.notes_list_search_bar_hint);
         viewHolder.getListView().setAdapter(null); //reset
         viewHolder.getListView().setAdapter(notesAdapter);
         setPlaceholderText();
@@ -241,8 +242,9 @@ public class NotesList extends Fragment
         return notesAdapter;
     }
     private void numNotesChanged() {
-        viewHolder.getTvNumNotes().setText(notesAdapter.getCount() + " notes");
-        setPlaceholderText();
+        String count = getResources().getQuantityString(R.plurals.notes_list_tv_num_note,
+                notesAdapter.getCount(), notesAdapter.getCount());
+        viewHolder.getTvNumNotes().setText(count);
     }
 
     private void log(String msg) {

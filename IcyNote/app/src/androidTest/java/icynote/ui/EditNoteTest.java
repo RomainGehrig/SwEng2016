@@ -64,7 +64,6 @@ public class EditNoteTest {
         latch.await();
     }
 
-
     @Test
     public void receiveNoteTest() throws InterruptedException {
         enableFragment();
