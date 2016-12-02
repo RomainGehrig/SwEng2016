@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/menu">
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/menuGroup">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/menuAllNotes"
             android:icon="@drawable/drawer_list"
@@ -17,25 +16,21 @@
             android:title="@string/openLastNote"
             android:onClick="openLastOpenedNote"/>
         <item
-            android:id="@+id/menuTagEdition"
             android:icon="@drawable/drawer_tags"
             android:alpha="0.5"
             android:title="@string/editTags"
             android:onClick="openListOfTags"/>
         <item
-            android:id="@+id/menuTrash"
             android:icon="@drawable/drawer_delete"
             android:alpha="0.5"
             android:title="@string/trash"
             android:onClick="openListOfTrashedNotes"/>
         <item
-            android:id="@+id/menuSettings"
             android:icon="@drawable/drawer_settings"
             android:alpha="0.5"
             android:title="@string/settings"
             android:onClick="openSettings"/>
         <item
-            android:id="@+id/menuLogout"
             android:icon="@drawable/drawer_logout"
             android:alpha="0.5"
             android:title="@string/logout"

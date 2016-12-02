@@ -19,12 +19,12 @@ import static junit.framework.Assert.assertNotNull;
 public class ConstIDInteractorTests extends NoteTests {
     @Override
     protected Note<String> makeData() {
-        return new NoteData<String>("", "");
+        return new NoteData<>("", "");
     }
 
     @Override
     protected Note<String> addInteractor(Note<String> data) {
-        return new NullInput<String>(new ConstId<String>(data));
+        return new NullInput<>(new ConstId<>(data));
     }
 
     @Override

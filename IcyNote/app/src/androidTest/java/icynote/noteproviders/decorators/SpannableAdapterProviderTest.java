@@ -1,16 +1,5 @@
 package icynote.noteproviders.decorators;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import icynote.note.Note;
-import icynote.note.impl.NoteData;
-import icynote.noteproviders.NoteProvider;
-import icynote.noteproviders.persistent.ListNoteProvider;
-import icynote.noteproviders.templates.NoteProviderTests;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by kl on 24.11.2016.
  */

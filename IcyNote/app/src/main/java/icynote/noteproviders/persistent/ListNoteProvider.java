@@ -34,21 +34,21 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
 
     public ListNoteProvider(Iterable<Note<String>> memory) {
         for (Note<String> n : memory) {
-            notes.add(new NoteData<String>(n));
+            notes.add(new NoteData<>(n));
         }
     }
 
     @Override
     public Optional<Note<String>> createNote() {
 
-        Note<String> created = new NoteData<String>("", "");
+        Note<String> created = new NoteData<>("", "");
         created.setId(nextId);
 
         ++nextId;
-        Note<String> defensiveCopy = new NoteData<String>(created);
+        Note<String> defensiveCopy = new NoteData<>(created);
         notes.add(defensiveCopy);
 
-        Note<String> validator = new ConstId<String>(created);
+        Note<String> validator = new ConstId<>(created);
 
         return Optional.of(validator);
     }
@@ -57,8 +57,8 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
     public Optional<Note<String>> getNote(int id) {
         for (Note<String> note : notes) {
             if (note.getId() == id) {
-                Note<String> defensiveCopy = new NoteData<String>(note);
-                return Optional.of((Note<String>) new ConstId<String>(defensiveCopy));
+                Note<String> defensiveCopy = new NoteData<>(note);
+                return Optional.of((Note<String>) new ConstId<>(defensiveCopy));
             }
         }
         return Optional.empty();
@@ -68,8 +68,8 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
     public Iterable<Note<String>> getNotes(final OrderBy index, final OrderType order) {
         List<Note<String>> unsorted = new ArrayList<>();
         for (Note<String> n : notes) {
-            Note<String> defensiveCopy = new NoteData<String>(n);
-            unsorted.add(new ConstId<String>(defensiveCopy));
+            Note<String> defensiveCopy = new NoteData<>(n);
+            unsorted.add(new ConstId<>(defensiveCopy));
         }
         Collections.sort(unsorted, new Comparator<Note<String>>() {
             @Override
@@ -103,7 +103,7 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
 
         for (int i = 0; i < notes.size(); ++i) {
             if (notes.get(i).getId() == n.getId()) {
-                Note<String> defensiveCopy = new NoteData<String>(n);
+                Note<String> defensiveCopy = new NoteData<>(n);
                 notes.set(i, defensiveCopy);
                 return ResponseFactory.positiveResponse();
             }

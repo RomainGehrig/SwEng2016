@@ -1,7 +1,6 @@
 package icynote.ui.view;
 
 import android.text.SpannableString;
-import android.view.View;
 
 import icynote.note.Note;
 import icynote.ui.BlankActivity;

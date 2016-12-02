@@ -25,7 +25,7 @@ public class DateInteractorTests extends NoteTests {
 
     @Override
     protected Note<String> addInteractor(Note<String> data) {
-        return new NullInput<String>(new DateDecorator<String>(data));
+        return new NullInput<>(new DateDecorator<>(data));
     }
 
     //----------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ public class DateInteractorTests extends NoteTests {
 
     @Override
     protected Note<String> makeData() {
-        return new NoteData<String>("", "");
+        return new NoteData<>("", "");
     }
 
     @Override
@@ -75,7 +75,7 @@ public class DateInteractorTests extends NoteTests {
     }
 
     private Note<String> getBlockedNote() {
-        NoteData<String> data = new NoteData<String>("", "");
+        NoteData<String> data = new NoteData<>("", "");
         data.setTitle(originalTitle);
         data.setContent(originalContent);
         data.setCreation(originalCreation);
@@ -87,6 +87,6 @@ public class DateInteractorTests extends NoteTests {
                 return ResponseFactory.negativeResponse();
             }
         };
-        return new DateDecorator<String>(blocker);
+        return new DateDecorator<>(blocker);
     }
 }

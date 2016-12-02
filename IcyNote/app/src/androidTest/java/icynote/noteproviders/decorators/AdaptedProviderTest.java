@@ -1,17 +1,5 @@
 package icynote.noteproviders.decorators;
 
-import android.text.SpannableString;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import icynote.note.Note;
-import icynote.note.impl.NoteData;
-import icynote.noteproviders.NoteProvider;
-import icynote.noteproviders.persistent.ListNoteProvider;
-import icynote.noteproviders.templates.NoteProviderTests;
-import util.Adapter;
-
 
 // FIXME
 /*
