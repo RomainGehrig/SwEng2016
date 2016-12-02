@@ -65,11 +65,11 @@ public class Preferences extends PreferenceFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Toast.makeText(getActivity(), "Actions not implemented, yet.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), R.string.preferences_actions_not_implemented, Toast.LENGTH_LONG).show();
     }
 
     private void setOrderPrefs() {
-        orderByPref = (ListPreference) findPreference("select_sort_by");
+        orderByPref = (ListPreference) findPreference(getString(R.string.preferences_sort_by));
         orderByPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -89,11 +89,11 @@ public class Preferences extends PreferenceFragment {
             }
         });
 
-        orderTypePref = (ListPreference) findPreference("select_sort_type");
+        orderTypePref = (ListPreference) findPreference(getString(R.string.preferences_select_sort_type));
         orderTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if(newValue.equals("DSC")){
+                if(newValue.equals(getString(R.string.preferences_dsc))){
                     CurrentPreferences.setOrderType(OrderType.DSC);
                 } else {
                     CurrentPreferences.setOrderType(OrderType.ASC);
@@ -104,19 +104,19 @@ public class Preferences extends PreferenceFragment {
     }
 
     private void updateAccountButtons() {
-        accountPref = findPreference("account_action");
+        accountPref = findPreference(getString(R.string.preferences_account_action));
         LoginManager loginManager = LoginManagerFactory.getInstance();
         if(loginManager.userCanLoginWithEmail()){
             if(loginManager.userCanLoginWithGoogle()){
-                setAccountPref("Unlink account from google", 1);
+                setAccountPref(getString(R.string.preferences_unlink_account_google), 1);
             } else {
-                setAccountPref("Link account with google", 0);
+                setAccountPref(getString(R.string.preferences_link_account_google), 0);
             }
         } else {
-            setAccountPref("Generate password", 2);
+            setAccountPref(getString(R.string.preferences_generate_password), 2);
         }
 
-        deleteAccPref = findPreference("account_delete");
+        deleteAccPref = findPreference(getString(R.string.preferences_account_delete));
         deleteAccPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 deleteAccount();
@@ -162,7 +162,7 @@ public class Preferences extends PreferenceFragment {
     }
 
     private void setPlugins() {
-        pluginPref = (PreferenceScreen) findPreference("plugin_settings");
+        pluginPref = (PreferenceScreen) findPreference(getString(R.string.preferences_plugin_settings));
         Iterable<Plugin> allPlugins = (new PluginsProvider()).getPlugins();
         for(Plugin plugin: allPlugins) {
             String pluginName = plugin.getName();
@@ -174,7 +174,7 @@ public class Preferences extends PreferenceFragment {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if(!(Boolean) newValue){
-                        thisPlugin.setSummary("disabled");
+                        thisPlugin.setSummary(R.string.preferences_disabled);
                         // TODO disable / enable plugin
                     } else {
                         thisPlugin.setSummary("");

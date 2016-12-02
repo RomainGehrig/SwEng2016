@@ -8,12 +8,16 @@ import java.util.List;
 import icynote.extras.Extra;
 import icynote.extras.ExtraData;
 import icynote.extras.ExtraProvider;
+import icynote.ui.R;
 import util.Optional;
 
 public class Provider implements ExtraProvider{
     private String mOwnerId;
     private List<ExtraData> mExtras;
     private int mNextId = 0;
+
+    private static final String ERROR_EXTRA_UNKNOWN = "extra unknown with id ";
+    private static final String ERROR_EXTRA_NULL = "null not allowed";
 
     public Provider(String userId, String ownerId) {
         mOwnerId = ownerId;
@@ -77,7 +81,7 @@ public class Provider implements ExtraProvider{
                 return;
             }
         }
-        throw new RuntimeException("extra unknown with id " + toPersist.getId());
+        throw new RuntimeException(ERROR_EXTRA_UNKNOWN + toPersist.getId());
     }
 
     /**
@@ -85,7 +89,7 @@ public class Provider implements ExtraProvider{
      */
     private void throwIfNull(Extra toCheck) {
         if (toCheck == null) {
-            throw new IllegalArgumentException("null not allowed");
+            throw new IllegalArgumentException(ERROR_EXTRA_NULL);
         }
     }
 

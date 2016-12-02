@@ -48,6 +48,20 @@ class ImageFormatter implements FormatterPlugin {
     private final int mRequestCodeCamera;
     private final int mRequestCodeGallery;
 
+    private static final String ERROR_GALLERY_NOT_IMPLEMENTED = "Gallery not implemented, yet.";
+    private static final String ERROR_UNABLE_TO_CREATE_FILE = "unable to create image file";
+    private static final String ERROR_UNABLE_TO_GET_URI_TEMP = "unable to get uri of temp. image file";
+    private static final String ERROR_UNEXPECTED = "Sorry, an unexpected error happened.";
+    private static final String ERROR_FILE_URI_NULL = "Unexpected error: file URI is null. Aborted.";
+    private static final String ERROR_UNHANDLED_REQUEST_CODE = "unhandled request code";
+    private static final String INSERTION_PLUGIN = "Image insertion Plugin";
+    private static final String DATE_FORMAT = "yyyyMMdd_HHmmss";
+    private static final String GALLERY = "gallery";
+    private static final String JPG = ".jpg";
+    private static final String URI_FILE_PROVIDER = "icynote.ui.fileprovider";
+    private static final String IMG = "img_";
+
+
     ImageFormatter(int requestCodeCamera, int requestCodeGallery) {
         mRequestCodeCamera = requestCodeCamera;
         mRequestCodeGallery = requestCodeGallery;
@@ -60,7 +74,7 @@ class ImageFormatter implements FormatterPlugin {
 
     @Override
     public String getName(){
-        return "Image insertion Plugin";
+        return INSERTION_PLUGIN ;
     }
 
     @Override
@@ -89,7 +103,7 @@ class ImageFormatter implements FormatterPlugin {
         usePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(a.getBaseContext(), "Gallery not implemented, yet.",
+                Toast.makeText(a.getBaseContext(), ERROR_GALLERY_NOT_IMPLEMENTED,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -190,22 +204,22 @@ class ImageFormatter implements FormatterPlugin {
     private Uri getTempFileUri(Activity a) {
         File pictureFile = createImageFile(a);
         if (pictureFile == null) {
-            throw new AssertionError("unable to create image file");
+            throw new AssertionError(ERROR_UNABLE_TO_CREATE_FILE);
         }
-        Uri uri = FileProvider.getUriForFile(a, "icynote.ui.fileprovider", pictureFile);
+        Uri uri = FileProvider.getUriForFile(a, URI_FILE_PROVIDER, pictureFile);
         if (uri == null) {
-            throw new AssertionError("unable to get uri of temp. image file");
+            throw new AssertionError(ERROR_UNABLE_TO_GET_URI_TEMP);
         }
         return uri;
     }
 
     private File createImageFile(Activity a) {
         try {
-            String imageFileName = "img_" + createNameFromStamp();
+            String imageFileName = IMG + createNameFromStamp();
             File storageDir = a.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             return File.createTempFile(
                     imageFileName,
-                    ".jpg",
+                    JPG,
                     storageDir
             );
         } catch (IOException ex) {
@@ -215,7 +229,7 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     private String createNameFromStamp() {
-        return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        return new SimpleDateFormat(DATE_FORMAT, Locale.US).format(new Date());
     }
 
     /* ---------------------------------------------------------------------------------------------
@@ -239,7 +253,7 @@ class ImageFormatter implements FormatterPlugin {
         if (requestCode == mRequestCodeCamera) {
             if (resultCode != Activity.RESULT_OK) {
                 Toast.makeText(state.getActivity()
-                        , "Sorry, an unexpected error happened.",
+                        , ERROR_UNEXPECTED,
                         Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -247,7 +261,7 @@ class ImageFormatter implements FormatterPlugin {
             if (lastUri == null) {
                 Log.i(TAG, "ignoring requestCode because uri is null");
                 Toast.makeText(state.getActivity(),
-                        "Unexpected error: file URI is null. Aborted.",
+                        ERROR_FILE_URI_NULL,
                         Toast.LENGTH_SHORT).show();
             } else {
                 writeUriToNote(state, lastUri);
@@ -259,9 +273,9 @@ class ImageFormatter implements FormatterPlugin {
                 });
             }
         } else if (requestCode == mRequestCodeGallery) {
-            Toast.makeText(state.getActivity(), "gallery", Toast.LENGTH_SHORT).show();
+            Toast.makeText(state.getActivity(), GALLERY, Toast.LENGTH_SHORT).show();
         } else {
-            throw new AssertionError("unhandled request code");
+            throw new AssertionError(ERROR_UNHANDLED_REQUEST_CODE);
         }
 
     }

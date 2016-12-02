@@ -35,7 +35,7 @@
                 android:id="@+id/searchBar"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:hint="Loading..."
+                android:hint="@string/loading"
                 android:visibility="visible"
                 android:enabled="false"
                 android:imeOptions="actionDone"/>
@@ -46,7 +46,7 @@
             android:id="@+id/emptyText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="To start click on ADD in the bottom right corner"
+            android:text="@string/notes_list_empty_text"
             android:gravity="center"
             android:layout_weight="1"
             android:visibility="gone"/>
@@ -68,7 +68,7 @@
             android:layout_alignParentRight="true" >
 
             <Button
-                android:text="Add"
+                android:text="@string/notes_list_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btAdd"
@@ -79,14 +79,14 @@
 
             <TextView
                 android:id="@+id/tvNumNotes"
-                android:text="Loading..."
+                android:text="@string/loading"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"/>
 
             <Button
-                android:text="Delete selected"
+                android:text="@string/notes_list_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btDelete"

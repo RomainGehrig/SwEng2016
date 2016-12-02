@@ -51,7 +51,7 @@ public class EditNoteTest extends ActivityInstrumentationTestCase2<BlankActivity
         note = mock(Note.class);
 
         // instanciate fragment EditNote into MainActivity
-        Fragment fragment = (Fragment) EditNote.class.newInstance();
+        Fragment fragment = EditNote.class.newInstance();
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragmentFrame, fragment).commit();

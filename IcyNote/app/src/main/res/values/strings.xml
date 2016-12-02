@@ -78,4 +78,83 @@
         <item>DSC</item>
     </string-array>
 
+    <!---->
+
+    <string name="activity_chooser_local_sign_in">Local Sign In</string>
+    <string name="activity_chooser_google_sign_in">Google Sign In</string>
+
+    <string name="edit_tags_not_implemented_yet">NOT IMPLEMENTED YET</string>
+
+    <string name="notes_list_context_menu_item_delete">Delete</string>
+    <string name="notes_list_context_menu_item_return">Return</string>
+
+    <string name="notes_list_add">Add</string>
+    <string name="notes_list_empty_text">To start click on ADD in the bottom right corner</string>
+    <string name="notes_list_delete">Delete selected</string>
+
+    <string name="trashed_note_empty_text">You don\'t have any trashed note.</string>
+    <string name="trashed_note_restore">Restore selected</string>
+
+    <string name="item_note_title">Title</string>
+    <string name="item_note_date">Date</string>
+    <string name="item_note_content">Content</string>
+
+    <string name="error_main_activiy_unable_to_create_new_holder">Sorry, unable to create a new holder for your note</string>
+    <string name="error_main_activity_unable_to_persist_note">Unexpected error: unable to persist the note</string>
+    <string name="error_main_activity_unable_to_save_note">"Unexpected error: unable to save the note "</string>
+    <string name="error_main_activity_unable_to_delete_note">Sorry, unable to delete note</string>
+    <string name="error_main_activity_no_last_opened_note">There is no last opened note.</string>
+
+    <string name="extra_user_uid">userUID</string>
+    <string name="extra_anonymous_user_id">anonymousUserId</string>
+
+    <string name="error_notes_adapter_no_item_found">"NotesAdapter: no item at position "</string>
+    <string name="notes_adapter_date">"Last updated: "</string>
+
+    <string name="error_email_password_login_email__required">Required.</string>
+    <string name="error_email_password_login_password_required">Required.</string>
+    <string name="sucess_email_password_login_local_sign_in">local sign in success</string>
+    <string name="email_password_login_create_user_email">createUserWithEmail</string>
+    <string name="email_password_login_sign_in_email">signInWithEmail</string>
+
+    <string name="error_google_client_unable_to_connect">Google Play Services error: unable to connect. %s</string>
+
+    <string name="sucess_google_link_credentials_put_extra">Success</string>
+    <string name="extra_google_link_message">googleLink.message</string>
+
+    <string name="error_google_sign_in">Google Sign In cancelled</string>
+    <string name="sucess_google_sign_in">Google Sign In success</string>
+
+    <string name="sign_out_account_closed">Account closed</string>
+
+    <string name="trashed_note_search_bar_hint">Enter text to find</string>
+    <plurals name="trashed_note_tv_num_note">
+        <item quantity="one">%d note.</item>
+        <item quantity="other">%d notes</item>
+    </plurals>
+
+    <string name="preferences_actions_not_implemented">Actions not implemented, yet.</string>
+    <string name="preferences_sort_by">select_sort_by</string>
+    <string name="preferences_select_sort_type">select_sort_type</string>
+    <string name="preferences_dsc">DSC</string>
+    <string name="preferences_account_action">account_action</string>
+    <string name="preferences_unlink_account_google">Unlink account from google</string>
+    <string name="preferences_link_account_google">Link account with google</string>
+    <string name="preferences_generate_password">Generate password</string>
+    <string name="preferences_account_delete">account_delete</string>
+    <string name="preferences_plugin_settings">plugin_settings</string>
+    <string name="preferences_disabled">disabled</string>
+
+    <string name="notes_list_search_bar_hint">Enter text to find</string>
+    <plurals name="notes_list_tv_num_note">
+        <item quantity="one">%d note.</item>
+        <item quantity="other">%d notes</item>
+    </plurals>
+
+    <string name="metadata_note_date_created">"Date Created:  "</string>
+    <string name="metadata_note_date_modified">"Date Modified:  "</string>
+    <string name="metadata_note_date_format">dd/MM/yyyy  \'at\'  HH:mm:ss</string>
+
+    <string name="error_edit_note_edit_note_contract_not_implemented">%s has to implement EditNote.Contract.</string>
+
 </resources>

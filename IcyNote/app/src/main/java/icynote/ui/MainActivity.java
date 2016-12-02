@@ -92,8 +92,8 @@ public class MainActivity  extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String userId = (getIntent() == null || getIntent().getExtras() == null)
-                ? "anonymousUserId"
-                : getIntent().getExtras().getString("userUID");
+                ? getString(R.string.extra_anonymous_user_id)
+                : getIntent().getExtras().getString(getString(R.string.extra_user_uid));
 
         Log.i(TAG, "onCreate");
 
@@ -186,7 +186,7 @@ public class MainActivity  extends AppCompatActivity implements
     public void openLastOpenedNote(MenuItem item) {
         Log.e(TAG, "openLastOpenedNote menu item");
         if (lastOpenedNoteId == null) {
-            Toast.makeText(this, "There is no last opened note.",
+            Toast.makeText(this, R.string.error_main_activity_no_last_opened_note,
                     Toast.LENGTH_SHORT).show();
             toggleMenu(null);
         } else {
@@ -235,7 +235,7 @@ public class MainActivity  extends AppCompatActivity implements
     @Override
     public void reOpenLastOpenedNote(NoteOpenerBase requester) {
         Log.e(TAG, "reopening note");
-        openLastOpenedNote((MenuItem)null);
+        openLastOpenedNote(null);
     }
 
     /** fragment contract */
@@ -259,7 +259,7 @@ public class MainActivity  extends AppCompatActivity implements
                 }
                 requester.onNoteDeletionSuccess(note);
             } else {
-                requester.onNoteDeletionFailure(note, "could not delete note");
+                requester.onNoteDeletionFailure(note, getString(R.string.error_main_activity_unable_to_delete_note));
             }
         }
     }
@@ -270,11 +270,11 @@ public class MainActivity  extends AppCompatActivity implements
         Response r = noteProvider.persist(note);
         if (!r.isPositive()) {
             if (requester != null) {
-                requester.onSaveNoteFailure("unable to save the note " + note.getTitle());
+                requester.onSaveNoteFailure(getString(R.string.error_main_activity_unable_to_save_note) + note.getTitle());
             } else {
-                Toast.makeText(this, "Unexpected error: unable to perist the note",
+                Toast.makeText(this, R.string.error_main_activity_unable_to_persist_note,
                         Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "Unexpected error: unable to perist the note" + note.getId());
+                Log.i(TAG, "Unexpected error: unable to persist the note" + note.getId());
             }
         }
     }
@@ -306,11 +306,11 @@ public class MainActivity  extends AppCompatActivity implements
                 requester.onTrashedNoteRestoredSuccess(note);
             } else {
                 requester.onTrashedNoteRestoredFailure(note,
-                        "Sorry, unable to persist the note");
+                        getString(R.string.error_main_activity_unable_to_persist_note));
             }
         } else {
             requester.onTrashedNoteRestoredFailure(note,
-                    "Sorry, unable to create a new holder for your note");
+                    getString(R.string.error_main_activiy_unable_to_create_new_holder));
         }
     }
 
@@ -362,7 +362,7 @@ public class MainActivity  extends AppCompatActivity implements
             @SuppressWarnings("unchecked")
             F fragment = (F)fragmentManager.findFragmentByTag(toOpen.getSimpleName());
             if (fragment == null) {
-                fragment = (F) toOpen.newInstance();
+                fragment = toOpen.newInstance();
             }
             return fragment;
         } catch (InstantiationException e) {

@@ -25,10 +25,12 @@ public class NotesLoader extends AsyncTaskLoader<Iterable<Note<SpannableString>>
     private OrderBy orderBy = OrderBy.CREATION;
     private OrderType orderType = OrderType.DSC;
 
+    private static final String ERROR_ADD_NOTE_DECORATOR_NULL = "addNoteDecorators is null";
+
     public NotesLoader(Context context, NoteProvider<Note<SpannableString>> core) {
         super(context);
         if (core == null)
-            throw new IllegalArgumentException("addNoteDecorators is null");
+            throw new IllegalArgumentException(ERROR_ADD_NOTE_DECORATOR_NULL);
         this.core = core;
 
         Log.i("NotesLoader", "NotesLoader created");

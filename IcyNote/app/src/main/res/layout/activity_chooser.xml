@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin">
     
     <Button
-        android:text="Local Sign In"
+        android:text="@string/activity_chooser_local_sign_in"
         android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:id="@+id/local_sign_in_button"
@@ -30,7 +30,7 @@
         android:layout_marginBottom="36dp" />
 
     <Button
-        android:text="Google Sign In"
+        android:text="@string/activity_chooser_google_sign_in"
         android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:id="@+id/googe_sign_in_button"

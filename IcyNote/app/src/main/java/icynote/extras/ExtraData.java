@@ -19,6 +19,9 @@ public class ExtraData implements Extra{
     private String mName;
     private Serializable mData;
 
+    private static final String ERROR_UNABLE_TO_CRATE_EXTRA_WITHOUT_OWNER = "can't create extra without owner";
+    private static final String ERROR_UNABLE_TO_COPY_EXTRA = "unable to copy extra";
+
     /**
      * @throws IllegalArgumentException if {@code ownerId} is {@code null}.
      * @param ownerId a non {@code null} string corresponding to a unique user id.
@@ -26,7 +29,7 @@ public class ExtraData implements Extra{
      */
     public ExtraData(@NonNull String ownerId, int id) {
         if (ownerId == null) {
-            throw new IllegalArgumentException("can't create extra without owner");
+            throw new IllegalArgumentException(ERROR_UNABLE_TO_CRATE_EXTRA_WITHOUT_OWNER);
         }
         mId = id;
         mOwnerId = ownerId;
@@ -44,7 +47,7 @@ public class ExtraData implements Extra{
         mName = toDeepCopy.getName();
         mData = deepClone(toDeepCopy.getData());
         if (mData == null) {
-            throw new RuntimeException("unable to copy extra");
+            throw new RuntimeException(ERROR_UNABLE_TO_COPY_EXTRA);
         }
     }
 
