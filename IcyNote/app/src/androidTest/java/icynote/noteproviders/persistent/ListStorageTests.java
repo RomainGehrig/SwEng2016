@@ -29,7 +29,7 @@ public class ListStorageTests extends StorageTests<String, Note<String>> {
 
     @Override
     protected Note<String> makeNewNote() {
-        return new NoteData<String>("", "");
+        return new NoteData<>("", "");
     }
 
     @Override

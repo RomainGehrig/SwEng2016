@@ -1,14 +1,9 @@
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="5sp"
-    android:paddingRight="5sp"
-    android:id="@+id/item_note"
-    >
+    android:paddingRight="5sp">
 
     <CheckBox
         android:layout_height="wrap_content"
@@ -22,7 +17,6 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_weight="1"
         android:id="@+id/item_content"
         android:descendantFocusability="blocksDescendants"
@@ -32,8 +26,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:weightSum="1"
-            android:id="@+id/layout_1">
+            android:weightSum="1">
             <TextView
                 android:id="@+id/tvTitle"
                 android:text="@string/item_note_title"
@@ -41,7 +34,6 @@
                 android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
                 android:layout_weight="0.8"/>
 
         </LinearLayout>
@@ -50,17 +42,13 @@
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/item_note_date"
-            android:layout_below="@id/layout_1"
-            />
+            android:text="@string/item_note_date" />
 
         <TextView
             android:id="@+id/tvContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/item_note_content"
-            android:layout_below="@id/layout_1"
-            />
+            android:text="@string/item_note_content" />
 
         <View style="@style/notesSeparator" />
     </LinearLayout>

@@ -11,7 +11,6 @@
     <include layout="@layout/menu_button"/>
 
     <LinearLayout
-        android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -21,11 +20,7 @@
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:id="@+id/layout_1"
-            >
+            android:layout_height="wrap_content">
 
             <EditText
                 android:layout_width="wrap_content"
@@ -62,10 +57,7 @@
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/layout_3"
-            android:layout_below="@id/lvNotes"
-            android:layout_alignParentRight="true" >
+            android:layout_height="wrap_content">
 
             <Button
                 android:text="@string/notes_list_add"

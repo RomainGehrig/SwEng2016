@@ -35,7 +35,7 @@ public final class Factory {
 
     public static <S> NoteWithInteractorsProvider<S>
     addNoteDecorators(NoteProvider<Note<S>> persistent) {
-        NoteWithInteractorsProvider<S> core = new NoteWithInteractorsProvider<S>(persistent);
+        NoteWithInteractorsProvider<S> core = new NoteWithInteractorsProvider<>(persistent);
         core.stack(new NoteDecoratorFactory<S>() {
             @Override
             public Note<S> make(Note<S> delegate) {
@@ -63,13 +63,13 @@ public final class Factory {
             public Note<String> make(Note<String> delegate) {
                 //delegate = new NullOutput<>(delegate, "site: sqlite output");
                 //delegate = new NullInput<>(delegate, "site: sqlite input");
-                delegate = new NullStringCorrector<String>(delegate, "sqlite",
+                delegate = new NullStringCorrector<>(delegate, "sqlite",
                         new NullStringCorrector.Corrector<String>() {
-                    @Override
-                    public String makeCorrection() {
-                        return "{null}";
-                    }
-                });
+                            @Override
+                            public String makeCorrection() {
+                                return "{null}";
+                            }
+                        });
                 return delegate;
 
             }

@@ -230,7 +230,7 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
     @NonNull
     private static Note<String> createNoteData(long id, GregorianCalendar now) {
         now = (now != null) ? now : new GregorianCalendar();
-        NoteData<String> data = new NoteData<String>("", "");
+        NoteData<String> data = new NoteData<>("", "");
         data.setId((int) id);
         data.setCreation(now);
         data.setLastUpdate(now);

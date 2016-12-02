@@ -23,19 +23,19 @@ public class NoteDataTests extends NoteTests {
 
     @Override
     protected Note<String> makeData() {
-        return new NoteData<String>("", "");
+        return new NoteData<>("", "");
     }
 
     @Test
     public void noteDataCanBeCopied() {
-        NoteData<String> a = new NoteData<String>("", "");
+        NoteData<String> a = new NoteData<>("", "");
         a.setId(0);
         a.setTitle("hello");
         a.setContent("hello2");
         a.setCreation(new GregorianCalendar(YEAR, 0, 0));
         a.setLastUpdate(new GregorianCalendar(YEAR + 1, 0, 0));
 
-        Note<String> b = new NoteData<String>(a);
+        Note<String> b = new NoteData<>(a);
 
         assertEquals(a.getCreation(), b.getCreation());
         assertEquals(a.getLastUpdate(), b.getLastUpdate());

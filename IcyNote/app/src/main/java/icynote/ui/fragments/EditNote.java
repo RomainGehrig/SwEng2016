@@ -173,7 +173,8 @@ public class EditNote extends Fragment implements NotePresenter {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {note.setContent(new SpannableString(s));
+            public void afterTextChanged(Editable s) {
+                note.setContent(new SpannableString(s));
                 viewHolder.getContent().removeTextChangedListener(this);
                 int start = viewHolder.getContent().getSelectionStart();
                 int end = viewHolder.getContent().getSelectionEnd();

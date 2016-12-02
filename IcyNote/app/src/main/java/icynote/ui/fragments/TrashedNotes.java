@@ -146,7 +146,7 @@ public class TrashedNotes extends Fragment
 
         viewHolder.enableAll();
         viewHolder.getTvNumNotes().setText(getResources().getQuantityString(R.plurals.trashed_note_tv_num_note,
-                notesAdapter.getCount(), notesAdapter.getCount()));;
+                notesAdapter.getCount(), notesAdapter.getCount()));
         viewHolder.getSearchBar().setHint(R.string.trashed_note_search_bar_hint);
         viewHolder.getListView().setAdapter(null); //reset
         viewHolder.getListView().setAdapter(notesAdapter);

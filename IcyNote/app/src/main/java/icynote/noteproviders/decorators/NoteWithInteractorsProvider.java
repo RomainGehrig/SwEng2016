@@ -24,7 +24,7 @@ import util.Optional;
 @SuppressWarnings("ReturnOfInnerClass")
 public class NoteWithInteractorsProvider<S> implements NoteProvider<Note<S>> {
     private final NoteProvider<Note<S>> storage;
-    private NoteDecoratorFactory<S> wrapper = new NoteDecoratorFactory<S>();
+    private NoteDecoratorFactory<S> wrapper = new NoteDecoratorFactory<>();
 
     //--------------------------------------------------------------
 

@@ -13,8 +13,8 @@ import icynote.note.decorators.NullOutput;
 
 @RunWith(AndroidJUnit4.class)
 public class NullOutputInteractorTests {
-    private final Note<String> toTest_Null = new NullOutput<String>(new NullNoteData());
-    private final Note<String> toTest_NotNull = new NullOutput<String>(new NoteData<String>("", ""));
+    private final Note<String> toTest_Null = new NullOutput<>(new NullNoteData());
+    private final Note<String> toTest_NotNull = new NullOutput<>(new NoteData<>("", ""));
 
     //-----------------------------------------------------------------------------
 

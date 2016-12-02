@@ -1,12 +1,10 @@
 package icynote.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 
 import icynote.login.LoginManager;
@@ -47,11 +45,6 @@ public class Preferences extends PreferenceActivity {
         // PLUGIN
 
         PreferenceCategory pluginPref = (PreferenceCategory) findPreference("plugin_group");
-
-        final SharedPreferences pref = PreferenceManager
-                .getDefaultSharedPreferences(Preferences.this);
-
-        final SharedPreferences.Editor editor = pref.edit();
 
         for(Plugin p : PluginsProvider.getInstance().getPlugins()) {
             final String pluginName = p.getName();

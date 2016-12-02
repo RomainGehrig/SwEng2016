@@ -2,7 +2,6 @@ package icynote.ui;
 
 import android.os.IBinder;
 import android.support.test.espresso.Root;
-import android.support.test.espresso.matcher.RootMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,14 +17,11 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static org.hamcrest.CoreMatchers.not;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.anything;
 
