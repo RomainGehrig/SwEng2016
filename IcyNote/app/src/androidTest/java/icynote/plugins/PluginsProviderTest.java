@@ -1,16 +1,18 @@
 package icynote.plugins;
 
+import org.junit.Test;
+
 import java.util.Iterator;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by kl on 24.11.2016.
  */
 public class PluginsProviderTest {
 
-    PluginsProvider provider = new PluginsProvider();
+    PluginsProvider provider = PluginsProvider.getInstance();
 
     @Test
     public void getPluginsTest() {

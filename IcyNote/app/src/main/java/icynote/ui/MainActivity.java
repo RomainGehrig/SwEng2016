@@ -103,7 +103,7 @@ public class MainActivity  extends AppCompatActivity implements
         if (savedInstanceState != null && savedInstanceState.get(BUNDLE_CURRENT_USER) != null) {
             currentUserId = savedInstanceState.getString(BUNDLE_CURRENT_USER);
         }
-        if (getIntent() != null || getIntent().getExtras() != null) {
+        if (getIntent() != null && getIntent().getExtras() != null) {
             currentUserId = getIntent().getExtras().getString(getString(R.string.extra_user_uid));
         }
 

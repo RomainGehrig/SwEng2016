@@ -81,8 +81,7 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
 
         Optional<Note<String>> result = Optional.empty();
 
-        if (cursor != null) try {
-            cursor.moveToFirst();
+        if (cursor != null && cursor.moveToFirst()) try {
             result = Optional.of(protect(getNoteFromCursor(cursor)));
         } catch (RuntimeException e) {
             Log.e(LOGGING_TAG, e.getMessage());
