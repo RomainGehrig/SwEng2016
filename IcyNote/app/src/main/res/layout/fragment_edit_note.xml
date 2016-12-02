@@ -40,7 +40,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:alpha="0.5"
-        android:src="@drawable/note_open_metadata"
+        android:src="@drawable/ic_more_vert_white_24dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -49,7 +49,6 @@
         android:id="@+id/noteDisplaySettingsButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/note_open_metadata"
         android:alpha="0"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"

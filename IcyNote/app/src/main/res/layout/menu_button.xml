@@ -17,6 +17,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:alpha="0.5"
-        android:src="@drawable/open_drawer" />
+        android:src="@drawable/ic_menu_white_24dp" />
 
 </merge>
