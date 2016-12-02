@@ -129,7 +129,7 @@
 
     <string name="trashed_note_search_bar_hint">Enter text to find</string>
     <plurals name="trashed_note_tv_num_note">
-        <item quantity="one">%d note.</item>
+        <item quantity="one">%d note</item>
         <item quantity="other">%d notes</item>
     </plurals>
 
@@ -147,7 +147,7 @@
 
     <string name="notes_list_search_bar_hint">Enter text to find</string>
     <plurals name="notes_list_tv_num_note">
-        <item quantity="one">%d note.</item>
+        <item quantity="one">%d note</item>
         <item quantity="other">%d notes</item>
     </plurals>
 
