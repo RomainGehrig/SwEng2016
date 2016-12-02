@@ -12,6 +12,7 @@
             android:onClick="openListOfNotes"/>
         <item
             android:id="@+id/menuLastNote"
+            android:icon="@drawable/drawer_reopen"
             android:alpha="0.5"
             android:title="@string/openLastNote"
             android:onClick="openLastOpenedNote"/>
