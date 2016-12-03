@@ -195,7 +195,7 @@ public class TrashedNotes extends Fragment
     }
     ////
     private void userRestoreNotesListener() {
-        ArrayList<Note<SpannableString>> toDelete = new ArrayList();
+        ArrayList<Note<SpannableString>> toDelete = new ArrayList<>();
 
         //first make a copy to avoid concurrency issues
         for (int i = 0; i < notesAdapter.getCount(); ++i) {

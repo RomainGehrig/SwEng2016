@@ -15,21 +15,21 @@ import icynote.noteproviders.templates.NoteProviderTests;
 public class CheckedNoteProviderTest extends NoteProviderTests<String, Note<String>> {
 
     @Override
-    protected NoteProvider makeNew() {
-        return new CheckedNoteProvider(new ListNoteProvider());
+    protected NoteProvider<Note<String>> makeNew() {
+        return new CheckedNoteProvider<>(new ListNoteProvider());
     }
 
     @Override
-    protected NoteProvider makeNewWith(Note<String> n1, Note<String> n2, Note<String> n3) {
+    protected NoteProvider<Note<String>> makeNewWith(Note<String> n1, Note<String> n2, Note<String> n3) {
         List<Note<String>> list = new ArrayList<>();
         list.add(n1); list.add(n2); list.add(n3);
         ListNoteProvider listNoteProvider = new ListNoteProvider(list);
-        return new CheckedNoteProvider(listNoteProvider);
+        return new CheckedNoteProvider<>(listNoteProvider);
     }
 
     @Override
     protected Note<String> makeNewNote() {
-        return new NoteData("", "");
+        return new NoteData<>("", "");
     }
 
     @Override
