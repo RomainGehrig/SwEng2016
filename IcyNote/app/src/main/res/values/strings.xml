@@ -82,17 +82,17 @@
 
     <string name="error_email_password_login_email__required">Required.</string>
     <string name="error_email_password_login_password_required">Required.</string>
-    <string name="sucess_email_password_login_local_sign_in">local sign in success</string>
+    <string name="success_email_password_login_local_sign_in">local sign in success</string>
     <string name="email_password_login_create_user_email">createUserWithEmail</string>
     <string name="email_password_login_sign_in_email">signInWithEmail</string>
 
     <string name="error_google_client_unable_to_connect">Google Play Services error: unable to connect. %s</string>
 
-    <string name="sucess_google_link_credentials_put_extra">Success</string>
+    <string name="success_google_link_credentials_put_extra">Success</string>
     <string name="extra_google_link_message">googleLink.message</string>
 
     <string name="error_google_sign_in">Google Sign In cancelled</string>
-    <string name="sucess_google_sign_in">Google Sign In success</string>
+    <string name="success_google_sign_in">Google Sign In success</string>
 
     <string name="sign_out_account_closed">Account closed</string>
 

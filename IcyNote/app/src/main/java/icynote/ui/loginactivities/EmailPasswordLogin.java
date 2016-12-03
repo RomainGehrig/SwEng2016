@@ -58,7 +58,7 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
             } else {
                 // Note: the onLoginSuccess callback will be notified. It handles the transition
                 //       to the next activity.
-                Toast.makeText(EmailPasswordLogin.this, R.string.sucess_email_password_login_local_sign_in, Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmailPasswordLogin.this, R.string.success_email_password_login_local_sign_in, Toast.LENGTH_SHORT).show();
             }
 
             hideProgressDialog();

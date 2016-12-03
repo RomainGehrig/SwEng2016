@@ -19,7 +19,7 @@ public class GoogleLinkCredentials extends GoogleSignIn {
                 if (!success) {
                     data.putExtra(getString(R.string.extra_google_link_message), errorMessage);
                 } else {
-                    data.putExtra(getString(R.string.extra_google_link_message), getString(R.string.sucess_google_link_credentials_put_extra));
+                    data.putExtra(getString(R.string.extra_google_link_message), getString(R.string.success_google_link_credentials_put_extra));
                 }
                 setResult(RESULT_OK, data);
                 finish();

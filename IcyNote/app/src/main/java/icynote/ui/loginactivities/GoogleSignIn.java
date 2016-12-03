@@ -49,7 +49,7 @@ public class GoogleSignIn extends GoogleClient {
                 } else {
                     // Note: the onLoginSuccess callback will be notified. It handles the transition
                     //       to the next activity.
-                    Toast.makeText(GoogleSignIn.this, R.string.sucess_google_sign_in, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GoogleSignIn.this, R.string.success_google_sign_in, Toast.LENGTH_SHORT).show();
                 }
             }
         };
