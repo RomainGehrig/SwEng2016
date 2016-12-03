@@ -43,7 +43,6 @@ public class NotesListTest  {
     private MockNotesList mActivity;
     private NotesList fragment;
     private List<Note<SpannableString>> list = new ArrayList<>();
-    private ListView lv;
 
 
     @Before
@@ -56,7 +55,7 @@ public class NotesListTest  {
         mActivity.openFragment(fragment);
 
         // ListView
-        lv = (ListView)(mActivity.findViewById(R.id.lvNotes));
+        ListView lv = (ListView) (mActivity.findViewById(R.id.lvNotes));
 
         // add notes to list
         NoteData2 n = new NoteData2();

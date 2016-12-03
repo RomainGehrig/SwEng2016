@@ -27,14 +27,12 @@ import static org.hamcrest.Matchers.anything;
 
 public class MainActivityTest {
 
-    private MainActivity mActivity;
-
     @Rule
     public ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setUp() throws Exception {
-        mActivity = main.getActivity();
+        MainActivity mActivity = main.getActivity();
     }
 
 

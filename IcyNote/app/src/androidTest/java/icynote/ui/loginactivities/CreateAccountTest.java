@@ -27,14 +27,12 @@ import static org.hamcrest.Matchers.startsWith;
 
 public class CreateAccountTest {
 
-    private LoginMenu mActivity;
-
     @Rule
     public ActivityTestRule<LoginMenu> main = new ActivityTestRule<>(LoginMenu.class);
 
     @Before
     public void setUp() throws Exception {
-        mActivity = main.getActivity();
+        LoginMenu mActivity = main.getActivity();
     }
 
 

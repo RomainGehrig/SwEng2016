@@ -26,14 +26,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class LocalLogInTest {
 
-    private LoginMenu mActivity;
-
     @Rule
     public ActivityTestRule<LoginMenu> main = new ActivityTestRule<>(LoginMenu.class);
 
     @Before
     public void setUp() throws Exception {
-        mActivity = main.getActivity();
+        LoginMenu mActivity = main.getActivity();
     }
 
 
