@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import icynote.note.Note;
 import icynote.ui.R;
@@ -159,7 +160,8 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     }
 
     private String dateToString(GregorianCalendar date, String description) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.metadata_note_date_format));
+        SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.metadata_note_date_format),
+                Locale.ROOT);
         return description + dateFormat.format(date.getTime());
     }
 
