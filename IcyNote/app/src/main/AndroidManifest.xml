@@ -29,10 +29,15 @@
             android:label="@string/label_emailpassword"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
+        <activity android:name=".BlankActivity"/>
+
+        <activity android:name=".ActivityWithProgressDialog"/>
+
         <activity android:name=".loginactivities.GoogleSignIn"/>
         <activity android:name=".loginactivities.SignOut"/>
         <activity android:name=".loginactivities.GoogleLinkCredentials"/>
         <activity android:name=".loginactivities.GoogleUnLinkCredentials"/>
+        <activity android:name=".loginactivities.GoogleClient"/>
 
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden" />
@@ -55,14 +60,14 @@
             </intent-filter>
         </activity>
 
-
-
         <activity android:name=".view.MockNotesList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"
