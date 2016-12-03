@@ -23,7 +23,7 @@
     <string name="hint_password">Password</string>
     <string name="desc_icynote_lockup">Icynote logo and name</string>
 
-    <string name="emailpassword_title_text">Email and Password</string>
+    <string name="email_password_title_text">Email and Password</string>
 
     <string-array name="sort_by">
         <item>Title</item>
