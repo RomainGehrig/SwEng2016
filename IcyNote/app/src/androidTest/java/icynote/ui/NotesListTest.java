@@ -204,7 +204,7 @@ public class NotesListTest  {
 
     //-----------------------------------------------------------------------
 
-    public void enableFragment() throws InterruptedException {
+    private void enableFragment() throws InterruptedException {
         //initalise a 1 = se debloque apres 1 countDown
         final CountDownLatch latch = new CountDownLatch(1);
         mActivity.runOnUiThread(
@@ -264,7 +264,7 @@ public class NotesListTest  {
         return counts[0];
     }*/
 
-    public int getNotesCount()
+    private int getNotesCount()
     {
         final int[] counts = new int[1];
         onView(withId(R.id.lvNotes)).check(matches(new TypeSafeMatcher<View>() {

@@ -45,7 +45,7 @@ public class EditNoteTest {
     }
 
 
-    public void enableFragment() throws InterruptedException {
+    private void enableFragment() throws InterruptedException {
         //initalise a 1 = se debloque apres 1 countDown
         final CountDownLatch latch = new CountDownLatch(1);
         mActivity.runOnUiThread(

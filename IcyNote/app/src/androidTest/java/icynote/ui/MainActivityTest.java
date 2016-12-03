@@ -413,8 +413,7 @@ public class MainActivityTest {
         onView(withId(R.id.btDelete)).perform(click());
     }
 
-    private int getNotesCount()
-    {
+    public int getNotesCount() {
         final int[] counts = new int[1];
         onView(withId(R.id.lvNotes)).check(matches(new TypeSafeMatcher<View>() {
             @Override

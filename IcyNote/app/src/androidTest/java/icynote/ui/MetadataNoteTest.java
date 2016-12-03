@@ -30,7 +30,7 @@ public class MetadataNoteTest {
     private MockMetadataNote mActivity;
     private MetadataNote fragment;
     private Note<SpannableString> note;
-    GregorianCalendar creation = new GregorianCalendar();
+    private GregorianCalendar creation = new GregorianCalendar();
 
 
     @Before
@@ -48,7 +48,7 @@ public class MetadataNoteTest {
     }
 
 
-    public void enableFragment() throws InterruptedException {
+    private void enableFragment() throws InterruptedException {
         //initalise a 1 = se debloque apres 1 countDown
         final CountDownLatch latch = new CountDownLatch(1);
         mActivity.runOnUiThread(

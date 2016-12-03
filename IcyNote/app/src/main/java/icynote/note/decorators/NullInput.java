@@ -13,7 +13,7 @@ import icynote.note.common.BoundaryCheckerUtil;
  * @version 1.0
  */
 public class NullInput<S> extends NoteDecoratorTemplate<S> {
-    String name = "";
+    private String name = "";
 
     public NullInput(Note<S> delegateInteractor) {
         super(delegateInteractor);

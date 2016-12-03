@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class ImageFormatterTest {
 
-    ImageFormatter formatter = new ImageFormatter(1, 2);
+    private ImageFormatter formatter = new ImageFormatter(1, 2);
 
     @Test
     public void getNameTest() {

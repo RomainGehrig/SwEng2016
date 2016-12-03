@@ -13,8 +13,8 @@ import icynote.note.impl.NoteData2;
 
 public class NoteDecoratorTemplateTest {
     
-    Note<SpannableString> note = new NoteData2();
-    NoteDecoratorTemplate<SpannableString> noteDecoratorTemplate = new NoteDecoratorTemplate<>(note);
+    private Note<SpannableString> note = new NoteData2();
+    private NoteDecoratorTemplate<SpannableString> noteDecoratorTemplate = new NoteDecoratorTemplate<>(note);
 
     @Test
     public void getIdTest() {

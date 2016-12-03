@@ -64,7 +64,7 @@ public class CreateAccountTest {
     }*/
 
 
-    public void badMailTest() throws InterruptedException {
+    private void badMailTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText("some_mail"));
         onView(withId(R.id.field_password)).perform(replaceText("pw")).perform(closeSoftKeyboard());
         Thread.sleep(100);
@@ -77,7 +77,7 @@ public class CreateAccountTest {
     }
 
 
-    public void badPassWordTest() throws InterruptedException {
+    private void badPassWordTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText("test1@icynote.ch"));
         onView(withId(R.id.field_password)).perform(replaceText("pw1")).perform(closeSoftKeyboard());
         Thread.sleep(100);
