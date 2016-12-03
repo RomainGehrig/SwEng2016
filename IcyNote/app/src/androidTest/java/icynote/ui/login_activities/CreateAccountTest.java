@@ -65,7 +65,7 @@ public class CreateAccountTest {
 
 
     public void badMailTest() throws InterruptedException {
-        onView(withId(R.id.field_email)).perform(replaceText("somemail"));
+        onView(withId(R.id.field_email)).perform(replaceText("some_mail"));
         onView(withId(R.id.field_password)).perform(replaceText("pw")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_create_account_button)).perform(click());

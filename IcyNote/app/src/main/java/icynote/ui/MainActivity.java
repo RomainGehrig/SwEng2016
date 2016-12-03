@@ -183,7 +183,7 @@ public class MainActivity  extends AppCompatActivity implements
     //*  MENU
     //**
 
-    /** on click listener that opens the dawer menu or closes it */
+    /** on click listener that opens the drawer menu or closes it */
     public void toggleMenu(View view) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {

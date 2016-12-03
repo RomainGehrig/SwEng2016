@@ -108,7 +108,7 @@ public class MainActivityTest {
     }
 */
 
-    // open metadata in editnote
+    // open metadata in edit note
     @Test
     public void openMetadataTest() {
         onView(withId(R.id.btAdd)).perform(click());
@@ -213,7 +213,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void titleModifiedInMetadatasAppearsInListTest()
+    public void titleModifiedInMetadataAppearsInListTest()
     {
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());

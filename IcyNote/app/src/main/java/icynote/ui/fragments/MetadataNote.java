@@ -58,7 +58,7 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
         // otherwise it does nothing
         // android bug: must be called in `onResume` method and not `onViewCreated`.
         // see: http://stackoverflow.com/questions/13303469/
-        // edittext-settext-not-working-with-fragment
+        // edit_text-set_text-not-working-with-fragment
 
         Log.i(this.getClass().getSimpleName(), "onViewCreated");
         addNoteInView();

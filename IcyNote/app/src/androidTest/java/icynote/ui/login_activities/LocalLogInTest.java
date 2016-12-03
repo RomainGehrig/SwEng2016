@@ -60,7 +60,7 @@ public class LocalLogInTest {
         onView(withId(R.id.email_sign_in_button)).perform(click());
         Thread.sleep(2000);
 
-        // check a view in mainactivity is shown
+        // check a view in main_activity is shown
         onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
     }
 
@@ -88,7 +88,7 @@ public class LocalLogInTest {
 
 
     public void badMailTest() throws InterruptedException {
-        onView(withId(R.id.field_email)).perform(replaceText("somemail"));
+        onView(withId(R.id.field_email)).perform(replaceText("some_mail"));
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_sign_in_button)).perform(click());
