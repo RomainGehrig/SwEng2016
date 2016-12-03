@@ -194,7 +194,6 @@ class ImageFormatter implements FormatterPlugin {
 
     private void takeAndInsertNewPhoto(PluginData state) {
         lastUri = getTempFileUri(state.getActivity());
-        assert (lastUri != null);
         startCamera(state);
     }
 
