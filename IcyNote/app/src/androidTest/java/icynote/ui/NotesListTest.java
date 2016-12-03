@@ -35,14 +35,14 @@ import static org.junit.Assert.assertTrue;
 public class NotesListTest  {
 
     @Rule
-    public ActivityTestRule<MockNotesList> main = new ActivityTestRule<>(MockNotesList.class);
+    public final ActivityTestRule<MockNotesList> main = new ActivityTestRule<>(MockNotesList.class);
 
     @Rule
     public UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
 
     private MockNotesList mActivity;
     private NotesList fragment;
-    private List<Note<SpannableString>> list = new ArrayList<>();
+    private final List<Note<SpannableString>> list = new ArrayList<>();
 
 
     @Before

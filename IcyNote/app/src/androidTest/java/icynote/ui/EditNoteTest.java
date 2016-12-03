@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class EditNoteTest {
 
     @Rule
-    public ActivityTestRule<MockEditNote> main = new ActivityTestRule<>(MockEditNote.class);
+    public final ActivityTestRule<MockEditNote> main = new ActivityTestRule<>(MockEditNote.class);
 
     private MockEditNote mActivity;
     private EditNote fragment;

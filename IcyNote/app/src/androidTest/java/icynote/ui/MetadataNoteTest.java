@@ -25,12 +25,12 @@ import static org.junit.Assert.assertTrue;
 
 public class MetadataNoteTest {
     @Rule
-    public ActivityTestRule<MockMetadataNote> main = new ActivityTestRule<>(MockMetadataNote.class);
+    public final ActivityTestRule<MockMetadataNote> main = new ActivityTestRule<>(MockMetadataNote.class);
 
     private MockMetadataNote mActivity;
     private MetadataNote fragment;
     private Note<SpannableString> note;
-    private GregorianCalendar creation = new GregorianCalendar();
+    private final GregorianCalendar creation = new GregorianCalendar();
 
 
     @Before

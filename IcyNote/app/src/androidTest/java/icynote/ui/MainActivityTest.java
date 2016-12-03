@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.anything;
 public class MainActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setUp() throws Exception {
@@ -413,7 +413,7 @@ public class MainActivityTest {
         onView(withId(R.id.btDelete)).perform(click());
     }
 
-    public int getNotesCount() {
+    private int getNotesCount() {
         final int[] counts = new int[1];
         onView(withId(R.id.lvNotes)).check(matches(new TypeSafeMatcher<View>() {
             @Override

@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.startsWith;
 public class CreateAccountTest {
 
     @Rule
-    public ActivityTestRule<LoginMenu> main = new ActivityTestRule<>(LoginMenu.class);
+    public final ActivityTestRule<LoginMenu> main = new ActivityTestRule<>(LoginMenu.class);
 
     @Before
     public void setUp() throws Exception {

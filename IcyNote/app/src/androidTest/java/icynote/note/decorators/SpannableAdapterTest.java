@@ -17,8 +17,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class SpannableAdapterTest {
     
-    private Note<String> note = new NoteData<>("", "");
-    private Note<SpannableString> spannableAdapter = new AdaptedNote<>(note, strAdapter);
+    private final Note<String> note = new NoteData<>("", "");
+    private final Note<SpannableString> spannableAdapter = new AdaptedNote<>(note, strAdapter);
 
     @Test
     public void getIdTest() {

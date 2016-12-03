@@ -17,7 +17,7 @@ import icynote.noteproviders.stubs.NullNoteProviderAndNotCol;
 @RunWith(AndroidJUnit4.class)
 public class CoreFactoryFaultyTests {
 
-    protected NoteProvider<Note<String>> makeNew(NoteProvider<Note<String>> s) {
+    private NoteProvider<Note<String>> makeNew(NoteProvider<Note<String>> s) {
         return Factory.addNullChecks(s);
     }
 

@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class LocalLogInTest {
 
     @Rule
-    public ActivityTestRule<LoginMenu> main = new ActivityTestRule<>(LoginMenu.class);
+    public final ActivityTestRule<LoginMenu> main = new ActivityTestRule<>(LoginMenu.class);
 
     @Before
     public void setUp() throws Exception {
@@ -65,7 +65,7 @@ public class LocalLogInTest {
     }
 
 
-    public void mailRequiredTest() throws InterruptedException {
+    private void mailRequiredTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText(""));
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
@@ -76,7 +76,7 @@ public class LocalLogInTest {
     }
 
 
-    public void passwordRequiredTest() throws InterruptedException {
+    private void passwordRequiredTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
         onView(withId(R.id.field_password)).perform(replaceText("")).perform(closeSoftKeyboard());
         Thread.sleep(100);
@@ -87,7 +87,7 @@ public class LocalLogInTest {
     }
 
 
-    public void badMailTest() throws InterruptedException {
+    private void badMailTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText("some_mail"));
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
@@ -100,7 +100,7 @@ public class LocalLogInTest {
     }
 
 
-    public void badPassWordTest() throws InterruptedException {
+    private void badPassWordTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
