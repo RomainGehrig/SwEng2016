@@ -5,7 +5,6 @@
     <dimen name="titleSize">24sp</dimen>
     <dimen name="icon_top_margin">24dp</dimen>
     <dimen name="icon_bottom_margin">24dp</dimen>
-    <dimen name="title_bottom_margin">16dp</dimen>
     <dimen name="notesTitleSize">20sp</dimen>
     <dimen name="textSizeSpinner">18sp</dimen>
 </resources>
