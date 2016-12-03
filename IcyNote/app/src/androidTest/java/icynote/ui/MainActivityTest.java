@@ -326,7 +326,7 @@ public class MainActivityTest {
         addNote("note1", "body1");
         assertEquals(1 + numberOfNotes, getNotesCount());
         deleteNote(0);
-        assertEquals(0, numberOfNotes);
+        assertEquals(numberOfNotes, getNotesCount());
 
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.trash)).perform(click());
