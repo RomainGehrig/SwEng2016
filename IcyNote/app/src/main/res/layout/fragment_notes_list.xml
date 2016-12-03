@@ -65,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btAdd"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:enabled="false"/>
@@ -83,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btDelete"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:enabled="false"/>
