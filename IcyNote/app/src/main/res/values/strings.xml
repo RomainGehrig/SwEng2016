@@ -111,6 +111,7 @@
     <string name="metadata_note_date_created">"Date Created:  "</string>
     <string name="metadata_note_date_modified">"Date Modified:  "</string>
     <string name="metadata_note_date_format">dd/MM/yyyy  \'at\'  HH:mm:ss</string>
+    <string name="metadata_note_back_text">Back</string>
 
     <string name="error_edit_note_edit_note_contract_not_implemented">%s has to implement EditNote.Contract.</string>
 
