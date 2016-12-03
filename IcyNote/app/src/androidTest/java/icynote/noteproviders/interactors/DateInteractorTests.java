@@ -18,6 +18,7 @@ import icynote.note.decorators.NullInput;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -44,9 +45,6 @@ public class DateInteractorTests extends NoteTests {
         assertNotNull("response is not null", r);
         assertFalse("response is negative", r.isPositive());
         assertEquals("check old value", toTest.getCreation(), originalCreation);
-    }
-
-    private void assertFalse(String s, boolean positive) {
     }
 
 
