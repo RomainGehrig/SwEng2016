@@ -44,7 +44,7 @@ public class GoogleSignInTest {
     public void googleSignInTest() throws InterruptedException {
 
         logOutIfAlreadyLogInTest();
-        onView(withId(R.id.googe_sign_in_button)).perform(click());
+        onView(withId(R.id.google_sign_in_button)).perform(click());
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(GoogleSignIn.RC_GOOGLE_SIGN_IN, null);
 
         //intended(toPackage("com.google.android.gms"));
@@ -57,7 +57,7 @@ public class GoogleSignInTest {
         try {
             onView(withId(R.id.menuButtonImage)).perform(click());
             onView(withText(R.string.logout)).perform(click());
-            onView(withId(R.id.local_sign_in_button)).check(matches(isDisplayed()));
+            onView(withId(R.id.google_sign_in_button)).check(matches(isDisplayed()));
         }
         catch (NoMatchingViewException e) {
             // was already logged out
