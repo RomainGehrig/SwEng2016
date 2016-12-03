@@ -1,4 +1,4 @@
-package icynote.ui.loginactivities;
+package icynote.ui.login_activities;
 
 import android.content.Intent;
 import android.util.Log;

@@ -12,9 +12,9 @@
     <string name="logout">Log out</string>
 
     <string name="menuButtonImage">Menu button image</string>
-    <string name="menuOpenMetadata">Metadatas button image</string>
+    <string name="menuOpenMetadata">Metadata button image</string>
 
-    <string name="label_emailpassword">Email/Password</string>
+    <string name="label_email_password">Email/Password</string>
 
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account</string>
@@ -68,7 +68,7 @@
     <string name="item_note_date">Date</string>
     <string name="item_note_content">Content</string>
 
-    <string name="error_main_activiy_unable_to_create_new_holder">Sorry, unable to create a new holder for your note</string>
+    <string name="error_main_activity_unable_to_create_new_holder">Sorry, unable to create a new holder for your note</string>
     <string name="error_main_activity_unable_to_persist_note">Unexpected error: unable to persist the note</string>
     <string name="error_main_activity_unable_to_save_note">"Unexpected error: unable to save the note "</string>
     <string name="error_main_activity_unable_to_delete_note">Sorry, unable to delete note</string>

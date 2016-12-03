@@ -11,8 +11,8 @@ import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
 import icynote.plugins.Plugin;
 import icynote.plugins.PluginsProvider;
-import icynote.ui.loginactivities.GoogleLinkCredentials;
-import icynote.ui.loginactivities.GoogleUnLinkCredentials;
+import icynote.ui.login_activities.GoogleLinkCredentials;
+import icynote.ui.login_activities.GoogleUnLinkCredentials;
 
 
 public class Preferences extends PreferenceActivity {

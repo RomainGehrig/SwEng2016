@@ -1,4 +1,4 @@
-package icynote.ui.loginactivities;
+package icynote.ui.login_activities;
 
 import android.os.IBinder;
 import android.support.test.espresso.NoMatchingViewException;
@@ -23,8 +23,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.startsWith;
 
-public class LocalLogInTest {
+public class CreateAccountTest {
 
     @Rule
     public ActivityTestRule<LoginMenu> main = new ActivityTestRule<>(LoginMenu.class);
@@ -36,62 +37,38 @@ public class LocalLogInTest {
 
 
     @Test
-    public void localLogInSuccessTest() throws InterruptedException {
+    public void createAccountSuccessTest() throws InterruptedException {
         logOutIfAlreadyLogInTest();
         onView(ViewMatchers.withId(R.id.local_sign_in_button)).perform(click());
 
         // bad input first
         badMailTest();
         badPassWordTest();
-        mailRequiredTest();
-        passwordRequiredTest();
 
-        // then success login
-        successfulLogIn();
+        // then success account creation
+        //successfulCreateAccount();
 
         // logout to be able to continue login test
         logOutIfAlreadyLogInTest();
     }
 
-    private void successfulLogIn() throws InterruptedException {
+    /*private void successfulCreateAccount() throws InterruptedException { // TODO create new account
         onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
         onView(withId(R.id.field_password)).perform(replaceText("icynote")).perform(closeSoftKeyboard());
         Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email_create_account_button)).perform(click());
         Thread.sleep(2000);
 
         // check a view in mainactivity is shown
         onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
-    }
-
-
-    public void mailRequiredTest() throws InterruptedException {
-        onView(withId(R.id.field_email)).perform(replaceText(""));
-        onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
-        Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
-
-        // check a view in local log in is shown
-        onView(withId(R.id.field_email)).check(matches(isDisplayed()));
-    }
-
-
-    public void passwordRequiredTest() throws InterruptedException {
-        onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
-        onView(withId(R.id.field_password)).perform(replaceText("")).perform(closeSoftKeyboard());
-        Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
-
-        // check a view in local log in is shown
-        onView(withId(R.id.field_email)).check(matches(isDisplayed()));
-    }
+    }*/
 
 
     public void badMailTest() throws InterruptedException {
         onView(withId(R.id.field_email)).perform(replaceText("somemail"));
-        onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.field_password)).perform(replaceText("pw")).perform(closeSoftKeyboard());
         Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email_create_account_button)).perform(click());
         Thread.sleep(1000);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
@@ -101,14 +78,14 @@ public class LocalLogInTest {
 
 
     public void badPassWordTest() throws InterruptedException {
-        onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
-        onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.field_email)).perform(replaceText("test1@icynote.ch"));
+        onView(withId(R.id.field_password)).perform(replaceText("pw1")).perform(closeSoftKeyboard());
         Thread.sleep(100);
-        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email_create_account_button)).perform(click());
         Thread.sleep(1000);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
-        onView(withText("The password is invalid or the user does not have a password.")).inRoot(new ToastMatcher())
+        onView(withText(startsWith("The given password is invalid."))).inRoot(new ToastMatcher())
                 .check(matches(isDisplayed()));
     }
 
@@ -142,5 +119,4 @@ public class LocalLogInTest {
             return false;
         }
     }
-
 }

@@ -327,7 +327,7 @@ public class MainActivity  extends AppCompatActivity implements
             }
         } else {
             requester.onTrashedNoteRestoredFailure(note,
-                    getString(R.string.error_main_activiy_unable_to_create_new_holder));
+                    getString(R.string.error_main_activity_unable_to_create_new_holder));
         }
     }
 

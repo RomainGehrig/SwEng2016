@@ -1,4 +1,4 @@
-package icynote.ui.loginactivities;
+package icynote.ui.login_activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

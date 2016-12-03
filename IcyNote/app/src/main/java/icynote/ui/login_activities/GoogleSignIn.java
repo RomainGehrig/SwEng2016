@@ -1,4 +1,4 @@
-package icynote.ui.loginactivities;
+package icynote.ui.login_activities;
 
 import android.content.Intent;
 import android.util.Log;
@@ -8,6 +8,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 import icynote.ui.R;
+import icynote.ui.login_activities.GoogleClient;
 import util.Callback2;
 
 public class GoogleSignIn extends GoogleClient {
