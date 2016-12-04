@@ -68,7 +68,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:layout_toEndOf="@+id/tvNumNotes"
+                android:layout_toRightOf="@+id/tvNumNotes" />
 
             <TextView
                 android:id="@+id/tvNumNotes"
@@ -76,7 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                />
 
             <Button
                 android:text="@string/notes_list_delete"
@@ -87,6 +90,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:layout_toLeftOf="@+id/tvNumNotes"
+                android:layout_toStartOf="@+id/tvNumNotes"
                 android:enabled="false"/>
 
         </RelativeLayout>
