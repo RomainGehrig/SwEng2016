@@ -45,11 +45,6 @@ public class TrashedNotes extends Fragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState)
@@ -74,11 +69,6 @@ public class TrashedNotes extends Fragment
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         viewHolder = null;
@@ -100,6 +90,7 @@ public class TrashedNotes extends Fragment
         log("Received list of notes " + ((notes == null) ? "null" : notes.iterator().hasNext()));
         //need to create if notes received before fragment is resumed.
 
+        assert notes != null;
         notesReceived = new ArrayList<>(notes);
         enableViewIfNeeded();
     }

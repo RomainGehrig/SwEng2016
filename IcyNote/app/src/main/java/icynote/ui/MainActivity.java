@@ -169,11 +169,6 @@ public class MainActivity  extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onBackPressed() {
         toggleMenu(null);
     }
@@ -506,7 +501,7 @@ public class MainActivity  extends AppCompatActivity implements
                 public void onLoaderReset(Loader<Iterable<Note<SpannableString>>> loader) { }
             };
 
-    public static void hideKeyboard(Activity activity) {
+    private static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
