@@ -45,11 +45,6 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         contractor = (Contract) getActivity();

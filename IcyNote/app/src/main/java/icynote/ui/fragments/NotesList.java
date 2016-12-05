@@ -24,7 +24,7 @@ import icynote.ui.view.NotesListViewHolder;
 
 public class NotesList extends Fragment
         implements NotesPresenter {
-    private static final String LOG_TAG = NotesList.class.getSimpleName();
+    //private static final String LOG_TAG = NotesList.class.getSimpleName();
 
     /** Utility class to hold the view items such as the buttons, text fields, etc. */
     private NotesListViewHolder viewHolder;
@@ -42,11 +42,6 @@ public class NotesList extends Fragment
 
     public NotesList() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -72,11 +67,6 @@ public class NotesList extends Fragment
         super.onResume();
         contractor = (Contract) getActivity();
         getOrCreateAdapter();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
