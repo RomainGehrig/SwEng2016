@@ -12,9 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 public class ActivityWithProgressDialog extends AppCompatActivity {
 
     @VisibleForTesting
-    public ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
 
-    public void showProgressDialog() {
+    protected void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
@@ -24,7 +24,7 @@ public class ActivityWithProgressDialog extends AppCompatActivity {
         mProgressDialog.show();
     }
 
-    public void hideProgressDialog() {
+    protected void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }

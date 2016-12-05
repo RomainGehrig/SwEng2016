@@ -14,7 +14,7 @@ import icynote.ui.fragments.NotesList;
 public class MockNotesList extends BlankActivity implements NotesList.Contract {
 
     public boolean createNote = false;
-    public boolean openNote = false;
+    private boolean openNote = false;
     public boolean deleteNote = false;
 
     public MockNotesList() {

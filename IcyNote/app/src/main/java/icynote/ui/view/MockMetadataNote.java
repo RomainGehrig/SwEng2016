@@ -11,7 +11,7 @@ import icynote.ui.fragments.MetadataNote;
 public class MockMetadataNote extends BlankActivity implements MetadataNote.Contract {
 
     public boolean saveNote = false;
-    public boolean optionPresenterFinished = false;
+    private boolean optionPresenterFinished = false;
     public boolean openEditNote = false;
 
     public MockMetadataNote() {}

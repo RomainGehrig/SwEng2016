@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class PluginsProvider {
     private static PluginsProvider instance = null;
-    final ArrayList<FormatterPlugin> formatters;
-    final ArrayList<Plugin> plugins;
+    private final ArrayList<FormatterPlugin> formatters;
+    private final ArrayList<Plugin> plugins;
 
     private PluginsProvider() {
         formatters = new ArrayList<>();

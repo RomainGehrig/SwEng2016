@@ -8,7 +8,7 @@ import icynote.noteproviders.OrderType;
 
 
 public class PreferencesHolder {
-    final SharedPreferences pref;
+    private final SharedPreferences pref;
 
     public PreferencesHolder(SharedPreferences sp) {
         pref = sp;

@@ -25,7 +25,7 @@ public class MetadataNoteViewHolder {
         return new MetadataNoteViewHolder(layout);
     }
 
-    public MetadataNoteViewHolder(View inflatedLayout) {
+    private MetadataNoteViewHolder(View inflatedLayout) {
         layout = inflatedLayout;
         titleTextView = (EditText) layout.findViewById(R.id.noteTitle);
         dateCreatedTextView = (TextView) layout.findViewById(R.id.noteCreationDate);

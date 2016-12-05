@@ -74,7 +74,7 @@ public class GoogleClient extends ActivityWithProgressDialog
         return mLoginManager;
     }
 
-    protected GoogleApiClient apiClient() {
+    GoogleApiClient apiClient() {
         return mGoogleApiClient;
     }
 }

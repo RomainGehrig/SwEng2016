@@ -65,7 +65,7 @@ public class Preferences extends PreferenceActivity {
         }
     }
 
-    public void setAccountPref(String title, final int mode) {
+    private void setAccountPref(String title, final int mode) {
         accountPref.setTitle(title);
         accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -75,7 +75,7 @@ public class Preferences extends PreferenceActivity {
         });
     }
 
-    public void execAccountAction(int mode){
+    private void execAccountAction(int mode){
         switch (mode){
             case 0: {
                 Intent intent = new Intent(this, GoogleLinkCredentials.class);
