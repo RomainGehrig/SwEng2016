@@ -158,14 +158,12 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
      * Deletes every note corresponding to the specified user.
      *
      * @param userUID the unique id of the user whose notes we want to delete.
-     * @return the number of deleted rows.
      */
     void deleteUser(@NonNull String userUID) {
         SQLiteDatabase db = mDbProvider.getReadableDatabase();
-
-        /*return db.delete(Notes.TABLE_NAME
+        db.delete(Notes.TABLE_NAME
                 , Notes.COL_USER_ID + " LIKE ?"
-                , new String[]{userUID});*/
+                , new String[]{userUID});
     }
 
     /**
