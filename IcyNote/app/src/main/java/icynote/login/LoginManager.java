@@ -43,7 +43,7 @@ public class LoginManager {
     private Callback onLogoutCallback;
 
     /** The underlying library we use to manager user's accounts. */
-    private FirebaseAuth mAuth;
+    private final FirebaseAuth mAuth;
 
     /**
      * Package protected method: use a factory to create a LoginManager.
@@ -274,7 +274,7 @@ public class LoginManager {
      * Adapter design pattern: translate our Callback2 to OnCompleteListener.
      */
     private static class OnCompleteListenerWithCallback implements OnCompleteListener<AuthResult> {
-        private Callback2<Boolean, String> callback;
+        private final Callback2<Boolean, String> callback;
 
         public OnCompleteListenerWithCallback(Callback2<Boolean, String> c){
             if (c == null) {

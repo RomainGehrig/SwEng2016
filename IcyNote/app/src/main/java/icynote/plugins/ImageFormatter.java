@@ -42,7 +42,7 @@ import static android.R.attr.minHeight;
 import static android.R.attr.minWidth;
 
 class ImageFormatter implements FormatterPlugin {
-    private static String TAG = ImageFormatter.class.getSimpleName();
+    private static final String TAG = ImageFormatter.class.getSimpleName();
     private static Uri lastUri;
 
     private final int mRequestCodeCamera;
@@ -175,7 +175,7 @@ class ImageFormatter implements FormatterPlugin {
     }
 
     private class FormatterFactory extends NoteDecoratorFactory<SpannableString> {
-        private PluginData appState;
+        private final PluginData appState;
 
         FormatterFactory(PluginData state) {
             appState = state;
@@ -330,7 +330,7 @@ class ImageFormatter implements FormatterPlugin {
         ss.setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
     }
     private static class ImageSpanWithId extends ImageSpan {
-        private String name;
+        private final String name;
 
         ImageSpanWithId(String name, Drawable d, int flag) {
             super(d, flag);

@@ -11,11 +11,11 @@ import icynote.ui.R;
 
 
 public class TrashedNotesViewHolder {
-    private ListView listView;
-    private TextView tvNumNotes;
-    private EditText searchBar;
-    private Button btRestore;
-    private TextView emptyText;
+    private final ListView listView;
+    private final TextView tvNumNotes;
+    private final EditText searchBar;
+    private final Button btRestore;
+    private final TextView emptyText;
 
 
     public TrashedNotesViewHolder(View notesList) {

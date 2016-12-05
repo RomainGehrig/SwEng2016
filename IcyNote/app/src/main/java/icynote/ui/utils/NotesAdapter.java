@@ -31,11 +31,11 @@ import icynote.ui.R;
 public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
     private static final String TAG = NotesAdapter.class.getSimpleName();
 
-    private Context context;
-    private BucketClickedListener onClickListener;
+    private final Context context;
+    private final BucketClickedListener onClickListener;
 
     /** used by the filter to retrieve the full list of notes */
-    private NotesBackup fullListBackup = new NotesBackup();
+    private final NotesBackup fullListBackup = new NotesBackup();
 
     public class Bucket {
         private Note<SpannableString> note;
@@ -270,7 +270,7 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
     };
 
     private static class NotesBackup {
-        private ArrayList<Bucket> backupData = new ArrayList<>();
+        private final ArrayList<Bucket> backupData = new ArrayList<>();
 
         public void add(Bucket b) {
             //Log.i(NotesAdapter.class.getSimpleName(), "add note " + b.getNote().getId() + " to backup");

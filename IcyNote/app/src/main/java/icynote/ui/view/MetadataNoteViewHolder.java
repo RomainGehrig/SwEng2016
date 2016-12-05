@@ -12,13 +12,13 @@ import android.widget.TextView;
 import icynote.ui.R;
 
 public class MetadataNoteViewHolder {
-    private View layout;
-    private LinearLayout optionalActionsLayout;
-    private EditText titleTextView;
-    private TextView dateCreatedTextView;
-    private TextView dateModifiedTextView;
+    private final View layout;
+    private final LinearLayout optionalActionsLayout;
+    private final EditText titleTextView;
+    private final TextView dateCreatedTextView;
+    private final TextView dateModifiedTextView;
     private TextWatcher currentTextWatcher;
-    private Button backToNoteButton;
+    private final Button backToNoteButton;
 
     public static MetadataNoteViewHolder inflate(LayoutInflater inflater, ViewGroup container) {
         View layout = inflater.inflate(R.layout.fragment_metadata_note, container, false);

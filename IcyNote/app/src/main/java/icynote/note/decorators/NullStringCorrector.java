@@ -14,7 +14,7 @@ import icynote.note.Response;
  */
 public class NullStringCorrector<S> extends NoteDecoratorTemplate<S> {
     private String name = "";
-    private Corrector<S> corrector;
+    private final Corrector<S> corrector;
 
     public interface Corrector<S> {
         S makeCorrection();

@@ -39,8 +39,8 @@ import util.Optional;
 public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
     private static final String LOGGING_TAG = SQLiteNoteProvider.class.getSimpleName();
 
-    private String mCurrentUserUID;
-    private DatabaseProvider mDbProvider;
+    private final String mCurrentUserUID;
+    private final DatabaseProvider mDbProvider;
     private final String[] mNoteColumns = {
             Notes.COL_ID,
             Notes.COL_USER_ID,

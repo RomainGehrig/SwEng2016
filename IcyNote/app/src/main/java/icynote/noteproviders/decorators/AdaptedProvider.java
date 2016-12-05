@@ -12,8 +12,8 @@ import util.Optional;
 
 
 public class AdaptedProvider<S, T> implements NoteProvider<S> {
-    private NoteProvider<T> adapted;
-    private Adapter<S,T> adapter;
+    private final NoteProvider<T> adapted;
+    private final Adapter<S,T> adapter;
 
     public AdaptedProvider(NoteProvider<T> toAdapt, Adapter<S, T> usingAdapter) {
         adapted = toAdapt;

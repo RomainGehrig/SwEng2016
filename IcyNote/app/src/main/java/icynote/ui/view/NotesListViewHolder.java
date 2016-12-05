@@ -11,12 +11,12 @@ import icynote.ui.R;
 
 
 public class NotesListViewHolder {
-    private ListView listView;
-    private TextView tvNumNotes;
-    private EditText searchBar;
-    private Button btAdd;
-    private Button btDelete;
-    private TextView emptyText;
+    private final ListView listView;
+    private final TextView tvNumNotes;
+    private final EditText searchBar;
+    private final Button btAdd;
+    private final Button btDelete;
+    private final TextView emptyText;
 
 
     public NotesListViewHolder(View notesList) {
