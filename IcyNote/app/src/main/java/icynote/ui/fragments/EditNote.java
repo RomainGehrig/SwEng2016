@@ -26,8 +26,7 @@ public class EditNote extends Fragment implements NotePresenter {
 
     private Contract activity;
 
-    private TagGroup mDefaultTagGroup;
-    private String[] tags = {}; // initialize tags here
+    private final String[] tags = {}; // initialize tags here
     private NoteViewHolder viewHolder;
 
     public EditNote() {
@@ -51,7 +50,7 @@ public class EditNote extends Fragment implements NotePresenter {
                 activity.openOptionalPresenter(EditNote.this);
             }
         });
-        mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
+        TagGroup mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
         if (tags != null && tags.length > 0) {
             mDefaultTagGroup.setTags(tags);
         }
