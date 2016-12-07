@@ -191,7 +191,7 @@ public class MainActivity  extends AppCompatActivity implements
 
     /** menu's on click listener that opens the list of notes */
     public void openListOfNotes(MenuItem item) {
-        listOfNotesPresenter = openFragment(NotesList.class, null);
+        listOfNotesPresenter = openFragment(NotesList.class);
         loadListOfNotes();
     }
 
@@ -203,19 +203,19 @@ public class MainActivity  extends AppCompatActivity implements
                     Toast.LENGTH_SHORT).show();
             toggleMenu(null);
         } else {
-            singleNotePresenter = openFragment(EditNote.class, null);
+            singleNotePresenter = openFragment(EditNote.class);
             lastOpenedNoteMenuItem.setChecked(true);
             reloadNote();
         }
     }
     /** menu's on click listener that opens the list of tags */
     public void openListOfTags(MenuItem item) {
-        openFragment(EditTags.class, null);
+        openFragment(EditTags.class);
     }
 
     /** menu's on click listener that opens the list of deleted notes */
     public void openListOfTrashedNotes(MenuItem item) {
-        TrashedNotesPresenter trashedNotesPresenter = openFragment(TrashedNotes.class, null);
+        TrashedNotesPresenter trashedNotesPresenter = openFragment(TrashedNotes.class);
         trashedNotesPresenter.receiveNotes(trashedNotes);
     }
 
@@ -238,7 +238,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void openNote(int id, NoteOpenerBase requester) {
-        singleNotePresenter = openFragment(EditNote.class, null);
+        singleNotePresenter = openFragment(EditNote.class);
         lastOpenedNoteMenuItem.setChecked(true);
         loadNote(id);
     }
@@ -253,7 +253,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void createNote(NotesPresenter requester) {
-        singleNotePresenter = openFragment(EditNote.class, null);
+        singleNotePresenter = openFragment(EditNote.class);
         lastOpenedNoteMenuItem.setChecked(true);
         loadNewNote();
     }
@@ -329,7 +329,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void openOptionalPresenter(NotePresenter requester) {
-        MetadataNote n = openFragment(MetadataNote.class, null);
+        MetadataNote n = openFragment(MetadataNote.class);
         singleNotePresenter = n;
 
         ArrayList<View> buttons = new ArrayList<>();
@@ -359,7 +359,7 @@ public class MainActivity  extends AppCompatActivity implements
     //*  FRAGMENTS
     //**
 
-    private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
+    private <F extends Fragment> F openFragment(Class<F> toOpen) {
         F f = getFragment(toOpen);
         listOfNotesPresenter = null;
         singleNotePresenter = null;
