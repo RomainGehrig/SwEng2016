@@ -15,7 +15,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:id="@+id/backButton"
-        android:background="@drawable/ic_navigate_before_white_24dp"
+        android:background="@drawable/meta_back"
         android:alpha="0.5"/>
 
     <TextView
