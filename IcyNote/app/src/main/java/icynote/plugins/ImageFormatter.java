@@ -18,6 +18,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -357,7 +358,12 @@ class ImageFormatter implements FormatterPlugin {
         //bitmap = MediaStore.Images.Media.getBitmap(
         //        appState.getActivity().getContentResolver(), uri);
 
-        return decodeSampledBitmapFromResource(appState, uri, MainActivity.screenWidth/3, MainActivity.screenHeight/3);
+
+        // Get screen size
+        DisplayMetrics metrics = new DisplayMetrics();
+        appState.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        return decodeSampledBitmapFromResource(appState, uri, metrics.widthPixels/3, metrics.heightPixels/3);
     }
     private static Bitmap decodeSampledBitmapFromResource(PluginData state,
                                                           Uri uri, int reqWidth, int reqHeight) {

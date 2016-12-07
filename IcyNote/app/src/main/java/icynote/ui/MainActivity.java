@@ -14,7 +14,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,9 +67,6 @@ public class MainActivity  extends AppCompatActivity implements
     private static final String BUNDLE_SEL_START = "sel_start";
     private static final String BUNDLE_SEL_STOP = "sel_stop";
     private static final String BUNDLE_CURRENT_USER = "current_user";
-
-    public static int screenWidth;
-    public static int screenHeight;
 
     private String currentUserId;
     private DrawerLayout drawer;
@@ -144,14 +140,6 @@ public class MainActivity  extends AppCompatActivity implements
         }
 
         executeOnStart = executeOnStartDefault;
-
-
-        // Get screen size
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        screenWidth = metrics.widthPixels;
-        screenHeight = metrics.heightPixels;
-        Log.i("w-h", Integer.toString(screenWidth) + " " +  Integer.toString(screenHeight));
     }
 
     @Override
