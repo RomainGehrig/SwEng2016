@@ -1,12 +1,9 @@
 
 package icynote.ui;
 
-import android.os.IBinder;
 import android.support.test.espresso.Espresso;
-import android.support.test.espresso.Root;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ListView;
 
 import org.hamcrest.Description;
@@ -20,9 +17,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -165,92 +160,3 @@ public class PreferencesTest {
         return counts[0];
     }
 }
-
-
-
-/*package icynote.ui;
-
-import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
-
-import org.junit.runner.RunWith;
-
-@RunWith(AndroidJUnit4.class)
-public class PreferencesTest extends ActivityInstrumentationTestCase2<MainActivity> {
-
-    private MainActivity mActivity;
-
-    public PreferencesTest() {
-        super(MainActivity.class);
-    }
-
-
-    //TODO use preferences instead of settings
-    @Before
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        final Context context = InstrumentationRegistry.getTargetContext();
-        mActivity = getActivity();
-    }
-
-    @Test
-    public void themeIsBrightAtStartUp() {
-        assertEquals(Theme.getTheme(), Theme.ThemeType.BRIGHT);
-    }
-
-    @Test
-    public void themeIsStillBrightWhenReselect() {
-        onView(withId(R.id.menuButton)).perform(click());
-        onView(withText(R.string.settings)).perform(click());
-        onView(withId(R.id.styles_list)).perform(click());
-        Espresso.onData(allOf(is(instanceOf(String.class)))).atPosition(Theme.getTheme().toPosition()).perform(click());
-        assertEquals(Theme.getTheme(), Theme.ThemeType.BRIGHT);
-    }
-
-    @Test
-    public void themeIsDarkWhenSelected() {
-        onView(withId(R.id.menuButton)).perform(click());
-        onView(withText(R.string.settings)).perform(click());
-        onView(withId(R.id.styles_list)).perform(click());
-        Espresso.onData(allOf(is(instanceOf(String.class))))
-                .atPosition(Theme.ThemeType.DARK.toPosition()).perform(click());
-        assertEquals(Theme.getTheme(), Theme.ThemeType.DARK);
-    }
-    
-
-    @Test
-    public void backgroundIsWhiteWhenBrightTheme() {
-        // Get the background color of the editNote Fragment
-        ColorDrawable backgroundColor =
-                (ColorDrawable) mActivity.findViewById(R.id.layoutFragmentEditNote).getBackground();
-
-        // Parse the current theme to get the background color corresponding to the current theme
-        TypedArray ta =
-                mActivity.obtainStyledAttributes(Theme.getTheme().toInt(), new int[]{android.R.attr.background});
-
-        assertEquals(backgroundColor.getColor(), ta.getColor(0, 0));
-    }
-    
-    @Test
-    public void textColorIsBlackWhenBrightTheme() {
-        int color = ((EditText)mActivity.findViewById(R.id.noteDisplayBodyText)).getCurrentTextColor();
-        assertEquals(color, Theme.getTheme().getTextColor());
-    }
-
-    @Test
-    public void textColorIsWhiteWhenDarkTheme() {
-        onView(withId(R.id.menuButton)).perform(click());
-        onView(withText(R.string.settings)).perform(click());
-        onView(withId(R.xml.preferences)).perform(click());
-        Espresso.onData(allOf(is(instanceOf(String.class))))
-                .atPosition(Theme.ThemeType.DARK.toPosition()).perform(click());
-        onView(withId(R.id.menuButton)).perform(click());
-        onView(withText(R.string.trash)).perform(click());
-        int color = ((EditText)mActivity.findViewById(R.id.noteDisplayBodyText)).getCurrentTextColor();
-        assertEquals(color, Theme.getTheme().getTextColor());
-    }
-
-}*/
