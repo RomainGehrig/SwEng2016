@@ -329,6 +329,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void openOptionalPresenter(NotePresenter requester) {
+        findViewById(R.id.noteDisplayBodyText).clearFocus();
         MetadataNote n = openFragment(MetadataNote.class);
         singleNotePresenter = n;
 
