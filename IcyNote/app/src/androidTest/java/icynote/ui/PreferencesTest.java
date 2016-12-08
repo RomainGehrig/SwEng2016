@@ -40,18 +40,63 @@ public class PreferencesTest {
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.listAllNotes)).perform(click());
         deleteAllNotes();
+        addNote("note1", "body1");
         addNote("note3", "body3");
         addNote("note2", "body2");
-        addNote("note1", "body1");
     }
 
     @Test
-    public void sortingByTitleTest () {
+    public void beginWith3Notes() {
         assertEquals(3, getNotesCount());
+    }
+
+    @Test
+    public void sortingByTitleAscendingTest () {
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.settings)).perform(click());
         onView(withText("Sort by")).perform(click());
         onView(withText("Title")).perform(click());
+        onView(withText("Sort order")).perform(click());
+        onView(withText("Ascending")).perform(click());
+
+        Espresso.pressBack();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+
+        //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
+        onView(withText("note1")).check(isAbove(withText("note2")));
+        onView(withText("note2")).check(isAbove(withText("note3")));
+    }
+
+    @Test
+    public void sortingByCreatedAscendingTest () {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.settings)).perform(click());
+        onView(withText("Sort by")).perform(click());
+        onView(withText("Created")).perform(click());
+        onView(withText("Sort order")).perform(click());
+        onView(withText("Ascending")).perform(click());
+
+        Espresso.pressBack();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+
+        //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
+        onView(withText("note1")).check(isAbove(withText("note3")));
+        onView(withText("note3")).check(isAbove(withText("note2")));
+    }
+
+    @Test
+    public void sortingByLastModifiedAscendingTest () {
+        onView(withText("note3")).perform(click());
+        onView(withId(R.id.noteDisplayBodyText)).perform(replaceText("new body"));
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.settings)).perform(click());
+        onView(withText("Sort by")).perform(click());
+        onView(withText("Last modified")).perform(click());
+        onView(withText("Sort order")).perform(click());
+        onView(withText("Ascending")).perform(click());
 
         Espresso.pressBack();
         onView(withId(R.id.menuButtonImage)).perform(click());
