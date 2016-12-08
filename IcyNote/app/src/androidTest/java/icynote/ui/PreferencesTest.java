@@ -29,15 +29,15 @@ public class PreferencesTest {
     @Rule
     public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
+    @Before
+    public void setUp() {
+        MainActivity mActivity = main.getActivity();
+    }
+
     @Test
     public void beginWith3Notes() throws Exception {
         setUpForSorting();
         assertEquals(3, getNotesCount());
-    }
-
-    @Before
-    public void setUp() {
-        MainActivity mActivity = main.getActivity();
     }
 
     @Test
