@@ -1,10 +1,15 @@
 
 package icynote.ui;
 
+import android.content.Intent;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -12,9 +17,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import icynote.login.LoginManager;
+import icynote.login.LoginManagerFactory;
+import icynote.ui.login_activities.EmailPasswordLogin;
+import icynote.ui.login_activities.GoogleSignIn;
+import icynote.ui.login_activities.LoginMenu;
+import util.Callback2;
+
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -30,8 +44,11 @@ public class PreferencesTest {
     public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         MainActivity mActivity = main.getActivity();
+        LoginManager loginManager = LoginManagerFactory.getInstance();
+        loginManager.login("test@icynote.ch", "icynote", null);
+        //loginIfNotLogged();
     }
 
     @Test
@@ -162,6 +179,20 @@ public class PreferencesTest {
 
 
     //---- Helper methods -----------
+
+    /*private void loginIfNotLogged() throws InterruptedException {
+        try {
+            onView(withId(R.id.local_sign_in_button)).perform(click());
+            onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
+            onView(withId(R.id.field_password)).perform(replaceText("icynote"))
+                    .perform(closeSoftKeyboard());
+            onView(withId(R.id.email_sign_in_button)).perform(click());
+        }
+        catch (NoMatchingViewException e) {
+            // was already logged in
+        }
+        Thread.sleep(2000);
+    }*/
 
     public void setUpForSorting() throws Exception {
         onView(withId(R.id.menuButtonImage)).perform(click());

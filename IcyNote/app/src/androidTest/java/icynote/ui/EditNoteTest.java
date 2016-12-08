@@ -88,13 +88,13 @@ public class EditNoteTest {
         assertTrue(mActivity.saveNote);
     }*/
 
-    @Test
+    /*@Test
     public void writeContentTest() throws InterruptedException {
         enableFragment();
         fragment.receiveNote(note);
         onView(withId(R.id.noteDisplayBodyText)).perform(replaceText("someText"));
         assertTrue(mActivity.saveNote);
-    }
+    }*/
 
     /*@Test
     public void saveNoteTest() throws InterruptedException { // TODO more checks
