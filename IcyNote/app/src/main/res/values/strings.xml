@@ -13,6 +13,8 @@
 
     <string name="menuButtonImage">Menu button image</string>
     <string name="menuOpenMetadata">Metadata button image</string>
+    <string name="menuRefresh">Refresh button image</string>
+    <string name="menuBack">Back button image</string>
 
     <string name="label_email_password">Email/Password</string>
 
