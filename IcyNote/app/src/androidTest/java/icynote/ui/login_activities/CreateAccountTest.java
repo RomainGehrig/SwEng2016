@@ -13,6 +13,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import icynote.ui.R;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -46,22 +50,26 @@ public class CreateAccountTest {
         badPassWordTest();
 
         // then success account creation
-        //successfulCreateAccount();
+        successfulCreateAccount();
 
         // logout to be able to continue login test
         logOutIfAlreadyLogInTest();
     }
 
-    /*private void successfulCreateAccount() throws InterruptedException { // TODO create new account
-        onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
+    private void successfulCreateAccount() throws InterruptedException { // TODO create new account
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        Date date = new Date();
+        System.out.println(dateFormat.format(date));
+        String email = dateFormat.format(date) + "@icynote.ch";
+        onView(withId(R.id.field_email)).perform(replaceText(email));
         onView(withId(R.id.field_password)).perform(replaceText("icynote")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_create_account_button)).perform(click());
         Thread.sleep(2000);
 
         // check a view in mainactivity is shown
-        onView(withId(R.id.searchBar)).check(matches(isDisplayed()));
-    }*/
+        onView(withId(R.id.menuButtonImage)).check(matches(isDisplayed()));
+    }
 
 
     private void badMailTest() throws InterruptedException {
@@ -69,7 +77,7 @@ public class CreateAccountTest {
         onView(withId(R.id.field_password)).perform(replaceText("pw")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_create_account_button)).perform(click());
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
         onView(withText("The email address is badly formatted.")).inRoot(new ToastMatcher())
@@ -82,7 +90,7 @@ public class CreateAccountTest {
         onView(withId(R.id.field_password)).perform(replaceText("pw1")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_create_account_button)).perform(click());
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
         onView(withText(startsWith("The given password is invalid."))).inRoot(new ToastMatcher())

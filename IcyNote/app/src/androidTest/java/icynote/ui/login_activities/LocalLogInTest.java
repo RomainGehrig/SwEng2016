@@ -92,7 +92,7 @@ public class LocalLogInTest {
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_sign_in_button)).perform(click());
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
         onView(withText("The email address is badly formatted.")).inRoot(new ToastMatcher())
@@ -105,7 +105,7 @@ public class LocalLogInTest {
         onView(withId(R.id.field_password)).perform(replaceText("password")).perform(closeSoftKeyboard());
         Thread.sleep(100);
         onView(withId(R.id.email_sign_in_button)).perform(click());
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
         onView(withText("The password is invalid or the user does not have a password.")).inRoot(new ToastMatcher())
