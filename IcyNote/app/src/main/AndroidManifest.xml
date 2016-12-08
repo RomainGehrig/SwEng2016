@@ -38,6 +38,7 @@
         <activity android:name=".login_activities.GoogleLinkCredentials"/>
         <activity android:name=".login_activities.GoogleUnLinkCredentials"/>
         <activity android:name=".login_activities.GoogleClient"/>
+        <activity android:name="icynote.plugins.GoogleDriveExport$GoogleDriveCreateFileActivity"/>
 
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden" />

@@ -21,6 +21,7 @@ public class PluginsProvider {
         for(FormatterPlugin fp : formatters) {
             plugins.add(fp);
         }
+        plugins.add(new GoogleDriveExport());
 
     }
 

@@ -3,6 +3,7 @@ package icynote.ui.login_activities;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -11,6 +12,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.drive.Drive;
 
 import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
@@ -42,20 +44,21 @@ public class GoogleClient extends ActivityWithProgressDialog
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER)) //request for google drive
+                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER), new Scope(Scopes.DRIVE_FILE)) //request for google drive
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Drive.API)
                 .addApi(Auth.CREDENTIALS_API)
+                .addScope(Drive.SCOPE_APPFOLDER)
+                .addScope(Drive.SCOPE_FILE)
                 .addConnectionCallbacks(this)
                 .build();
 
         mLoginManager = LoginManagerFactory.getInstance();
-
     }
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -63,6 +66,7 @@ public class GoogleClient extends ActivityWithProgressDialog
                 String.format(getString(R.string.error_google_client_unable_to_connect), connectionResult.getErrorMessage()),
                 Toast.LENGTH_LONG)
                 .show();
+        Log.w("GoogleClient", "Connection failed with message: " + connectionResult.getErrorMessage());
         finish();
     }
 

@@ -369,7 +369,7 @@ public class MainActivity  extends AppCompatActivity implements
         singleNotePresenter = n;
 
         ArrayList<View> buttons = new ArrayList<>();
-        for(FormatterPlugin plugin : pluginProvider.getFormatters()) {
+        for(Plugin plugin : pluginProvider.getPlugins()) {
             for(View pluginAction : plugin.getMetaButtons(pluginData)) {
                 buttons.add(pluginAction);
             }

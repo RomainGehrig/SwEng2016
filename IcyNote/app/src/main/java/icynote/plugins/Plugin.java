@@ -1,6 +1,7 @@
 package icynote.plugins;
 
 import android.content.Intent;
+import android.view.View;
 
 /**
  * The Plugin interface.
@@ -33,6 +34,15 @@ public interface Plugin {
      * @return the name
      */
     String getName();
+
+    /**
+     * Gets meta buttons.
+     *
+     * @param state the state
+     * @return the meta buttons
+     */
+    Iterable<View> getMetaButtons(PluginData state);
+
 
     /**
      * Sets enabled.
