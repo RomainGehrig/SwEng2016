@@ -18,6 +18,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -28,25 +29,20 @@ public class PreferencesTest {
     @Rule
     public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
-    @Before
-    public void setUp() throws Exception {
-        MainActivity mActivity = main.getActivity();
-
-        onView(withId(R.id.menuButtonImage)).perform(click());
-        onView(withText(R.string.listAllNotes)).perform(click());
-        deleteAllNotes();
-        addNote("note1", "body1");
-        addNote("note3", "body3");
-        addNote("note2", "body2");
-    }
-
     @Test
-    public void beginWith3Notes() {
+    public void beginWith3Notes() throws Exception {
+        setUpForSorting();
         assertEquals(3, getNotesCount());
     }
 
+    @Before
+    public void setUp() {
+        MainActivity mActivity = main.getActivity();
+    }
+
     @Test
-    public void sortingByTitleAscendingTest () {
+    public void sortingByTitleAscendingTest () throws Exception {
+        setUpForSorting();
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.settings)).perform(click());
         onView(withText("Sort by")).perform(click());
@@ -64,7 +60,8 @@ public class PreferencesTest {
     }
 
     @Test
-    public void sortingByCreatedAscendingTest () {
+    public void sortingByCreatedAscendingTest () throws Exception {
+        setUpForSorting();
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.settings)).perform(click());
         onView(withText("Sort by")).perform(click());
@@ -82,7 +79,8 @@ public class PreferencesTest {
     }
 
     @Test
-    public void sortingByLastModifiedAscendingTest () {
+    public void sortingByLastModifiedAscendingTest () throws Exception {
+        setUpForSorting();
         onView(withText("note3")).perform(click());
         onView(withId(R.id.noteDisplayBodyText)).perform(replaceText("new body"));
 
@@ -102,8 +100,77 @@ public class PreferencesTest {
         onView(withText("note2")).check(isAbove(withText("note3")));
     }
 
+    @Test
+    public void sortingByTitleDescendingTest () throws Exception {
+        setUpForSorting();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.settings)).perform(click());
+        onView(withText("Sort by")).perform(click());
+        onView(withText("Title")).perform(click());
+        onView(withText("Sort order")).perform(click());
+        onView(withText("Descending")).perform(click());
+
+        Espresso.pressBack();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+
+        //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
+        onView(withText("note3")).check(isAbove(withText("note2")));
+        onView(withText("note2")).check(isAbove(withText("note1")));
+    }
+
+    @Test
+    public void sortingByCreatedDescendingTest () throws Exception {
+        setUpForSorting();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.settings)).perform(click());
+        onView(withText("Sort by")).perform(click());
+        onView(withText("Created")).perform(click());
+        onView(withText("Sort order")).perform(click());
+        onView(withText("Descending")).perform(click());
+
+        Espresso.pressBack();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+
+        //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
+        onView(withText("note2")).check(isAbove(withText("note3")));
+        onView(withText("note3")).check(isAbove(withText("note1")));
+    }
+
+    @Test
+    public void sortingByLastModifiedDescendingTest () throws Exception {
+        setUpForSorting();
+        onView(withText("note3")).perform(click());
+        onView(withId(R.id.noteDisplayBodyText)).perform(replaceText("new body"));
+
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.settings)).perform(click());
+        onView(withText("Sort by")).perform(click());
+        onView(withText("Last modified")).perform(click());
+        onView(withText("Sort order")).perform(click());
+        onView(withText("Descending")).perform(click());
+
+        Espresso.pressBack();
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+
+        //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
+        onView(withText("note3")).check(isAbove(withText("note2")));
+        onView(withText("note2")).check(isAbove(withText("note1")));
+    }
+
 
     //---- Helper methods -----------
+
+    public void setUpForSorting() throws Exception {
+        onView(withId(R.id.menuButtonImage)).perform(click());
+        onView(withText(R.string.listAllNotes)).perform(click());
+        deleteAllNotes();
+        addNote("note1", "body1");
+        addNote("note3", "body3");
+        addNote("note2", "body2");
+    }
 
     private void addNote(String title, String body) {
         onView(withId(R.id.btAdd)).perform(click());
