@@ -6,6 +6,6 @@
     <dimen name="icon_top_margin">24dp</dimen>
     <dimen name="icon_bottom_margin">24dp</dimen>
     <dimen name="notesTitleSize">20sp</dimen>
-    <dimen name="textSizeSpinner">18sp</dimen>
+    <dimen name="textSizeVarious">18sp</dimen>
     <dimen name="refresh_margin">10sp</dimen>
 </resources>
