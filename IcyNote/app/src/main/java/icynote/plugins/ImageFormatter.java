@@ -1,14 +1,18 @@
 package icynote.plugins;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
@@ -211,15 +215,31 @@ class ImageFormatter implements FormatterPlugin {
         if (camera.resolveActivity(a.getPackageManager()) == null) {
             Log.e("imageFormatter", "unable to get camera activity");
         } else {
+
+            camera.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             camera.putExtra(MediaStore.EXTRA_OUTPUT, destUri);
             a.startActivityForResult(camera, mRequestCodeCamera);
         }
     }
+
+    public static Camera getCameraInstance(){
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
+    }
+
+    static String absPath = null;
     private Uri getTempFileUri(Activity a) {
         File pictureFile = createImageFile(a);
         if (pictureFile == null) {
             throw new AssertionError("unable to create image file");
         }
+        absPath = pictureFile.getAbsolutePath();
         Uri uri = FileProvider.getUriForFile(a, "icynote.ui.fileprovider", pictureFile);
         if (uri == null) {
             throw new AssertionError("unable to get uri of temp. image file");
@@ -231,12 +251,13 @@ class ImageFormatter implements FormatterPlugin {
         try {
             String imageFileName = "img_" + createNameFromStamp();
             File storageDir = a.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            //return new File(storageDir + File.separator + imageFileName + ".jpg");
             return File.createTempFile(
                     imageFileName,
                     ".jpg",
                     storageDir
             );
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Log.e("imageFormatter", ex.getMessage());
         }
         return null;
@@ -278,6 +299,9 @@ class ImageFormatter implements FormatterPlugin {
                         "Unexpected error: file URI is null. Aborted.",
                         Toast.LENGTH_SHORT).show();
             } else {
+
+                //getRotationFromQuery(insertIntoContent(state), state);
+
                 writeUriToNote(state, lastUri);
                 state.getContractor().registerOnStartCallback(new Callback() {
                     @Override
@@ -285,6 +309,7 @@ class ImageFormatter implements FormatterPlugin {
                         state.getContractor().reOpenLastOpenedNote(null);
                     }
                 });
+
             }
         } else if (requestCode == mRequestCodeGallery) {
             Toast.makeText(state.getActivity(), "gallery", Toast.LENGTH_SHORT).show();
@@ -292,6 +317,59 @@ class ImageFormatter implements FormatterPlugin {
             throw new AssertionError("unhandled request code");
         }
 
+    }
+
+    private static void getRotationFromExif(String absPath, PluginData state) {
+
+        ExifInterface ei = null;
+        if(absPath == null) return;
+
+        try {
+            ei = new ExifInterface(absPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        Log.e("orientation EXIF", Integer.toString(orientation));
+/*
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotateImage(bitmap, 90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotateImage(bitmap, 180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotateImage(bitmap, 270);
+                break;
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                break;
+        }*/
+    }
+
+    private Uri insertIntoContent(PluginData state) {
+        ContentValues values = new ContentValues(1);
+        values.put(MediaStore.Images.Media.ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        return state.getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+
+    private void getRotationFromQuery(Uri lastUri, PluginData state) {
+        String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
+        Cursor cur = state.getActivity().getContentResolver().query(lastUri, orientationColumn, null, null, null);
+
+        for(int i = 0; i<cur.getColumnCount(); i++) {
+            Log.e("column name",cur.getColumnName(i));
+        }
+
+        int orientation = -1;
+        if (cur != null && cur.moveToFirst()) {
+            orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
+        }
+        Log.e("orientation",Integer.toString(orientation));
     }
 
     private void writeUriToNote(PluginData state, Uri uri) {
@@ -363,12 +441,19 @@ class ImageFormatter implements FormatterPlugin {
         DisplayMetrics metrics = new DisplayMetrics();
         appState.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        return decodeSampledBitmapFromResource(appState, uri, metrics.widthPixels/3, metrics.heightPixels/3);
+        Bitmap b = decodeSampledBitmapFromResource(appState, uri, metrics.widthPixels/3, metrics.heightPixels/3);
+
+
+        if(b==null) return null;
+        else return /*rotateImage(b, 90);*/ b;
     }
     private static Bitmap decodeSampledBitmapFromResource(PluginData state,
                                                           Uri uri, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
+
+        getRotationFromExif(absPath, state);
+
         InputStream inputStream = null;
         try {
             inputStream = state.getActivity().getContentResolver().openInputStream(uri);
@@ -436,8 +521,8 @@ class ImageFormatter implements FormatterPlugin {
         imageStream = context.getContentResolver().openInputStream(selectedImage);
         Bitmap img = BitmapFactory.decodeStream(imageStream, null, options);
 
-
-        img = rotateImageIfRequired(context, img, selectedImage);
+        img = rotateImage(img, 90);
+        //img = rotateImageIfRequired(context, img, selectedImage);
         return img;
     }
 
@@ -527,4 +612,6 @@ class ImageFormatter implements FormatterPlugin {
         img.recycle();
         return rotatedImg;
     }
+
+
 }
