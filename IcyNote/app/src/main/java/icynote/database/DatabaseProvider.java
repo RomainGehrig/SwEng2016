@@ -19,6 +19,11 @@ public class DatabaseProvider extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Icynote.db";
     private static final String LOGGING_TAG = "DatabaseProvider";
 
+    /**
+     * Instantiates a new Database provider.
+     *
+     * @param context the context
+     */
     public DatabaseProvider(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -42,6 +47,9 @@ public class DatabaseProvider extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ", ";
 
     private static final class SqlCreateTable {
+        /**
+         * The Note.
+         */
         static final String NOTE =
                 "CREATE TABLE " + Notes.TABLE_NAME +
                         " (" + Notes.COL_ID + Notes.TYPE_ID + PRIMARY +
@@ -55,6 +63,9 @@ public class DatabaseProvider extends SQLiteOpenHelper {
 
     private static final class SqlDeleteTable {
         private static final String DROP = "DROP TABLE IF EXISTS ";
+        /**
+         * The Note.
+         */
         static final String NOTE  = DROP + Notes.TABLE_NAME;
     }
 }

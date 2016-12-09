@@ -19,12 +19,22 @@ import static util.ArgumentChecker.requireNonNull;
  * @see NoteProvider
  */
 public class NoteLoader extends AsyncTaskLoader<Optional<Note<SpannableString>>> {
+    /**
+     * The constant LOADER_ID.
+     */
     public static final int LOADER_ID = 2;
     private final NoteProvider<Note<SpannableString>> core;
     private Optional<Integer> noteId;
 
     private static final String ERROR_ADD_NOTE_DECORATOR_NULL = "addNoteDecorators is null";
 
+    /**
+     * Instantiates a new Note loader.
+     *
+     * @param context the context
+     * @param core    the core
+     * @param noteId  the note id
+     */
     public NoteLoader(Context context, NoteProvider<Note<SpannableString>> core, Optional<Integer> noteId) {
         super(context);
         if (core == null)

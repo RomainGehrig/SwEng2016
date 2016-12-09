@@ -4,6 +4,9 @@ import android.support.annotation.VisibleForTesting;
 
 /**
  * Implements a pattern singleton around LoginManager.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
  */
 @SuppressWarnings("UtilityClassWithoutPrivateConstructor")
 public final class LoginManagerFactory {

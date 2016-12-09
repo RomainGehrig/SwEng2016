@@ -18,6 +18,12 @@ import icynote.ui.ActivityWithProgressDialog;
 import icynote.ui.R;
 
 
+/**
+ * The class for a Google client.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class GoogleClient extends ActivityWithProgressDialog
         implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks
@@ -70,10 +76,20 @@ public class GoogleClient extends ActivityWithProgressDialog
 
     }
 
+    /**
+     * Get the login manager
+     *
+     * @return the login manager
+     */
     protected LoginManager loginManager() {
         return mLoginManager;
     }
 
+    /**
+     * Get the api client
+     *
+     * @return the google api client
+     */
     GoogleApiClient apiClient() {
         return mGoogleApiClient;
     }

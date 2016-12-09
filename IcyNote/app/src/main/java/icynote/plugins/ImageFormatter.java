@@ -41,6 +41,12 @@ import util.Callback;
 import static android.R.attr.minHeight;
 import static android.R.attr.minWidth;
 
+/**
+ * Image formatter.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 class ImageFormatter implements FormatterPlugin {
     private static final String TAG = ImageFormatter.class.getSimpleName();
     private static Uri lastUri;
@@ -49,6 +55,12 @@ class ImageFormatter implements FormatterPlugin {
     private final int mRequestCodeGallery;
     private boolean isEnabled = false;
 
+    /**
+     * Instantiates a new Image formatter.
+     *
+     * @param requestCodeCamera  the request code camera
+     * @param requestCodeGallery the request code gallery
+     */
     ImageFormatter(int requestCodeCamera, int requestCodeGallery) {
         mRequestCodeCamera = requestCodeCamera;
         mRequestCodeGallery = requestCodeGallery;
@@ -118,6 +130,12 @@ class ImageFormatter implements FormatterPlugin {
     private class FormatterDecorator extends NoteDecoratorTemplate<SpannableString> {
         private final PluginData appState;
 
+        /**
+         * Instantiates a new Formatter decorator.
+         *
+         * @param delegateInteractor the delegate interactor
+         * @param appState           the app state
+         */
         FormatterDecorator(Note<SpannableString> delegateInteractor, PluginData appState) {
             super(delegateInteractor);
             this.appState = appState;
@@ -177,6 +195,11 @@ class ImageFormatter implements FormatterPlugin {
     private class FormatterFactory extends NoteDecoratorFactory<SpannableString> {
         private final PluginData appState;
 
+        /**
+         * Instantiates a new Formatter factory.
+         *
+         * @param state the state
+         */
         FormatterFactory(PluginData state) {
             appState = state;
         }
@@ -332,11 +355,23 @@ class ImageFormatter implements FormatterPlugin {
     private static class ImageSpanWithId extends ImageSpan {
         private final String name;
 
+        /**
+         * Instantiates a new Image span with id.
+         *
+         * @param name the name
+         * @param d    the d
+         * @param flag the flag
+         */
         ImageSpanWithId(String name, Drawable d, int flag) {
             super(d, flag);
             this.name = name;
         }
 
+        /**
+         * Gets name.
+         *
+         * @return the name
+         */
         public String getName() {
             return name;
         }

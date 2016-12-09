@@ -22,6 +22,13 @@ import icynote.ui.contracts.NotesPresenter;
 import icynote.ui.utils.NotesAdapter;
 import icynote.ui.view.NotesListViewHolder;
 
+/**
+ * The fragment to list notes
+ *
+ * @author Julien Harbulot
+ * @author Diana Petrescu
+ * @version 1.0
+ */
 public class NotesList extends Fragment
         implements NotesPresenter {
     //private static final String LOG_TAG = NotesList.class.getSimpleName();
@@ -40,8 +47,10 @@ public class NotesList extends Fragment
 
     //-------------------------------------------------------------------------------------
 
+    /**
+     * Required empty public constructor
+     */
     public NotesList() {
-        // Required empty public constructor
     }
 
     @Override

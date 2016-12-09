@@ -19,6 +19,9 @@ import icynote.noteproviders.OrderType;
  * @see NoteProvider
  */
 public class NotesLoader extends AsyncTaskLoader<Iterable<Note<SpannableString>>> {
+    /**
+     * The constant LOADER_ID.
+     */
     public static final int LOADER_ID = 1;
     
     private static final String ERROR_ADD_NOTE_DECORATOR_NULL = "addNoteDecorators is null";
@@ -28,7 +31,15 @@ public class NotesLoader extends AsyncTaskLoader<Iterable<Note<SpannableString>>
     private OrderBy orderBy;
     private OrderType orderType;
 
-    
+
+    /**
+     * Instantiates a new Notes loader.
+     *
+     * @param context the context
+     * @param core    the core
+     * @param by      the by
+     * @param tpe     the tpe
+     */
     public NotesLoader(Context context,
                        NoteProvider<Note<SpannableString>> core,
                        OrderBy by,

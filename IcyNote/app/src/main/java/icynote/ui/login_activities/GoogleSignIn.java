@@ -11,7 +11,16 @@ import icynote.ui.R;
 import icynote.ui.login_activities.GoogleClient;
 import util.Callback2;
 
+/**
+ * The class to sign in with google.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class GoogleSignIn extends GoogleClient {
+    /**
+     * The constant RC_GOOGLE_SIGN_IN.
+     */
     public static final int RC_GOOGLE_SIGN_IN = 9001;
 
     @Override
@@ -36,6 +45,11 @@ public class GoogleSignIn extends GoogleClient {
         }
     }
 
+    /**
+     * Sets the result of a google sign in.
+     *
+     * @param result
+     */
     void signInResult(GoogleSignInResult result) {
         Callback2<Boolean, String> callback = new Callback2<Boolean, String>() {
             @Override

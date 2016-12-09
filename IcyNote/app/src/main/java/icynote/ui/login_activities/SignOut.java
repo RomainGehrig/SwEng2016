@@ -13,6 +13,9 @@ import icynote.ui.R;
 import util.Callback;
 
 
+/**
+ * The class for sign out.
+ */
 public class SignOut extends GoogleClient {
 
     @Override
@@ -31,6 +34,12 @@ public class SignOut extends GoogleClient {
         startActivity(intent);
     }
 
+    /**
+     * Gets sign out callback.
+     *
+     * @param a the activity
+     * @return the sign out callback
+     */
     static Callback getSignOutCallback(final Activity a) {
         //noinspection ReturnOfInnerClass
         return new Callback() {
