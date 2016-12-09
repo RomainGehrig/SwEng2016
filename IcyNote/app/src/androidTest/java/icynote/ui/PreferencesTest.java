@@ -48,7 +48,6 @@ public class PreferencesTest {
         MainActivity mActivity = main.getActivity();
         LoginManager loginManager = LoginManagerFactory.getInstance();
         loginManager.login("test@icynote.ch", "icynote", null);
-        //loginIfNotLogged();
     }
 
     @Test
@@ -180,19 +179,6 @@ public class PreferencesTest {
 
     //---- Helper methods -----------
 
-    /*private void loginIfNotLogged() throws InterruptedException {
-        try {
-            onView(withId(R.id.local_sign_in_button)).perform(click());
-            onView(withId(R.id.field_email)).perform(replaceText("test@icynote.ch"));
-            onView(withId(R.id.field_password)).perform(replaceText("icynote"))
-                    .perform(closeSoftKeyboard());
-            onView(withId(R.id.email_sign_in_button)).perform(click());
-        }
-        catch (NoMatchingViewException e) {
-            // was already logged in
-        }
-        Thread.sleep(2000);
-    }*/
 
     public void setUpForSorting() throws Exception {
         onView(withId(R.id.menuButtonImage)).perform(click());
