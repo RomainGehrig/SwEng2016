@@ -1,19 +1,13 @@
 package icynote.plugins;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.Camera;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -30,7 +24,6 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,13 +36,8 @@ import icynote.note.Note;
 import icynote.note.Response;
 import icynote.note.decorators.NoteDecoratorFactory;
 import icynote.note.decorators.NoteDecoratorTemplate;
-import icynote.ui.MainActivity;
 import icynote.ui.R;
-import icynote.ui.fragments.EditNote;
 import util.Callback;
-
-import static android.R.attr.minHeight;
-import static android.R.attr.minWidth;
 
 class ImageFormatter implements FormatterPlugin {
     private static final String TAG = ImageFormatter.class.getSimpleName();
@@ -57,6 +45,8 @@ class ImageFormatter implements FormatterPlugin {
 
     private final int mRequestCodeCamera;
     private final int mRequestCodeGallery;
+    public static final int mRequestCodeEditor = 30;
+    private String absolutePath;
     private boolean isEnabled = false;
 
     ImageFormatter(int requestCodeCamera, int requestCodeGallery) {
@@ -222,18 +212,7 @@ class ImageFormatter implements FormatterPlugin {
         }
     }
 
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
-    }
-
-    static String absPath = null;
+    private String absPath;
     private Uri getTempFileUri(Activity a) {
         File pictureFile = createImageFile(a);
         if (pictureFile == null) {
@@ -251,12 +230,14 @@ class ImageFormatter implements FormatterPlugin {
         try {
             String imageFileName = "img_" + createNameFromStamp();
             File storageDir = a.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            //return new File(storageDir + File.separator + imageFileName + ".jpg");
-            return File.createTempFile(
+           /* File f = new File(storageDir + File.separator + imageFileName + ".jpg");*/
+            File f = File.createTempFile(
                     imageFileName,
                     ".jpg",
                     storageDir
             );
+            absolutePath = f.getAbsolutePath();
+            return f;
         } catch (Exception ex) {
             Log.e("imageFormatter", ex.getMessage());
         }
@@ -274,7 +255,7 @@ class ImageFormatter implements FormatterPlugin {
 
     @Override
     public boolean canHandle(int requestCode) {
-        return mRequestCodeGallery == requestCode || mRequestCodeCamera == requestCode;
+        return mRequestCodeGallery == requestCode || mRequestCodeCamera == requestCode || mRequestCodeEditor == requestCode;
     }
 
     @Override
@@ -300,7 +281,19 @@ class ImageFormatter implements FormatterPlugin {
                         Toast.LENGTH_SHORT).show();
             } else {
 
-                //getRotationFromQuery(insertIntoContent(state), state);
+                startEditor(state);
+
+            }
+        } else if (requestCode == mRequestCodeGallery) {
+            Toast.makeText(state.getActivity(), "gallery", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == mRequestCodeEditor) {
+            if (resultCode != Activity.RESULT_OK) {
+                Toast.makeText(state.getActivity()
+                        , "Sorry, an unexpected error happened.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else {
 
                 writeUriToNote(state, lastUri);
                 state.getContractor().registerOnStartCallback(new Callback() {
@@ -311,65 +304,20 @@ class ImageFormatter implements FormatterPlugin {
                 });
 
             }
-        } else if (requestCode == mRequestCodeGallery) {
-            Toast.makeText(state.getActivity(), "gallery", Toast.LENGTH_SHORT).show();
-        } else {
+
+        }
+        else {
             throw new AssertionError("unhandled request code");
         }
 
     }
 
-    private static void getRotationFromExif(String absPath, PluginData state) {
+    private void startEditor(PluginData state) {
+        Intent editor = new Intent(state.getActivity(), PictureEditor.class);
+        editor.putExtra("uri",lastUri.toString());
+        editor.putExtra("absolutePath",absPath);
+        state.getActivity().startActivityForResult(editor, mRequestCodeEditor);
 
-        ExifInterface ei = null;
-        if(absPath == null) return;
-
-        try {
-            ei = new ExifInterface(absPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED);
-
-        Log.e("orientation EXIF", Integer.toString(orientation));
-/*
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                rotateImage(bitmap, 90);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                rotateImage(bitmap, 180);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                rotateImage(bitmap, 270);
-                break;
-            case ExifInterface.ORIENTATION_NORMAL:
-            default:
-                break;
-        }*/
-    }
-
-    private Uri insertIntoContent(PluginData state) {
-        ContentValues values = new ContentValues(1);
-        values.put(MediaStore.Images.Media.ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        return state.getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-    }
-
-    private void getRotationFromQuery(Uri lastUri, PluginData state) {
-        String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
-        Cursor cur = state.getActivity().getContentResolver().query(lastUri, orientationColumn, null, null, null);
-
-        for(int i = 0; i<cur.getColumnCount(); i++) {
-            Log.e("column name",cur.getColumnName(i));
-        }
-
-        int orientation = -1;
-        if (cur != null && cur.moveToFirst()) {
-            orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
-        }
-        Log.e("orientation",Integer.toString(orientation));
     }
 
     private void writeUriToNote(PluginData state, Uri uri) {
@@ -438,180 +386,28 @@ class ImageFormatter implements FormatterPlugin {
 
 
         // Get screen size
-        DisplayMetrics metrics = new DisplayMetrics();
-        appState.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        /*DisplayMetrics metrics = new DisplayMetrics();
+        appState.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);*/
 
-        Bitmap b = decodeSampledBitmapFromResource(appState, uri, metrics.widthPixels/3, metrics.heightPixels/3);
-
-
-        if(b==null) return null;
-        else return /*rotateImage(b, 90);*/ b;
+        return getBitmapFromUri(uri, appState);
     }
-    private static Bitmap decodeSampledBitmapFromResource(PluginData state,
-                                                          Uri uri, int reqWidth, int reqHeight) {
 
-        // First decode with inJustDecodeBounds=true to check dimensions
-
-        getRotationFromExif(absPath, state);
+    private static Bitmap getBitmapFromUri(Uri uri, PluginData appState) {
+/*
+        Bitmap b = decodeSampledBitmapFromResource(uri, MAX_WIDTH, MAX_HEIGHT);*/
 
         InputStream inputStream = null;
         try {
-            inputStream = state.getActivity().getContentResolver().openInputStream(uri);
+            inputStream = appState.getActivity().getContentResolver().openInputStream(uri);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        Bitmap bb = BitmapFactory.decodeStream(inputStream, null, options);
+        Bitmap bb = BitmapFactory.decodeStream(inputStream);
 
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        try {
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        InputStream is = null;
-        try {
-            is = state.getActivity().getContentResolver().openInputStream(uri);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        // need to create a new inputstream to decode the image again
-
-        return BitmapFactory.decodeStream(is, null, options);
+        return bb;
     }
-
-
-    // ROTATION
-
-    /**
-     * This method is responsible for solving the rotation issue if exist. Also scale the images to
-     * 1024x1024 resolution
-     *
-     * @param context       The current context
-     * @param selectedImage The Image URI
-     * @return Bitmap image results
-     * @throws IOException
-     */
-    public static Bitmap handleSamplingAndRotationBitmap(Context context, Uri selectedImage)
-            throws IOException {
-        int MAX_HEIGHT = 1024;
-        int MAX_WIDTH = 1024;
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        InputStream imageStream = context.getContentResolver().openInputStream(selectedImage);
-        BitmapFactory.decodeStream(imageStream, null, options);
-        imageStream.close();
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, MAX_WIDTH, MAX_HEIGHT);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        imageStream = context.getContentResolver().openInputStream(selectedImage);
-        Bitmap img = BitmapFactory.decodeStream(imageStream, null, options);
-
-        img = rotateImage(img, 90);
-        //img = rotateImageIfRequired(context, img, selectedImage);
-        return img;
-    }
-
-
-    /**
-     * Calculate an inSampleSize for use in a {@link BitmapFactory.Options} object when decoding
-     * bitmaps using the decode* methods from {@link BitmapFactory}. This implementation calculates
-     * the closest inSampleSize that will result in the final decoded bitmap having a width and
-     * height equal to or larger than the requested width and height. This implementation does not
-     * ensure a power of 2 is returned for inSampleSize which can be faster when decoding but
-     * results in a larger bitmap which isn't as useful for caching purposes.
-     *
-     * @param options   An options object with out* params already populated (run through a decode*
-     *                  method with inJustDecodeBounds==true
-     * @param reqWidth  The requested width of the resulting bitmap
-     * @param reqHeight The requested height of the resulting bitmap
-     * @return The value to be used for inSampleSize
-     */
-    private static int calculateInSampleSize(BitmapFactory.Options options,
-                                             int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            // Calculate ratios of height and width to requested height and width
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-            // Choose the smallest ratio as inSampleSize value, this will guarantee a final image
-            // with both dimensions larger than or equal to the requested height and width.
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-
-            // This offers some additional logic in case the image has a strange
-            // aspect ratio. For example, a panorama may have a much larger
-            // width than height. In these cases the total pixels might still
-            // end up being too large to fit comfortably in memory, so we should
-            // be more aggressive with sample down the image (=larger inSampleSize).
-
-            final float totalPixels = width * height;
-
-            // Anything more than 2x the requested pixels we'll sample down further
-            final float totalReqPixelsCap = reqWidth * reqHeight * 2;
-
-            while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
-                inSampleSize++;
-            }
-        }
-        return inSampleSize;
-    }
-
-
-
-    /**
-     * Rotate an image if required.
-     *
-     * @param img           The image bitmap
-     * @param selectedImage Image URI
-     * @return The resulted Bitmap after manipulation
-     */
-    private static Bitmap rotateImageIfRequired(Context context, Bitmap img, Uri selectedImage) throws IOException {
-
-        // TODO ne match pas les paths !
-        ExifInterface ei = new ExifInterface(selectedImage.getPath());
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
-    }
-
-
-
-    private static Bitmap rotateImage(Bitmap img, int degree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-        return rotatedImg;
-    }
-
 
 }
