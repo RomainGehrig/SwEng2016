@@ -20,6 +20,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,7 +40,9 @@ public class PictureEditor extends AppCompatActivity {
 
     private Uri uri;
     private Bitmap currentImg;
+    private Bitmap originalImage;
     private String absPath;
+    private int rotation = 0;
 
     private int MAX_WIDTH;
     private int MAX_HEIGHT;
@@ -47,45 +54,23 @@ public class PictureEditor extends AppCompatActivity {
 
         uri = Uri.parse(getIntent().getExtras().getString("uri"));
         absPath = getIntent().getExtras().getString("absolutePath");
-        
-        currentImg = getBitmapFromUri(uri);
+
+        // Set maximum length
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        MAX_WIDTH = metrics.widthPixels / 3;
+        MAX_HEIGHT = metrics.heightPixels / 3;
+
+        originalImage = getOriginalImage();
+
+        // Get thumbnail picture
+        currentImg = decodeSampledBitmapFromResource(uri, MAX_WIDTH, MAX_HEIGHT);
+
+        // Update View
         TextView tv = (TextView) findViewById(R.id.textView3);
         tv.setText(uri.toString());
         updateCurrentImage();
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        MAX_WIDTH = metrics.widthPixels;
-        MAX_HEIGHT = metrics.heightPixels;
-
-    }
-
-    public Bitmap getBitmapFromUri(Uri uri) {
-/*
-        Bitmap b = decodeSampledBitmapFromResource(uri, MAX_WIDTH, MAX_HEIGHT);*/
-
-        InputStream inputStream = null;
-        Bitmap bitmap = null;
-        try {
-            inputStream = getContentResolver().openInputStream(uri);
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            bitmap = BitmapFactory.decodeStream(inputStream);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            assert inputStream != null;
-            inputStream.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return bitmap;
     }
 
     private void updateCurrentImage() {
@@ -94,55 +79,71 @@ public class PictureEditor extends AppCompatActivity {
     }
 
     public void rotateLeft(View view) {
+        rotation -= 90;
         currentImg = rotateImage(currentImg, -90);
         updateCurrentImage();
     }
 
     public void rotateRight(View view) {
+        rotation += 90;
         currentImg = rotateImage(currentImg, 90);
         updateCurrentImage();
     }
 
-    public void validate(View view)  {
-        saveImage();
+    public void validate(View view) {
+        saveFinalImage();
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
-    private void saveImage() {
+    private void saveFinalImage() {
 
-        FileOutputStream outputstream = null;
+        FileOutputStream outputStream = null;
         try {
+            // apply transformations
+            originalImage = rotateImage(originalImage, rotation);
+            Log.e("final rotation", Integer.toString(rotation));
+
             File file = new File(absPath);
-            outputstream = new FileOutputStream(file);
-            currentImg.compress(Bitmap.CompressFormat.JPEG, 100, outputstream); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
+            outputStream = new FileOutputStream(file);
+            originalImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if (outputstream != null) {
-                    outputstream.close();
+                if (outputStream != null) {
+                    outputStream.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
-
-
-
-    private static Bitmap rotateImage(Bitmap img, int degree) {
+    private Bitmap rotateImage(Bitmap img, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        Bitmap resultImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
         img.recycle();
-        return rotatedImg;
+        return resultImg;
     }
 
+    private Bitmap getOriginalImage() {
+        InputStream inputStream;
+        Bitmap b = null;
+        try {
+            inputStream = getContentResolver().openInputStream(uri);
+            b = BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
 
     private Bitmap decodeSampledBitmapFromResource(Uri uri, int reqWidth, int reqHeight) {
 
@@ -157,7 +158,7 @@ public class PictureEditor extends AppCompatActivity {
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        Bitmap bb = BitmapFactory.decodeStream(inputStream, null, options);
+        BitmapFactory.decodeStream(inputStream, null, options);
 
 
         // Calculate inSampleSize
@@ -182,9 +183,6 @@ public class PictureEditor extends AppCompatActivity {
 
         return BitmapFactory.decodeStream(is, null, options);
     }
-
-
-    // ROTATION
 
     /**
      * Calculate an inSampleSize for use in a {@link BitmapFactory.Options} object when decoding
@@ -234,5 +232,4 @@ public class PictureEditor extends AppCompatActivity {
         }
         return inSampleSize;
     }
-
 }
