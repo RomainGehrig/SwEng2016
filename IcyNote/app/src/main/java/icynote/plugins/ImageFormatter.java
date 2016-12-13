@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,7 +17,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +48,9 @@ class ImageFormatter implements FormatterPlugin {
     public static final int mRequestCodeEditor = 30;
     private String absolutePath;
     private boolean isEnabled = false;
+
+    private int containerWidth;
+    private int containerHeight;
 
     ImageFormatter(int requestCodeCamera, int requestCodeGallery) {
         mRequestCodeCamera = requestCodeCamera;
@@ -103,8 +106,7 @@ class ImageFormatter implements FormatterPlugin {
         usePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(a.getBaseContext(), "Gallery not implemented, yet.",
-                        Toast.LENGTH_SHORT).show();
+                startGallery(state);
             }
         });
 
@@ -112,7 +114,15 @@ class ImageFormatter implements FormatterPlugin {
         buttonList.add(takePictureButton);
         buttonList.add(usePictureButton);
 
+        /*int containerHeight = state.getActivity().findViewById(R.id.noteDisplayBodyText).getHeight();
+        int containerWidth = state.getActivity().findViewById(R.id.noteDisplayBodyText).getWidth();*/
+
         return buttonList;
+    }
+
+    private void startGallery(PluginData state) {
+        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        state.getActivity().startActivityForResult(i, mRequestCodeGallery);
     }
 
     private class FormatterDecorator extends NoteDecoratorTemplate<SpannableString> {
@@ -212,13 +222,12 @@ class ImageFormatter implements FormatterPlugin {
         }
     }
 
-    private String absPath;
     private Uri getTempFileUri(Activity a) {
         File pictureFile = createImageFile(a);
         if (pictureFile == null) {
             throw new AssertionError("unable to create image file");
         }
-        absPath = pictureFile.getAbsolutePath();
+        absolutePath = pictureFile.getAbsolutePath();
         Uri uri = FileProvider.getUriForFile(a, "icynote.ui.fileprovider", pictureFile);
         if (uri == null) {
             throw new AssertionError("unable to get uri of temp. image file");
@@ -285,7 +294,34 @@ class ImageFormatter implements FormatterPlugin {
 
             }
         } else if (requestCode == mRequestCodeGallery) {
-            Toast.makeText(state.getActivity(), "gallery", Toast.LENGTH_SHORT).show();
+
+
+            if (resultCode == Activity.RESULT_OK && null != data) {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                Cursor cursor = state.getActivity().getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                lastUri = Uri.fromFile(new File(picturePath));
+                writeUriToNote(state, lastUri);
+                state.getContractor().registerOnStartCallback(new Callback() {
+                    @Override
+                    public void execute() {
+                        state.getContractor().reOpenLastOpenedNote(null);
+                    }
+                });
+            }
+            else {
+                Toast.makeText(state.getActivity()
+                        , "Sorry, an unexpected error happened.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
         } else if (requestCode == mRequestCodeEditor) {
             if (resultCode != Activity.RESULT_OK) {
                 Toast.makeText(state.getActivity()
@@ -295,6 +331,7 @@ class ImageFormatter implements FormatterPlugin {
             }
             else {
 
+                galleryAddPic(state, getBitmapFromUri(lastUri, state));
                 writeUriToNote(state, lastUri);
                 state.getContractor().registerOnStartCallback(new Callback() {
                     @Override
@@ -315,7 +352,7 @@ class ImageFormatter implements FormatterPlugin {
     private void startEditor(PluginData state) {
         Intent editor = new Intent(state.getActivity(), PictureEditor.class);
         editor.putExtra("uri",lastUri.toString());
-        editor.putExtra("absolutePath",absPath);
+        editor.putExtra("absolutePath",absolutePath);
         state.getActivity().startActivityForResult(editor, mRequestCodeEditor);
 
     }
@@ -381,13 +418,6 @@ class ImageFormatter implements FormatterPlugin {
     }
     private static Bitmap getImage(String name, PluginData appState) {
         Uri uri = Uri.parse(name);
-        //bitmap = MediaStore.Images.Media.getBitmap(
-        //        appState.getActivity().getContentResolver(), uri);
-
-
-        // Get screen size
-        /*DisplayMetrics metrics = new DisplayMetrics();
-        appState.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);*/
 
         return getBitmapFromUri(uri, appState);
     }
@@ -403,11 +433,19 @@ class ImageFormatter implements FormatterPlugin {
             e.printStackTrace();
         }
 
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
         Bitmap bb = BitmapFactory.decodeStream(inputStream);
 
         return bb;
+    }
+
+
+    private void galleryAddPic(PluginData state, Bitmap bitmap) {
+        MediaStore.Images.Media.insertImage(
+                state.getActivity().getContentResolver(),
+                bitmap,
+                "demo_image",
+                "demo_image"
+        );
     }
 
 }

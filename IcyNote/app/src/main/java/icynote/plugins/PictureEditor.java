@@ -1,48 +1,32 @@
 package icynote.plugins;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import icynote.ui.R;
-import icynote.ui.fragments.EditNote;
 
 public class PictureEditor extends AppCompatActivity {
 
     private Uri uri;
     private Bitmap currentImg;
-    private Bitmap originalImage;
     private String absPath;
-    private int rotation = 0;
 
     private int MAX_WIDTH;
     private int MAX_HEIGHT;
@@ -55,37 +39,32 @@ public class PictureEditor extends AppCompatActivity {
         uri = Uri.parse(getIntent().getExtras().getString("uri"));
         absPath = getIntent().getExtras().getString("absolutePath");
 
-        // Set maximum length
+        // Set maximum length TODO code a precizer method
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        MAX_WIDTH = metrics.widthPixels / 3;
-        MAX_HEIGHT = metrics.heightPixels / 3;
-
-        originalImage = getOriginalImage();
+        MAX_WIDTH = (int) (metrics.widthPixels/2.5);
+        MAX_HEIGHT = (int) (metrics.heightPixels/2.5);
 
         // Get thumbnail picture
         currentImg = decodeSampledBitmapFromResource(uri, MAX_WIDTH, MAX_HEIGHT);
 
         // Update View
-        TextView tv = (TextView) findViewById(R.id.textView3);
-        tv.setText(uri.toString());
         updateCurrentImage();
 
     }
 
     private void updateCurrentImage() {
-        ImageView img = (ImageView) findViewById(R.id.image);
-        img.setImageBitmap(currentImg);
+        ImageView iv = (ImageView) findViewById(R.id.preview_image);
+        iv.setImageBitmap(currentImg);
+        iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
     }
 
     public void rotateLeft(View view) {
-        rotation -= 90;
         currentImg = rotateImage(currentImg, -90);
         updateCurrentImage();
     }
 
     public void rotateRight(View view) {
-        rotation += 90;
         currentImg = rotateImage(currentImg, 90);
         updateCurrentImage();
     }
@@ -101,13 +80,9 @@ public class PictureEditor extends AppCompatActivity {
 
         FileOutputStream outputStream = null;
         try {
-            // apply transformations
-            originalImage = rotateImage(originalImage, rotation);
-            Log.e("final rotation", Integer.toString(rotation));
-
             File file = new File(absPath);
             outputStream = new FileOutputStream(file);
-            originalImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            currentImg.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,6 +97,7 @@ public class PictureEditor extends AppCompatActivity {
         }
     }
 
+    // TODO cannot handle big images
     private Bitmap rotateImage(Bitmap img, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
