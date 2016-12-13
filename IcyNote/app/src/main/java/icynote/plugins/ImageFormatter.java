@@ -394,7 +394,7 @@ class ImageFormatter implements FormatterPlugin {
     /**
      * Sample Size : load less https://developer.android.com/training/displaying-bitmaps/load-bitmap.html
      **/
-    private static int calculateInSampleSize(
+    protected static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
