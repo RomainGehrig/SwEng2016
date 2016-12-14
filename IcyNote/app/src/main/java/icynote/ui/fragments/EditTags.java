@@ -7,10 +7,19 @@ import android.view.ViewGroup;
 
 import icynote.ui.R;
 
+/**
+ * The fragment to edit tags.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class EditTags extends FragmentWithState {
 
+    /**
+     * Instantiates a new Edit tags. Required empty public constructor
+     */
     public EditTags() {
-        // Required empty public constructor
+
     }
 
     @Override

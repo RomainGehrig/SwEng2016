@@ -18,6 +18,11 @@ import icynote.note.common.ResponseFactory;
  */
 public class DateDecorator<S> extends NoteDecoratorTemplate<S> {
 
+    /**
+     * Instantiates a new Date decorator.
+     *
+     * @param delegateInteractor the delegate interactor
+     */
     public DateDecorator(Note<S> delegateInteractor) {
         super(delegateInteractor);
     }

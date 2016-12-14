@@ -23,11 +23,12 @@ import icynote.ui.R;
 
 
 /**
+ * The notes adapter used to list the notes and the trashed notes.
+ *
  * @author Julien Harbulot
- * @author Diana
+ * @author Diana Petrescu
  * @version 2.0
  */
-
 public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
     private static final String TAG = NotesAdapter.class.getSimpleName();
 
@@ -37,46 +38,94 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
     /** used by the filter to retrieve the full list of notes */
     private final NotesBackup fullListBackup = new NotesBackup();
 
+    /**
+     * The type Bucket.
+     */
     public class Bucket {
         private Note<SpannableString> note;
         private boolean checked = false;
         private boolean enabled = true;
+
+        /**
+         * Instantiates a new Bucket for a note.
+         *
+         * @param n the note
+         */
         public Bucket(Note<SpannableString> n) {
             setNote(n);
         }
 
+        /**
+         * Gets note from the bucket.
+         *
+         * @return the note
+         */
         public Note<SpannableString> getNote() {
             return note;
         }
 
+        /**
+         * Sets note from the bucket.
+         *
+         * @param note the note
+         */
         public void setNote(Note<SpannableString> note) {
             this.note = note;
             NotesAdapter.this.notifyDataSetChanged();
         }
 
+        /**
+         * Checks if th note is checked.
+         *
+         * @return true if the notes is checked.
+         */
         public boolean isChecked() {
             return checked;
         }
 
+        /**
+         * Sets if the not is checked.
+         *
+         * @param checked
+         */
         public void setChecked(boolean checked) {
             this.checked = checked;
             NotesAdapter.this.notifyDataSetChanged();
         }
 
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
         public boolean isEnabled() {
             return enabled;
         }
 
+        /**
+         * Sets enabled.
+         *
+         * @param enabled the enabled
+         */
         public void setEnabled(boolean enabled) {
             this.enabled = enabled;
             NotesAdapter.this.notifyDataSetChanged();
         }
     }
 
+    /**
+     * The interface for the Bucket clicked listener.
+     */
     public interface BucketClickedListener {
         void onClick(Bucket b);
     }
 
+    /**
+     * Instantiates a new Notes adapter.
+     *
+     * @param c                   the context
+     * @param onItemClickListener the on item click listener
+     */
     public NotesAdapter(Context c, BucketClickedListener onItemClickListener) {
         super(c, 0);
         context = c;
@@ -155,6 +204,11 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         return convertView;
     }
 
+    /**
+     * Sets notes.
+     *
+     * @param notes the notes
+     */
     public void setNotes(Iterable<Note<SpannableString>> notes) {
         clear();
         fullListBackup.clear();
@@ -165,6 +219,12 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         }
     }
 
+    /**
+     * Sets enabled.
+     *
+     * @param enabled the enabled
+     * @param note    the note
+     */
     public void setEnabled(boolean enabled, Note<SpannableString> note) {
         Bucket toEnable = find(note);
         if (toEnable == null) {
@@ -176,6 +236,11 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
         }
     }
 
+    /**
+     * Delete note.
+     *
+     * @param note the note
+     */
     public void deleteNote(Note<SpannableString> note) {
         Bucket b = find(note);
         if (b != null) {
@@ -272,11 +337,21 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
     private static class NotesBackup {
         private final ArrayList<Bucket> backupData = new ArrayList<>();
 
+        /**
+         * Add.
+         *
+         * @param b the b
+         */
         public void add(Bucket b) {
             //Log.i(NotesAdapter.class.getSimpleName(), "add note " + b.getNote().getId() + " to backup");
             backupData.add(b);
         }
 
+        /**
+         * Remove.
+         *
+         * @param b the b
+         */
         public void remove(Bucket b) {
             //Log.i(NotesAdapter.class.getSimpleName(),
             //        "remove note "
@@ -285,16 +360,29 @@ public class NotesAdapter extends ArrayAdapter<NotesAdapter.Bucket> {
             backupData.remove(b);
         }
 
+        /**
+         * Clear.
+         */
         public void clear() {
             //Log.i(NotesAdapter.class.getSimpleName(), "clear backup");
             backupData.clear();
         }
 
+        /**
+         * Size int.
+         *
+         * @return the int
+         */
         public int size() {
             //Log.i(NotesAdapter.class.getSimpleName(), "get size of backup " + backupData.size());
             return backupData.size();
         }
 
+        /**
+         * Gets data.
+         *
+         * @return the data
+         */
         public ArrayList<Bucket> getData() {
             //Log.i(NotesAdapter.class.getSimpleName(), "duplicate backup");
             return new ArrayList<>(backupData);

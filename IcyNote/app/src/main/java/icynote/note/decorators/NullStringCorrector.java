@@ -16,9 +16,25 @@ public class NullStringCorrector<S> extends NoteDecoratorTemplate<S> {
     private String name = "";
     private final Corrector<S> corrector;
 
+    /**
+     * The interface Corrector.
+     */
     public interface Corrector<S> {
+        /**
+         * Make correction s.
+         *
+         * @return the s
+         */
         S makeCorrection();
     }
+
+    /**
+     * Instantiates a new Null string corrector.
+     *
+     * @param delegateInteractor the delegate interactor
+     * @param errorMessage       the error message
+     * @param c                  the corrector
+     */
     public NullStringCorrector(Note<S> delegateInteractor, String errorMessage, Corrector<S> c) {
         super(delegateInteractor);
         name = errorMessage;

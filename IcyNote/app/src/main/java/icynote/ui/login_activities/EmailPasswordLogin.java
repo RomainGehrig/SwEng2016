@@ -14,6 +14,12 @@ import icynote.ui.BuildConfig;
 import icynote.ui.R;
 import util.Callback2;
 
+/**
+ * Email password login.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class EmailPasswordLogin extends ActivityWithProgressDialog implements
         View.OnClickListener {
 
@@ -44,6 +50,11 @@ public class EmailPasswordLogin extends ActivityWithProgressDialog implements
     private class SignInCallback extends Callback2<Boolean, String> {
         private final String id;
 
+        /**
+         * Instantiates a new Sign in callback.
+         *
+         * @param logInOrSignIn
+         */
         SignInCallback(String logInOrSignIn) {
             id = logInOrSignIn;
         }

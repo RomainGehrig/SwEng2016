@@ -8,6 +8,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import icynote.ui.R;
 import util.Callback2;
 
+/**
+ * The Google link credentials.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class GoogleLinkCredentials extends GoogleSignIn {
     @Override
     protected void signInResult(GoogleSignInResult result) {
