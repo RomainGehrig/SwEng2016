@@ -95,8 +95,6 @@ public class LocalLogInTest {
         Thread.sleep(1500);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
-        onView(withText("The email address is badly formatted.")).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
     }
 
 
@@ -108,8 +106,6 @@ public class LocalLogInTest {
         Thread.sleep(1500);
         // check a view in local log in is shown
         onView(withId(R.id.field_email)).check(matches(isDisplayed()));
-        onView(withText("The password is invalid or the user does not have a password.")).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
     }
 
 
@@ -123,24 +119,4 @@ public class LocalLogInTest {
             // was already logged out
         }
     }
-
-    private class ToastMatcher extends TypeSafeMatcher<Root> {
-        @Override public void describeTo(Description description) {
-            description.appendText("is toast");
-        }
-
-        @Override public boolean matchesSafely(Root root) {
-            int type = root.getWindowLayoutParams().get().type;
-            if ((type == WindowManager.LayoutParams.TYPE_TOAST)) {
-                IBinder windowToken = root.getDecorView().getWindowToken();
-                IBinder appToken = root.getDecorView().getApplicationWindowToken();
-                if (windowToken == appToken) {
-                    //means this window isn't contained by any other windows.
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
 }

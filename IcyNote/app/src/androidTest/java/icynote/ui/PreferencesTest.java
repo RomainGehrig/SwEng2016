@@ -112,8 +112,8 @@ public class PreferencesTest {
         onView(withText(R.string.listAllNotes)).perform(click());
 
         //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
-        onView(withText("note1")).check(isAbove(withText("note2")));
-        onView(withText("note2")).check(isAbove(withText("note3")));
+        onView(withText("note1")).check(isAbove(withText("note3")));
+        onView(withText("note3")).check(isAbove(withText("note2")));
     }
 
     @Test
@@ -172,8 +172,8 @@ public class PreferencesTest {
         onView(withText(R.string.listAllNotes)).perform(click());
 
         //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
-        onView(withText("note3")).check(isAbove(withText("note2")));
-        onView(withText("note2")).check(isAbove(withText("note1")));
+        onView(withText("note2")).check(isAbove(withText("note3")));
+        onView(withText("note3")).check(isAbove(withText("note1")));
     }
 
 
