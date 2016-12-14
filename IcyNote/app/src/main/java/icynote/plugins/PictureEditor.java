@@ -172,7 +172,7 @@ public class PictureEditor extends AppCompatActivity {
      * @param reqHeight The requested height of the resulting bitmap
      * @return The value to be used for inSampleSize
      */
-    private static int calculateInSampleSize(BitmapFactory.Options options,
+    protected static int calculateInSampleSize(BitmapFactory.Options options,
                                              int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;

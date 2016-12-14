@@ -143,4 +143,18 @@ public class PictureEditorTest {
         Bitmap newB = getBitmapFromFile();
         assertEquals(oldB.getWidth(), newB.getWidth());
     }
+
+    @Test
+    public void calculateInSampleSizeTest() {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.outHeight = 1000;
+        options.outWidth = 1500;
+
+        int res = PictureEditor.calculateInSampleSize(options, 100, 100);
+        assertEquals(10, res);
+        int res2 = PictureEditor.calculateInSampleSize(options, 20, 20);
+        assertEquals(50, res2);
+    }
+
 }
+
