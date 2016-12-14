@@ -6,7 +6,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="icynote.ui.fragments.EditNote">
 
     <include layout="@layout/menu_button" />
@@ -39,7 +38,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:alpha="0.5"
-        android:src="@drawable/ic_more_vert_white_24dp"
+        android:src="@drawable/note_open_meta"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -70,8 +69,33 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/noteDisplayTagsText"
         android:imeOptions="actionDone"/>
+
+    <ImageView
+        android:id="@+id/note_refresh"
+        android:contentDescription="@string/menuRefresh"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:alpha="0.5"
+        android:src="@drawable/note_refresh"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/refresh_margin"
+        android:layout_marginRight="@dimen/refresh_margin"
+        android:layout_marginBottom="@dimen/refresh_margin"/>
+
+    <Button
+        android:id="@+id/noteRefreshButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:alpha="0"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/refresh_margin"
+        android:layout_marginRight="@dimen/refresh_margin"
+        android:layout_marginBottom="@dimen/refresh_margin" />
 
     <LinearLayout android:focusable="true"
         android:focusableInTouchMode="true"
@@ -79,22 +103,6 @@
         android:layout_height="0px" >
         <requestFocus />
     </LinearLayout>
-
-    <me.gujun.android.taggroup.TagGroup
-        android:id="@+id/noteDisplayTagsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-
-        style="@style/TagGroup"
-        app:atg_isAppendMode="true"
-        app:atg_inputHint="add ..."
-        android:layout_marginTop="10dp"
-        android:imeOptions="actionDone" />
 
 </RelativeLayout>
 

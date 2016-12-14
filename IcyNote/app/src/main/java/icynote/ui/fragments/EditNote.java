@@ -14,7 +14,6 @@ import icynote.note.Note;
 import icynote.ui.R;
 import icynote.ui.contracts.NotePresenter;
 import icynote.ui.view.NoteViewHolder;
-import me.gujun.android.taggroup.TagGroup;
 
 import static java.lang.Math.min;
 
@@ -26,7 +25,6 @@ public class EditNote extends Fragment implements NotePresenter {
 
     private Contract activity;
 
-    private final String[] tags = {}; // initialize tags here
     private NoteViewHolder viewHolder;
 
     public EditNote() {
@@ -50,43 +48,6 @@ public class EditNote extends Fragment implements NotePresenter {
                 activity.openOptionalPresenter(EditNote.this);
             }
         });
-        TagGroup mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
-        if (tags != null && tags.length > 0) {
-            mDefaultTagGroup.setTags(tags);
-        }
-
-        /*
-        mDefaultTagGroup.setOnTagChangeListener(new TagGroup.OnTagChangeListener() {
-            @Override
-            public void onAppend(TagGroup tagGroup, String tag) {
-                String[] allTags = tagGroup.getTags();
-
-                if (containsNotLast(allTags, tag)) {
-                    //tagGroup.setBackgroundColor(Color.BLACK);
-                } else {
-                    //tagGroup.setBackgroundColor(Color.WHITE);
-                }
-            }
-
-            @Override
-            public void onDelete(TagGroup tagGroup, String tag) {
-                // ---
-            }
-        });
-
-        // FIXME does nothing
-        mDefaultTagGroup.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_A) {
-                    Log.d("key", "press");
-                    ((TagGroup) v.findViewById(R.id.noteDisplayTagsText)).submitTag();
-                    return true;
-                }
-                return false;
-            }
-        });
-        */
 
         return view;
     }
@@ -188,17 +149,6 @@ public class EditNote extends Fragment implements NotePresenter {
         });
     }
 
-    /*
-    private boolean containsNotLast(String[] l, String t) {
-        List<String> e = Arrays.asList(l).subList(0, l.length - 1);
-        for (String s : e) {
-            if (s.equals(t)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    */
 
     @Override
     public void onOpenOptPresenterFailure(String message) {

@@ -97,6 +97,8 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
         if (viewIsCreated && actionsReceived)  {
             viewHolder.getOptionalActionsLayout().removeAllViews();
             for (View button : receivedData.optionalActions) {
+                button.setScaleY(1);
+                button.setScaleX(0.5625f);
                 viewHolder.getOptionalActionsLayout().addView(button);
             }
         }
