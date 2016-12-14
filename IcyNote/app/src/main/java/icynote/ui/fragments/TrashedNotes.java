@@ -22,6 +22,12 @@ import icynote.ui.contracts.TrashedNotesPresenter;
 import icynote.ui.utils.NotesAdapter;
 import icynote.ui.view.TrashedNotesViewHolder;
 
+/**
+ * The fragment to list the Trashed notes.
+ *
+ * @author Diana Petrescu
+ * @version 1.0
+ */
 public class TrashedNotes extends Fragment
         implements TrashedNotesPresenter {
     private static final String LOG_TAG = TrashedNotes.class.getSimpleName();
@@ -40,8 +46,10 @@ public class TrashedNotes extends Fragment
 
     //-------------------------------------------------------------------------------------
 
+    /**
+     * Instantiates a new Trashed notes. Required empty public constructor
+     */
     public TrashedNotes() {
-        // Required empty public constructor
     }
 
     @Override

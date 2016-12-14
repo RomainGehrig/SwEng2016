@@ -9,11 +9,20 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
 
+/**
+ * The activity with progress dialog.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class ActivityWithProgressDialog extends AppCompatActivity {
 
     @VisibleForTesting
     private ProgressDialog mProgressDialog;
 
+    /**
+     * Show progress dialog.
+     */
     protected void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -24,6 +33,9 @@ public class ActivityWithProgressDialog extends AppCompatActivity {
         mProgressDialog.show();
     }
 
+    /**
+     * Hide progress dialog.
+     */
     protected void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();

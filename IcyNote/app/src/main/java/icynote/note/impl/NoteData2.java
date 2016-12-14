@@ -13,6 +13,9 @@ import android.text.SpannableString;
  */
 @SuppressWarnings("UseOfClone")
 public class NoteData2 extends NoteData<SpannableString> {
+    /**
+     * Instantiates a new Note data 2.
+     */
     public NoteData2() {
         super(new SpannableString(""), new SpannableString(""));
     }

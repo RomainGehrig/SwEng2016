@@ -18,6 +18,12 @@ import me.gujun.android.taggroup.TagGroup;
 
 import static java.lang.Math.min;
 
+/**
+ * The fragment to edit notes
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class EditNote extends Fragment implements NotePresenter {
 
     private Note<SpannableString> note;
@@ -29,8 +35,11 @@ public class EditNote extends Fragment implements NotePresenter {
     private final String[] tags = {}; // initialize tags here
     private NoteViewHolder viewHolder;
 
+    /**
+     * Instantiates a new Edit note. Required empty public constructor
+     */
     public EditNote() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -162,7 +171,7 @@ public class EditNote extends Fragment implements NotePresenter {
         });
 
         // add listener to the content
-        viewHolder.getContent().addTextChangedListener(new TextWatcher() {
+        /*viewHolder.getContent().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -185,7 +194,26 @@ public class EditNote extends Fragment implements NotePresenter {
                 viewHolder.getContent().addTextChangedListener(this);
                 activity.saveNote(note, EditNote.this);
             }
+        });*/
+        viewHolder.getContent().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    // code to execute when EditText loses focus
+                    note.setContent(new SpannableString(viewHolder.getContent().getText()));
+                    int start = viewHolder.getContent().getSelectionStart();
+                    int end = viewHolder.getContent().getSelectionEnd();
+                    viewHolder.getContent().setText(note.getContent());
+                    int length = viewHolder.getContent().getText().length();
+                    if (start > 0 && end > 0) {
+                        viewHolder.getContent().setSelection(min(start, length), min(end, length));
+                    }
+                    activity.saveNote(note, EditNote.this);
+                }
+            }
         });
+
+
     }
 
     /*

@@ -7,10 +7,19 @@ import icynote.note.Response;
 import icynote.note.impl.NoteData;
 import util.Adapter;
 
+/**
+ * The note to be adapted
+ */
 public class AdaptedNote<S, T> implements Note<S> {
     private final Note<T> delegate;
     private final Adapter<S, T> adapter;
 
+    /**
+     * Instantiates a new Adapted note.
+     *
+     * @param toAdapt      the delagated note to adapt
+     * @param usingAdapter the using adapter
+     */
     public AdaptedNote(Note<T> toAdapt, Adapter<S, T> usingAdapter) {
         delegate = toAdapt;
         adapter = usingAdapter;
@@ -18,6 +27,9 @@ public class AdaptedNote<S, T> implements Note<S> {
 
     //-------------------------------------
 
+    /**
+     * Returns a data-object with no behaviour containing the data of the note
+     */
     @Override
     public NoteData<S> getRaw() {
         NoteData<T> raw = delegate.getRaw();

@@ -54,6 +54,12 @@ import icynote.ui.utils.PreferencesHolder;
 import util.Callback;
 import util.Optional;
 
+/**
+ * Main activity used for fragments
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
 public class MainActivity  extends AppCompatActivity implements
         NotesList.Contract,
@@ -178,7 +184,11 @@ public class MainActivity  extends AppCompatActivity implements
     //*  MENU
     //**
 
-    /** on click listener that opens the drawer menu or closes it */
+    /**
+     * on click listener that opens the drawer menu or closes it
+     *
+     * @param view the view
+     */
     public void toggleMenu(View view) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -189,13 +199,21 @@ public class MainActivity  extends AppCompatActivity implements
         hideKeyboard(this);
     }
 
-    /** menu's on click listener that opens the list of notes */
+    /**
+     * menu's on click listener that opens the list of notes
+     *
+     * @param item the item
+     */
     public void openListOfNotes(MenuItem item) {
         listOfNotesPresenter = openFragment(NotesList.class);
         loadListOfNotes();
     }
 
-    /** menu's on click listener that opens the list of notes */
+    /**
+     * menu's on click listener that opens the list of notes  @param item the item
+     *
+     * @param item the item
+     */
     public void openLastOpenedNote(MenuItem item) {
         Log.e(TAG, "openLastOpenedNote menu item");
         if (lastOpenedNoteId == null) {
@@ -208,25 +226,42 @@ public class MainActivity  extends AppCompatActivity implements
             reloadNote();
         }
     }
-    /** menu's on click listener that opens the list of tags */
+
+    /**
+     * menu's on click listener that opens the list of tags
+     *
+     * @param item the item
+     */
     public void openListOfTags(MenuItem item) {
         openFragment(EditTags.class);
     }
 
-    /** menu's on click listener that opens the list of deleted notes */
+    /**
+     * menu's on click listener that opens the list of deleted notes
+     *
+     * @param item the item
+     */
     public void openListOfTrashedNotes(MenuItem item) {
         TrashedNotesPresenter trashedNotesPresenter = openFragment(TrashedNotes.class);
         trashedNotesPresenter.receiveNotes(trashedNotes);
     }
 
-    /** menu's on click listener that opens the settings */
+    /**
+     * menu's on click listener that opens the settings
+     *
+     * @param item the item
+     */
     public void openSettings(MenuItem item) {
         Intent i = new Intent(this, Preferences.class);
         startActivity(i);
         //Toast.makeText(this, "We don't have settings, yet !", Toast.LENGTH_SHORT).show();
     }
 
-    /** menu's on click listener that logs the current user out */
+    /**
+     * menu's on click listener that logs the current user out
+     *
+     * @param item the item
+     */
     public void logout(MenuItem item) {
         loginManager.logout();
     }
@@ -329,6 +364,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void openOptionalPresenter(NotePresenter requester) {
+        findViewById(R.id.noteDisplayBodyText).clearFocus();
         MetadataNote n = openFragment(MetadataNote.class);
         singleNotePresenter = n;
 

@@ -16,9 +16,21 @@ import static icynote.note.common.BoundaryCheckerUtil.checkNotNull;
 public class NullOutput<S> extends NoteDecoratorTemplate<S> {
     private String name = "";
 
+    /**
+     * Instantiates a new Null output.
+     *
+     * @param delegateInteractor the delegate interactor
+     */
     public NullOutput(Note<S> delegateInteractor) {
         super(delegateInteractor);
     }
+
+    /**
+     * Instantiates a new Null output.
+     *
+     * @param delegateInteractor the delegate interactor
+     * @param errorMessage       the error message
+     */
     public NullOutput(Note<S> delegateInteractor, String errorMessage) {
         super(delegateInteractor);
         name = errorMessage;

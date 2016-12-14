@@ -80,13 +80,13 @@ public class EditNoteTest {
         // assertTrue(mActivity.openMetadata); // FIXME
     }*/
 
-   /* @Test // FIXME
+    @Test
     public void writeTitleTest() throws InterruptedException {
         enableFragment();
         fragment.receiveNote(note);
         onView(withId(R.id.noteDisplayTitleText)).perform(replaceText("someTitle"));
         assertTrue(mActivity.saveNote);
-    }*/
+    }
 
     /*@Test
     public void writeContentTest() throws InterruptedException {

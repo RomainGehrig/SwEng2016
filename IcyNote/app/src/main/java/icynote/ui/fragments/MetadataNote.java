@@ -21,14 +21,23 @@ import icynote.ui.R;
 import icynote.ui.contracts.NoteOptionsPresenter;
 import icynote.ui.view.MetadataNoteViewHolder;
 
+/**
+ * The fragment for the Metadata of a note.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     private MetadataNoteViewHolder viewHolder;
 
     private ReceivedData receivedData = null;
     private NoteOptionsPresenter.Contract contractor;
 
+    /**
+     * Instantiates a new Metadata note. Required empty public constructor
+     */
     public MetadataNote() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -171,7 +180,13 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     }
 
     private static class ReceivedData {
+        /**
+         * The Note.
+         */
         Note<SpannableString> note;
+        /**
+         * The Optional actions.
+         */
         ArrayList<View> optionalActions;
     }
 }

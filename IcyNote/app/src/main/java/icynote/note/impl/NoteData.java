@@ -23,11 +23,22 @@ public class NoteData<S> implements Note<S> {
     private GregorianCalendar creation = new GregorianCalendar();
     private GregorianCalendar lastUpdate = new GregorianCalendar();
 
+    /**
+     * Instantiates a new Note data with default title and content.
+     *
+     * @param defaultTitle
+     * @param defaultContent
+     */
     public NoteData(S defaultTitle, S defaultContent) {
         title = defaultTitle;
         content = defaultContent;
     }
 
+    /**
+     * Instantiates a new Note data from a note to be copied.
+     *
+     * @param toCopy the note to be copied
+     */
     public NoteData(Note<S> toCopy) {
         id = toCopy.getId();
         title = toCopy.getTitle();

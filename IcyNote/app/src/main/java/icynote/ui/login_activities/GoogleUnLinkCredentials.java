@@ -8,6 +8,12 @@ import com.google.android.gms.auth.api.Auth;
 
 import icynote.login.LoginManagerFactory;
 
+/**
+ * The class to unlink Google credentials.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class GoogleUnLinkCredentials extends GoogleClient {
     @Override
     public void onConnected(@Nullable Bundle bundle) {
