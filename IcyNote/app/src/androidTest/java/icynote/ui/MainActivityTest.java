@@ -24,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.anything;
 
 public class MainActivityTest {
@@ -277,11 +278,11 @@ public class MainActivityTest {
 
         onView(withId(R.id.menuButtonImage)).perform(click());
         onView(withText(R.string.trash)).perform(click());
-        assertEquals(2, getNotesCount());
+        int nbNotes = getNotesCount();
         onView(withId(R.id.searchBar)).perform(replaceText("note3"));
-        assertEquals(0, getNotesCount());
-        onView(withId(R.id.searchBar)).perform(replaceText("note"));
-        assertEquals(2, getNotesCount());
+        assertTrue(getNotesCount() <= nbNotes - 2);
+        onView(withId(R.id.searchBar)).perform(replaceText(""));
+        assertEquals(nbNotes, getNotesCount());
     }
 
     @Test
