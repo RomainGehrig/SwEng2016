@@ -68,6 +68,7 @@ public class EditNoteTest {
     public void receiveNoteTest() throws InterruptedException {
         enableFragment();
         fragment.receiveNote(note);
+        Thread.sleep(500);
         onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
         onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
     }

@@ -147,6 +147,7 @@ public class PreferencesTest {
 
         Espresso.pressBack();
         onView(withId(R.id.menuButtonImage)).perform(click());
+        Thread.sleep(500);
         onView(withText(R.string.listAllNotes)).perform(click());
 
         //assertEquals(3, getNotesCount()); TODO decomment when bug fixed
