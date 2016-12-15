@@ -1,6 +1,7 @@
 package icynote.plugins;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
@@ -47,13 +48,13 @@ import util.Callback;
  */
 class ImageFormatter implements FormatterPlugin {
     private static final String TAG = ImageFormatter.class.getSimpleName();
-    private static Uri lastUri;
+    protected static Uri lastUri;
 
     private final int mRequestCodeCamera;
     private final int mRequestCodeGallery;
     public static final int mRequestCodeEditor = 30;
     private String absolutePath;
-    private boolean isEnabled = false;
+    protected boolean isEnabled = false;
 
     /**
      * Instantiates a new Image formatter.
@@ -132,12 +133,12 @@ class ImageFormatter implements FormatterPlugin {
         return buttonList;
     }
 
-    private void startGallery(PluginData state) {
+    protected void startGallery(PluginData state) {
         Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         state.getActivity().startActivityForResult(i, mRequestCodeGallery);
     }
 
-    private class FormatterDecorator extends NoteDecoratorTemplate<SpannableString> {
+    protected class FormatterDecorator extends NoteDecoratorTemplate<SpannableString> {
         private final PluginData appState;
 
         /**
@@ -225,12 +226,12 @@ class ImageFormatter implements FormatterPlugin {
      * ---------------------------------------------------------------------------------------------
      */
 
-    private void takeAndInsertNewPhoto(PluginData state) {
+    protected void takeAndInsertNewPhoto(PluginData state) {
         lastUri = getTempFileUri(state.getActivity());
         startCamera(state);
     }
 
-    private void startCamera(PluginData state) {
+    protected void startCamera(PluginData state) {
         Activity a = state.getActivity();
         Uri destUri = lastUri;
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -245,7 +246,7 @@ class ImageFormatter implements FormatterPlugin {
         }
     }
 
-    private Uri getTempFileUri(Activity a) {
+    protected Uri getTempFileUri(Activity a) {
         File pictureFile = createImageFile(a);
         if (pictureFile == null) {
             throw new AssertionError("unable to create image file");
@@ -258,7 +259,7 @@ class ImageFormatter implements FormatterPlugin {
         return uri;
     }
 
-    private File createImageFile(Activity a) {
+    protected File createImageFile(Activity a) {
         try {
             String imageFileName = "img_" + createNameFromStamp();
             File storageDir = a.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -296,7 +297,7 @@ class ImageFormatter implements FormatterPlugin {
 
         if (!canHandle(requestCode)) {
             Log.i(TAG, "aborting: unknown request code " + requestCode);
-            return;
+            throw new AssertionError("unhandled request code");
         }
         if (requestCode == mRequestCodeCamera) {
             if (resultCode != Activity.RESULT_OK) {
@@ -372,7 +373,7 @@ class ImageFormatter implements FormatterPlugin {
 
     }
 
-    private void startEditor(PluginData state) {
+    protected void startEditor(PluginData state) {
         Intent editor = new Intent(state.getActivity(), PictureEditor.class);
         editor.putExtra("uri",lastUri.toString());
         editor.putExtra("absolutePath",absolutePath);
@@ -380,7 +381,7 @@ class ImageFormatter implements FormatterPlugin {
 
     }
 
-    private void writeUriToNote(PluginData state, Uri uri) {
+    protected void writeUriToNote(PluginData state, Uri uri) {
 
         int selectionStart = state.getSelectionStart();
         int selectionEnd = state.getSelectionEnd();
@@ -418,10 +419,12 @@ class ImageFormatter implements FormatterPlugin {
                                    int end) {
         Bitmap image = getImage(uri, appState);
         Activity a = appState.getActivity();
-        ImageSpanWithId span = getImageSpan(a.getResources(), image, uri);
-        ss.setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        if (a != null) {
+            ImageSpanWithId span = getImageSpan(a.getResources(), image, uri);
+            ss.setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
     }
-    private static class ImageSpanWithId extends ImageSpan {
+    protected static class ImageSpanWithId extends ImageSpan {
         private final String name;
 
         /**
@@ -445,7 +448,7 @@ class ImageFormatter implements FormatterPlugin {
             return name;
         }
     }
-    private static ImageSpanWithId getImageSpan(Resources r, Bitmap image, String name) {
+    protected static ImageSpanWithId getImageSpan(Resources r, Bitmap image, String name) {
         Drawable d = new BitmapDrawable(r, image);
 
         d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
@@ -457,13 +460,16 @@ class ImageFormatter implements FormatterPlugin {
         return getBitmapFromUri(uri, appState);
     }
 
-    private static Bitmap getBitmapFromUri(Uri uri, PluginData appState) {
+    protected static Bitmap getBitmapFromUri(Uri uri, PluginData appState) {
 /*
         Bitmap b = decodeSampledBitmapFromResource(uri, MAX_WIDTH, MAX_HEIGHT);*/
 
         InputStream inputStream = null;
         try {
-            inputStream = appState.getActivity().getContentResolver().openInputStream(uri);
+            Activity activity = appState.getActivity();
+            if (activity != null) {
+                activity.getContentResolver().openInputStream(uri);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -474,7 +480,7 @@ class ImageFormatter implements FormatterPlugin {
     }
 
 
-    private void galleryAddPic(PluginData state, Bitmap bitmap) {
+    protected void galleryAddPic(PluginData state, Bitmap bitmap) {
         MediaStore.Images.Media.insertImage(
                 state.getActivity().getContentResolver(),
                 bitmap,

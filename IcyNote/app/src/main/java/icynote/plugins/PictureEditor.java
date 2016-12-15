@@ -142,7 +142,7 @@ public class PictureEditor extends AppCompatActivity {
         options.inJustDecodeBounds = false;
         try {
             inputStream.close();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
 
