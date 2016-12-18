@@ -53,12 +53,13 @@ public class PictureEditorTest {
         startPictureEditor();
     }
 
-    private void startPictureEditor() {
+    private void startPictureEditor() throws InterruptedException {
         // start PictureEditor with uri and path in extra
         Intent i = new Intent(mActivity, PictureEditor.class);
         i.putExtra("uri", uri.toString());
         i.putExtra("absolutePath", absPath);
         mActivity.startActivity(i);
+        Thread.sleep(500);
     }
 
     private void addImageInContentResolver() {
