@@ -111,29 +111,8 @@ public class NotesListTest  {
 
         onView(withId(R.id.checkBox)).perform(click());
 
-        onView(withId(R.id.btDelete)).perform(click());// TODO check it is the right delete button
-        assertTrue(mActivity.deleteNote);
-
-        // Méthode 1
-        /*onView(isNotChecked()).perform(click());*/
-
-        // Méthode 2 : Fonctionne mais ne permet pas de sélectionner une checkbox spécifique
-        // onView(withId(R.id.checkBox)).perform(click());
-
-        // Méthode 3
-        /*onData(withId(R.id.lvNotes)).inAdapterView(withId(R.id.checkBox)).atPosition(0)
-                .perform(click());*/
-
-        // Méthode 4 : si lv n'est pas nul :
-        /*
-        View view = getViewByPosition(0, lv);
-        view.findViewById(R.id.checkBox);
         onView(withId(R.id.btDelete)).perform(click());
-        //onView(withId(R.id.lvNotes))
-        */
-
-        // Méthode 5 : récupérer la listView d'une autre manière
-        //checkBoxTester();
+        assertTrue(mActivity.deleteNote);
     }
 
     @Test
@@ -143,7 +122,7 @@ public class NotesListTest  {
         int notesCountBefore = getNotesCount();
         assertEquals(1, notesCountBefore);
 
-        onView(withId(R.id.btDelete)).perform(click());// TODO check it is the right delete button
+        onView(withId(R.id.btDelete)).perform(click());
         assertFalse(mActivity.deleteNote);
     }
 
@@ -222,47 +201,6 @@ public class NotesListTest  {
         // dans le thread du test, attend qu elle passe a 0 = attend que receiveNote soit appele
         latch.await();
     }
-
-    public View getViewByPosition(int pos, ListView listView) {
-        final int firstListItemPosition = listView.getFirstVisiblePosition();
-        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
-
-        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
-            return listView.getAdapter().getView(pos, null, listView);
-        } else {
-            final int childIndex = pos - firstListItemPosition;
-            return listView.getChildAt(childIndex);
-        }
-    }
-
-    /*public int checkBoxTester()
-    {
-        final int[] counts = new int[1];
-        onView(withId(R.id.lvNotes)).check(matches(new TypeSafeMatcher<View>() {
-            @Override
-            public boolean matchesSafely(View view) {
-                ListView listView = (ListView) view;
-
-                View v = getViewByPosition(0, listView);
-                v.findViewById(R.id.checkBox);
-                onView(withId(R.id.btDelete)).perform(click());
-                int notesCountAfter = getNotesCount();
-                assertEquals(0, notesCountAfter);
-
-
-                counts[0] = listView.getCount();
-
-                return true;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-
-            }
-        }));
-
-        return counts[0];
-    }*/
 
     private int getNotesCount()
     {
