@@ -8,4 +8,6 @@
     <dimen name="notesTitleSize">20sp</dimen>
     <dimen name="textSizeVarious">18sp</dimen>
     <dimen name="refresh_margin">10sp</dimen>
+    <dimen name="editor_margin">20dp</dimen>
+    <dimen name="editor_margin_rotate">5dp</dimen>
 </resources>

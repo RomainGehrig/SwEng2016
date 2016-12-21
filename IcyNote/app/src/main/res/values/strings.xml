@@ -118,6 +118,11 @@
     <string name="metadata_note_edit_title_title">Edit the Title</string>
     <string name="metadata_note_info_title">More Information</string>
 
+    <string name="pic_edit_preview">Preview of the Photo</string>
+    <string name="pic_edit_done">Finish modifications and submit image a Note</string>
+    <string name="pic_edit_rotate_right">Rotate image clockwise</string>
+    <string name="pic_edit_rotate_left">Rotate image counter-clockwise</string>
+
     <string name="error_edit_note_edit_note_contract_not_implemented">%s has to implement EditNote.Contract.</string>
 
 </resources>
