@@ -94,7 +94,7 @@ public class GoogleClient extends ActivityWithProgressDialog
      *
      * @return the google api client
      */
-    GoogleApiClient apiClient() {
+    protected GoogleApiClient apiClient() {
         return mGoogleApiClient;
     }
 }

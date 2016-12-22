@@ -47,7 +47,7 @@ import util.Callback;
  * @author Julien Harbulot
  * @version 1.0
  */
-class ImageFormatter implements FormatterPlugin {
+public class ImageFormatter implements FormatterPlugin {
     private static final String TAG = ImageFormatter.class.getSimpleName();
     protected static Uri lastUri;
 
@@ -400,7 +400,7 @@ class ImageFormatter implements FormatterPlugin {
             ss.setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
     }
-    protected static class ImageSpanWithId extends ImageSpan {
+    public static class ImageSpanWithId extends ImageSpan {
         private final String name;
 
         /**

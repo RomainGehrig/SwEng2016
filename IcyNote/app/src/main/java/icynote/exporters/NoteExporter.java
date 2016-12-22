@@ -1,5 +1,6 @@
 package icynote.exporters;
 
+import android.content.Context;
 import android.text.SpannableString;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import icynote.note.Note;
 import icynote.plugins.PluginData;
 
 public interface NoteExporter<T extends NoteExporter.ExportedNote> {
-    T export(Note<SpannableString> note);
+    T export(Note<SpannableString> note, Context context);
 
     interface ExportedNote extends Serializable {
         byte[] getBytes();

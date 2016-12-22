@@ -50,14 +50,6 @@ public class GoogleDriveExport implements Plugin {
 
         if (requestCode == EXPORT_REQUEST) {
             log("Export request, result code is: " + resultCode);
-
-            /*
-            if (resultCode != Activity.RESULT_OK) {
-                Toast.makeText(state.getActivity()
-                        , "Sorry, an unexpected error happened.",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }*/
         } else {
             log("Plugin cannot handle code " + requestCode + " (but declared it could handle it).");
         }
@@ -127,7 +119,7 @@ public class GoogleDriveExport implements Plugin {
         }
 
         private void showMessage(String message) {
-            Toast.makeText(this, message, Toast.LENGTH_LONG);
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
 
         final private ResultCallback<DriveContentsResult> driveContentsCallback = new
@@ -155,7 +147,7 @@ public class GoogleDriveExport implements Plugin {
                                 // write content to DriveContents
                                 OutputStream outputStream = driveContents.getOutputStream();
                                 try {
-                                    outputStream.write(new HTMLExporter().export(note).getBytes());
+                                    outputStream.write(new HTMLExporter().export(note, getApplicationContext()).getBytes());
                                     outputStream.close();
                                 } catch (IOException e) {
                                     log("Couldn't write to gdrive", e);

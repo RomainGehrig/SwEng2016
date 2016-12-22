@@ -1,22 +1,60 @@
 package icynote.exporters;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.text.Html;
 import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import android.util.Base64;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import icynote.note.Note;
+import icynote.plugins.ImageFormatter;
 import util.ArgumentChecker;
 
 public class HTMLExporter implements NoteExporter<HTMLExporter.HTMLNote> {
     @Override
-    public HTMLNote export(Note<SpannableString> note) {
+    public HTMLNote export(Note<SpannableString> note, Context context) {
         // For the moment we implement a quite dumb export
         // TODO: convert special characters to their html equivalent
         StringBuilder sb = new StringBuilder();
-        String title = note.getTitle().toString();
-        String content = note.getContent().toString();
-        content = content.replace("\n", "<br/>");
+        String title = Html.escapeHtml(note.getTitle());
+        SpannableString spanContent = note.getContent();
+
+        ImageFormatter.ImageSpanWithId[] spans = spanContent.getSpans(
+                0,
+                spanContent.length(),
+                ImageFormatter.ImageSpanWithId.class);
+
+        SpannableString translatedContent = new SpannableString(spanContent);
+        // Convert image URIs found as spans to Base64 to embed them in the HTML source
+        for (ImageFormatter.ImageSpanWithId span : spans) {
+            Uri img = Uri.parse(span.getName());
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), img);
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                byte[] bytes = out.toByteArray();
+                String encoded = Base64.encodeToString(bytes, Base64.DEFAULT);
+
+                translatedContent.removeSpan(span);
+                translatedContent.setSpan(new ImageSpan(span.getDrawable(), "data:image/png;base64," + encoded),
+                        spanContent.getSpanStart(span),
+                        spanContent.getSpanEnd(span),
+                        spanContent.getSpanFlags(span));
+            } catch (IOException e) {
+                // We don't convert the image if it doesn't exist
+                continue;
+            }
+        }
+
+        String content = Html.toHtml(translatedContent);
         sb.append("<!DOCTYPE html>\n");
         sb.append("<html>\n");
         sb.append("  <head>\n");
