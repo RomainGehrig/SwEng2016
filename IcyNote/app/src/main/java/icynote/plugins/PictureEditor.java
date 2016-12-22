@@ -95,7 +95,6 @@ public class PictureEditor extends AppCompatActivity {
         }
     }
 
-    // TODO cannot handle big images
     private Bitmap rotateImage(Bitmap img, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
@@ -104,20 +103,6 @@ public class PictureEditor extends AppCompatActivity {
         return resultImg;
     }
 
-    private Bitmap getOriginalImage() {
-        InputStream inputStream;
-        Bitmap b = null;
-        try {
-            inputStream = getContentResolver().openInputStream(uri);
-            b = BitmapFactory.decodeStream(inputStream);
-            inputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return b;
-    }
 
     private Bitmap decodeSampledBitmapFromResource(Uri uri, int reqWidth, int reqHeight) {
 

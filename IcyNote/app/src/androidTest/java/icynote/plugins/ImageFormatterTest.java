@@ -790,19 +790,13 @@ public class ImageFormatterTest {
             try {
                 ImageFormatterForTest imageFormatter = new ImageFormatterForTest(mActivity, 10, 20);
                 exception.expect(NullPointerException.class);
-                imageFormatter.galleryAddPic(null, null);
+                imageFormatter.galleryAddPic(null, null, null);
             } catch (AssertionError e) {
                 tryAgain = true;
                 numberOfTry += 1;
                 Thread.sleep(500);
             }
         }
-    }
-
-    @Test
-    public void galleryAddPicNullBitmapTest() {
-        ImageFormatterForTest imageFormatter = new ImageFormatterForTest(mActivity, 10, 20);
-        imageFormatter.galleryAddPic(imageFormatter.getPluginData(), null);
     }
 
 
