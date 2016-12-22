@@ -468,7 +468,7 @@ class ImageFormatter implements FormatterPlugin {
         try {
             Activity activity = appState.getActivity();
             if (activity != null) {
-                activity.getContentResolver().openInputStream(uri);
+                inputStream = activity.getContentResolver().openInputStream(uri);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
