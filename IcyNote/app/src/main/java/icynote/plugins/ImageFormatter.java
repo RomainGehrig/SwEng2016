@@ -128,16 +128,10 @@ class ImageFormatter implements FormatterPlugin {
         return buttonList;
     }
 
-    /*protected void startGallery(PluginData state) {
-
-        if(checkPermissionsOnStorage(state)) {
-            Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            state.getActivity().startActivityForResult(i, mRequestCodeGallery);
-        }
-        else {
-            Toast.makeText(state.getActivity(), "Permissions are not granted", Toast.LENGTH_SHORT).show();
-        }
-    }*/
+    protected void startGallery(PluginData state) {
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        state.getActivity().startActivityForResult(i, mRequestCodeGallery);
+    }
 
     /*private boolean checkPermissionsOnStorage(PluginData state) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
