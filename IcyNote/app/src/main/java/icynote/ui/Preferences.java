@@ -11,10 +11,16 @@ import icynote.login.LoginManager;
 import icynote.login.LoginManagerFactory;
 import icynote.plugins.Plugin;
 import icynote.plugins.PluginsProvider;
-import icynote.ui.loginactivities.GoogleLinkCredentials;
-import icynote.ui.loginactivities.GoogleUnLinkCredentials;
+import icynote.ui.login_activities.GoogleLinkCredentials;
+import icynote.ui.login_activities.GoogleUnLinkCredentials;
 
 
+/**
+ * The preferences of the accounts
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class Preferences extends PreferenceActivity {
 
     static private final int RC_LINK_GOOGLE = 1505;
@@ -65,7 +71,7 @@ public class Preferences extends PreferenceActivity {
         }
     }
 
-    public void setAccountPref(String title, final int mode) {
+    private void setAccountPref(String title, final int mode) {
         accountPref.setTitle(title);
         accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -75,7 +81,8 @@ public class Preferences extends PreferenceActivity {
         });
     }
 
-    public void execAccountAction(int mode){
+
+    private void execAccountAction(int mode){
         switch (mode){
             case 0: {
                 Intent intent = new Intent(this, GoogleLinkCredentials.class);

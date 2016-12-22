@@ -14,10 +14,15 @@ import icynote.note.Note;
 import icynote.ui.R;
 import icynote.ui.contracts.NotePresenter;
 import icynote.ui.view.NoteViewHolder;
-import me.gujun.android.taggroup.TagGroup;
 
 import static java.lang.Math.min;
 
+/**
+ * The fragment to edit notes
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class EditNote extends Fragment implements NotePresenter {
 
     private Note<SpannableString> note;
@@ -26,12 +31,13 @@ public class EditNote extends Fragment implements NotePresenter {
 
     private Contract activity;
 
-    private TagGroup mDefaultTagGroup;
-    private String[] tags = {}; // initialize tags here
     private NoteViewHolder viewHolder;
 
+    /**
+     * Instantiates a new Edit note. Required empty public constructor
+     */
     public EditNote() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -51,43 +57,6 @@ public class EditNote extends Fragment implements NotePresenter {
                 activity.openOptionalPresenter(EditNote.this);
             }
         });
-        mDefaultTagGroup = (TagGroup) view.findViewById(R.id.noteDisplayTagsText);
-        if (tags != null && tags.length > 0) {
-            mDefaultTagGroup.setTags(tags);
-        }
-
-        /*
-        mDefaultTagGroup.setOnTagChangeListener(new TagGroup.OnTagChangeListener() {
-            @Override
-            public void onAppend(TagGroup tagGroup, String tag) {
-                String[] allTags = tagGroup.getTags();
-
-                if (containsNotLast(allTags, tag)) {
-                    //tagGroup.setBackgroundColor(Color.BLACK);
-                } else {
-                    //tagGroup.setBackgroundColor(Color.WHITE);
-                }
-            }
-
-            @Override
-            public void onDelete(TagGroup tagGroup, String tag) {
-                // ---
-            }
-        });
-
-        // FIXME does nothing
-        mDefaultTagGroup.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_A) {
-                    Log.d("key", "press");
-                    ((TagGroup) v.findViewById(R.id.noteDisplayTagsText)).submitTag();
-                    return true;
-                }
-                return false;
-            }
-        });
-        */
 
         return view;
     }
@@ -163,7 +132,7 @@ public class EditNote extends Fragment implements NotePresenter {
         });
 
         // add listener to the content
-        viewHolder.getContent().addTextChangedListener(new TextWatcher() {
+        /*viewHolder.getContent().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -186,20 +155,28 @@ public class EditNote extends Fragment implements NotePresenter {
                 viewHolder.getContent().addTextChangedListener(this);
                 activity.saveNote(note, EditNote.this);
             }
+        });*/
+        viewHolder.getContent().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    // code to execute when EditText loses focus
+                    note.setContent(new SpannableString(viewHolder.getContent().getText()));
+                    int start = viewHolder.getContent().getSelectionStart();
+                    int end = viewHolder.getContent().getSelectionEnd();
+                    viewHolder.getContent().setText(note.getContent());
+                    int length = viewHolder.getContent().getText().length();
+                    if (start > 0 && end > 0) {
+                        viewHolder.getContent().setSelection(min(start, length), min(end, length));
+                    }
+                    activity.saveNote(note, EditNote.this);
+                }
+            }
         });
+
+
     }
 
-    /*
-    private boolean containsNotLast(String[] l, String t) {
-        List<String> e = Arrays.asList(l).subList(0, l.length - 1);
-        for (String s : e) {
-            if (s.equals(t)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    */
 
     @Override
     public void onOpenOptPresenterFailure(String message) {

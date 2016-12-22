@@ -39,8 +39,8 @@ import util.Optional;
 public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
     private static final String LOGGING_TAG = SQLiteNoteProvider.class.getSimpleName();
 
-    private String mCurrentUserUID;
-    private DatabaseProvider mDbProvider;
+    private final String mCurrentUserUID;
+    private final DatabaseProvider mDbProvider;
     private final String[] mNoteColumns = {
             Notes.COL_ID,
             Notes.COL_USER_ID,
@@ -158,12 +158,10 @@ public class SQLiteNoteProvider implements NoteProvider<Note<String>> {
      * Deletes every note corresponding to the specified user.
      *
      * @param userUID the unique id of the user whose notes we want to delete.
-     * @return the number of deleted rows.
      */
-    int deleteUser(@NonNull String userUID) {
+    void deleteUser(@NonNull String userUID) {
         SQLiteDatabase db = mDbProvider.getReadableDatabase();
-
-        return db.delete(Notes.TABLE_NAME
+        db.delete(Notes.TABLE_NAME
                 , Notes.COL_USER_ID + " LIKE ?"
                 , new String[]{userUID});
     }

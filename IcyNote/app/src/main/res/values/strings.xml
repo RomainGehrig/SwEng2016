@@ -12,9 +12,11 @@
     <string name="logout">Log out</string>
 
     <string name="menuButtonImage">Menu button image</string>
-    <string name="menuOpenMetadata">Metadatas button image</string>
+    <string name="menuOpenMetadata">Metadata button image</string>
+    <string name="menuRefresh">Refresh button image</string>
+    <string name="menuBack">Back button image</string>
 
-    <string name="label_emailpassword">Email/Password</string>
+    <string name="label_email_password">Email/Password</string>
 
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account</string>
@@ -23,7 +25,7 @@
     <string name="hint_password">Password</string>
     <string name="desc_icynote_lockup">Icynote logo and name</string>
 
-    <string name="emailpassword_title_text">Email and Password</string>
+    <string name="email_password_title_text">Email and Password</string>
 
     <string-array name="sort_by">
         <item>Title</item>
@@ -68,7 +70,7 @@
     <string name="item_note_date">Date</string>
     <string name="item_note_content">Content</string>
 
-    <string name="error_main_activiy_unable_to_create_new_holder">Sorry, unable to create a new holder for your note</string>
+    <string name="error_main_activity_unable_to_create_new_holder">Sorry, unable to create a new holder for your note</string>
     <string name="error_main_activity_unable_to_persist_note">Unexpected error: unable to persist the note</string>
     <string name="error_main_activity_unable_to_save_note">"Unexpected error: unable to save the note "</string>
     <string name="error_main_activity_unable_to_delete_note">Sorry, unable to delete note</string>
@@ -82,17 +84,17 @@
 
     <string name="error_email_password_login_email__required">Required.</string>
     <string name="error_email_password_login_password_required">Required.</string>
-    <string name="sucess_email_password_login_local_sign_in">local sign in success</string>
+    <string name="success_email_password_login_local_sign_in">local sign in success</string>
     <string name="email_password_login_create_user_email">createUserWithEmail</string>
     <string name="email_password_login_sign_in_email">signInWithEmail</string>
 
     <string name="error_google_client_unable_to_connect">Google Play Services error: unable to connect. %s</string>
 
-    <string name="sucess_google_link_credentials_put_extra">Success</string>
+    <string name="success_google_link_credentials_put_extra">Success</string>
     <string name="extra_google_link_message">googleLink.message</string>
 
     <string name="error_google_sign_in">Google Sign In cancelled</string>
-    <string name="sucess_google_sign_in">Google Sign In success</string>
+    <string name="success_google_sign_in">Google Sign In success</string>
 
     <string name="sign_out_account_closed">Account closed</string>
 
@@ -110,7 +112,16 @@
 
     <string name="metadata_note_date_created">"Date Created:  "</string>
     <string name="metadata_note_date_modified">"Date Modified:  "</string>
-    <string name="metadata_note_date_format">dd/MM/yyyy  \'at\'  HH:mm:ss</string>
+    <string name="metadata_note_date_format">dd/MM/yyyy</string>
+    <string name="metadata_note_back_text">Back</string>
+    <string name="metadata_note_plugins_title">Plugins</string>
+    <string name="metadata_note_edit_title_title">Edit the Title</string>
+    <string name="metadata_note_info_title">More Information</string>
+
+    <string name="pic_edit_preview">Preview of the Photo</string>
+    <string name="pic_edit_done">Finish modifications and submit image a Note</string>
+    <string name="pic_edit_rotate_right">Rotate image clockwise</string>
+    <string name="pic_edit_rotate_left">Rotate image counter-clockwise</string>
 
     <string name="error_edit_note_edit_note_contract_not_implemented">%s has to implement EditNote.Contract.</string>
 

@@ -30,7 +30,7 @@
         android:text="@string/activity_chooser_google_sign_in"
         android:layout_width="150sp"
         android:layout_height="wrap_content"
-        android:id="@+id/googe_sign_in_button"
+        android:id="@+id/google_sign_in_button"
         android:onClick="googleSignIn"
         android:layout_below="@+id/local_sign_in_button"
         android:layout_centerHorizontal="true" />

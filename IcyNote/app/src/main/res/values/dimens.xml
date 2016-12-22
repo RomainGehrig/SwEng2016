@@ -5,6 +5,9 @@
     <dimen name="titleSize">24sp</dimen>
     <dimen name="icon_top_margin">24dp</dimen>
     <dimen name="icon_bottom_margin">24dp</dimen>
-    <dimen name="title_bottom_margin">16dp</dimen>
     <dimen name="notesTitleSize">20sp</dimen>
+    <dimen name="textSizeVarious">18sp</dimen>
+    <dimen name="refresh_margin">10sp</dimen>
+    <dimen name="editor_margin">20dp</dimen>
+    <dimen name="editor_margin_rotate">5dp</dimen>
 </resources>

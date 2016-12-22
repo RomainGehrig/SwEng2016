@@ -1,6 +1,5 @@
 package icynote.ui.fragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +7,18 @@ import android.view.ViewGroup;
 
 import icynote.ui.R;
 
+/**
+ * The fragment to edit tags.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class EditTags extends FragmentWithState {
 
+    /**
+     * Instantiates a new Edit tags. Required empty public constructor
+     */
     public EditTags() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
     }
 
@@ -27,7 +29,4 @@ public class EditTags extends FragmentWithState {
         return inflater.inflate(R.layout.fragment_edit_tags, container, false);
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }

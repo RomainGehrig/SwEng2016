@@ -29,9 +29,17 @@ public class ListNoteProvider implements NoteProvider<Note<String>> {
     private final List<Note<String>> notes = new ArrayList<>();
     private int nextId = 0;
 
+    /**
+     * Instantiates a new List note provider.
+     */
     public ListNoteProvider() {
     }
 
+    /**
+     * Instantiates a new List note provider.
+     *
+     * @param memory the memory
+     */
     public ListNoteProvider(Iterable<Note<String>> memory) {
         for (Note<String> n : memory) {
             notes.add(new NoteData<>(n));

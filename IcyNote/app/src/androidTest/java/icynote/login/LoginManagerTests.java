@@ -28,11 +28,11 @@ public class LoginManagerTests {
     private LoginManager manager = null;
     private String email = null;
     private String password = null;
-    private String knownEmail = "test@icynote.ch";
-    private String knownPassword = "icynote";
+    private final String knownEmail = "test@icynote.ch";
+    private final String knownPassword = "icynote";
 
     @Rule
-    public UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
+    public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
 
     @Before
     public void setUp() throws Throwable {

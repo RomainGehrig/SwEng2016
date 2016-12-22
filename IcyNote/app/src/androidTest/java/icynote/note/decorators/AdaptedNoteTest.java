@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class AdaptedNoteTest {
 
-    private static Adapter<String, SpannableString> adapter = new Adapter<String, SpannableString>() {
+    private static final Adapter<String, SpannableString> adapter = new Adapter<String, SpannableString>() {
         @Override
         public SpannableString from(String b) {
             return new SpannableString(b);
@@ -26,8 +26,8 @@ public class AdaptedNoteTest {
         }
     };
 
-    private Note<SpannableString> note = new NoteData2();
-    private AdaptedNote<String, SpannableString> adaptedNote = new AdaptedNote<>(note, adapter);
+    private final Note<SpannableString> note = new NoteData2();
+    private final AdaptedNote<String, SpannableString> adaptedNote = new AdaptedNote<>(note, adapter);
 
     @Test
     public void getIdTest() {

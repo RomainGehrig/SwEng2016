@@ -19,6 +19,11 @@ public class NoteDecoratorTemplate<S> implements Note<S> {
 
     //-------------------------------------
 
+    /**
+     * Instantiates a new Note decorator template.
+     *
+     * @param delegateInteractor the delegate interactor
+     */
     protected NoteDecoratorTemplate(Note<S> delegateInteractor) {
         delegate = delegateInteractor;
     }

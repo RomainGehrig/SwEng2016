@@ -14,20 +14,30 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import icynote.note.Note;
 import icynote.ui.R;
 import icynote.ui.contracts.NoteOptionsPresenter;
 import icynote.ui.view.MetadataNoteViewHolder;
 
+/**
+ * The fragment for the Metadata of a note.
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     private MetadataNoteViewHolder viewHolder;
 
     private ReceivedData receivedData = null;
     private NoteOptionsPresenter.Contract contractor;
 
+    /**
+     * Instantiates a new Metadata note. Required empty public constructor
+     */
     public MetadataNote() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -44,11 +54,6 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         contractor = (Contract) getActivity();
@@ -57,7 +62,7 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
         // otherwise it does nothing
         // android bug: must be called in `onResume` method and not `onViewCreated`.
         // see: http://stackoverflow.com/questions/13303469/
-        // edittext-settext-not-working-with-fragment
+        // edit_text-set_text-not-working-with-fragment
 
         Log.i(this.getClass().getSimpleName(), "onViewCreated");
         addNoteInView();
@@ -101,6 +106,8 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
         if (viewIsCreated && actionsReceived)  {
             viewHolder.getOptionalActionsLayout().removeAllViews();
             for (View button : receivedData.optionalActions) {
+                button.setScaleY(1);
+                button.setScaleX(0.5625f);
                 viewHolder.getOptionalActionsLayout().addView(button);
             }
         }
@@ -159,7 +166,8 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     }
 
     private String dateToString(GregorianCalendar date, String description) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.metadata_note_date_format));
+        SimpleDateFormat dateFormat = new SimpleDateFormat(getString(R.string.metadata_note_date_format),
+                Locale.ROOT);
         return description + dateFormat.format(date.getTime());
     }
 
@@ -174,7 +182,13 @@ public class MetadataNote extends Fragment implements NoteOptionsPresenter {
     }
 
     private static class ReceivedData {
+        /**
+         * The Note.
+         */
         Note<SpannableString> note;
+        /**
+         * The Optional actions.
+         */
         ArrayList<View> optionalActions;
     }
 }

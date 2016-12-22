@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class PluginsProviderTest {
 
-    PluginsProvider provider = PluginsProvider.getInstance();
+    private final PluginsProvider provider = PluginsProvider.getInstance();
 
     @Test
     public void getPluginsTest() {

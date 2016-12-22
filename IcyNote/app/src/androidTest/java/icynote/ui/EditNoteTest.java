@@ -15,6 +15,7 @@ import icynote.ui.fragments.EditNote;
 import icynote.ui.view.MockEditNote;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -24,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class EditNoteTest {
 
     @Rule
-    public ActivityTestRule<MockEditNote> main = new ActivityTestRule<>(MockEditNote.class);
+    public final ActivityTestRule<MockEditNote> main = new ActivityTestRule<>(MockEditNote.class);
 
     private MockEditNote mActivity;
     private EditNote fragment;
@@ -45,7 +46,7 @@ public class EditNoteTest {
     }
 
 
-    public void enableFragment() throws InterruptedException {
+    private void enableFragment() throws InterruptedException {
         //initalise a 1 = se debloque apres 1 countDown
         final CountDownLatch latch = new CountDownLatch(1);
         mActivity.runOnUiThread(
@@ -67,49 +68,25 @@ public class EditNoteTest {
     @Test
     public void receiveNoteTest() throws InterruptedException {
         enableFragment();
-        fragment.receiveNote(note);
+        Thread.sleep(500);
         onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
         onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
     }
 
-    /*@Test
-    public void goToMetadataTest() throws InterruptedException {
-        enableFragment();
-        fragment.receiveNote(note);
-        onView(withId(R.id.note_open_metadata)).perform(click());
-        // assertTrue(mActivity.openMetadata); // FIXME
-    }*/
-
-   /* @Test // FIXME
+    @Test
     public void writeTitleTest() throws InterruptedException {
         enableFragment();
-        fragment.receiveNote(note);
+        Thread.sleep(500);
         onView(withId(R.id.noteDisplayTitleText)).perform(replaceText("someTitle"));
-        assertTrue(mActivity.saveNote);
-    }*/
-
-    @Test
-    public void writeContentTest() throws InterruptedException {
-        enableFragment();
-        fragment.receiveNote(note);
-        onView(withId(R.id.noteDisplayBodyText)).perform(replaceText("someText"));
         assertTrue(mActivity.saveNote);
     }
 
-    /*@Test
-    public void saveNoteTest() throws InterruptedException { // TODO more checks
-        enableFragment();
-        mActivity.saveNote(note, EditNoteTest.this);
-        onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
-        onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
-    }*/
-
     @Test
-    public void onSaveNoteFailureTest() {
+    public void onSaveNoteFailureTest() throws InterruptedException {
         fragment.receiveNote(note);
+        Thread.sleep(500);
         fragment.onSaveNoteFailure("fail to save");
         onView(withId(R.id.noteDisplayTitleText)).check(matches(withText("someTitle")));
         onView(withId(R.id.noteDisplayBodyText)).check(matches(withText("someContent")));
     }
-    
 }

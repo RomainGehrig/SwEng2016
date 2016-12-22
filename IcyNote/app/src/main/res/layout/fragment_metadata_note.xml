@@ -8,22 +8,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="icynote.ui.fragments.MetadataNote">
 
-    <Button
+    <ImageView
+        android:id="@+id/metadata_back"
+        android:contentDescription="@string/menuBack"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:alpha="0.5"
+        android:background="@drawable/meta_back"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="true" />
+
+    <Button
         android:id="@+id/backButton"
-        android:background="@drawable/ic_navigate_before_white_24dp"
-        android:alpha="0.5"/>
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:alpha="0"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="Back"
+        android:text="@string/metadata_note_back_text"
         android:gravity="center"
-        android:textSize="@dimen/textSizeSpinner"
+        android:textSize="@dimen/textSizeVarious"
         android:layout_marginStart="-5dp"
         android:layout_marginLeft="-5dp"
         android:alpha="0.5"
@@ -38,19 +48,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp">
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metadata_note_plugins_title"
+            android:textSize="@dimen/textSizeVarious"
+            android:textStyle="normal|bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="5dp"
+            android:background="#80ffffff"/>
 
         <LinearLayout
             android:id="@+id/pluginButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             android:orientation="horizontal" >
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metadata_note_edit_title_title"
+            android:textSize="@dimen/textSizeVarious"
+            android:textStyle="normal|bold"
+            android:layout_marginTop="20dp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="5dp"
             android:background="#80ffffff"/>
 
@@ -59,33 +97,52 @@
             android:textSize="24sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="textPersonName"
             android:textStyle="normal|bold"
-            android:hint="@string/noteDisplayTitleHint" />
+            android:hint="@string/noteDisplayTitleHint"
+            android:inputType="textMultiLine"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metadata_note_info_title"
+            android:textSize="@dimen/textSizeVarious"
+            android:textStyle="normal|bold"
+            android:layout_marginTop="20dp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="5dp"
             android:background="#80ffffff"/>
 
         <TextView
             android:textSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/noteCreationDate" />
+            android:gravity="start"
+            android:layout_marginTop="5dp"
+            android:id="@+id/noteCreationDate"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp" />
 
         <TextView
             android:paddingTop="5dp"
             android:textSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:id="@+id/noteModificationDate" />
+            android:gravity="start"
+            android:layout_marginTop="5dp"
+            android:id="@+id/noteModificationDate"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp" />
     </LinearLayout>
 
 

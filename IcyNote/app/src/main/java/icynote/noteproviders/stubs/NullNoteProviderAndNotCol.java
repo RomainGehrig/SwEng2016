@@ -14,7 +14,6 @@ import icynote.noteproviders.OrderType;
  * @author Julien Harbulot
  * @version 1.0
  */
-
 public class NullNoteProviderAndNotCol extends NullNoteProviderAndCol {
     @Override
 

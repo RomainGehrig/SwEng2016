@@ -13,14 +13,14 @@ import icynote.note.impl.NoteData2;
  */
 public class NullStringCorrectorTest {
 
-    Note<SpannableString> note = new NoteData2();
-    NullStringCorrector.Corrector<SpannableString> corrector = new NullStringCorrector.Corrector<SpannableString>() {
+    private final Note<SpannableString> note = new NoteData2();
+    private final NullStringCorrector.Corrector<SpannableString> corrector = new NullStringCorrector.Corrector<SpannableString>() {
         @Override
         public SpannableString makeCorrection() {
             return new SpannableString("a corrected string");
         }
     };
-    NullStringCorrector<SpannableString> nullStringCorrector = new NullStringCorrector<>(note, "message error", corrector);
+    private final NullStringCorrector<SpannableString> nullStringCorrector = new NullStringCorrector<>(note, "message error", corrector);
 
     @Test
     public void getTitleWhenTitleIsNullTest() {

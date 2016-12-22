@@ -13,12 +13,24 @@ import icynote.note.common.BoundaryCheckerUtil;
  * @version 1.0
  */
 public class NullInput<S> extends NoteDecoratorTemplate<S> {
-    String name = "";
+    private String name = "";
 
+    /**
+     * Instantiates a new Null input.
+     *
+     * @param delegateInteractor the delegate interactor
+     */
     public NullInput(Note<S> delegateInteractor) {
         super(delegateInteractor);
         name = "";
     }
+
+    /**
+     * Instantiates a new Null input.
+     *
+     * @param delegateInteractor the delegate interactor
+     * @param errorMessage       the error message
+     */
     public NullInput(Note<S> delegateInteractor, String errorMessage) {
         super(delegateInteractor);
         name = errorMessage;

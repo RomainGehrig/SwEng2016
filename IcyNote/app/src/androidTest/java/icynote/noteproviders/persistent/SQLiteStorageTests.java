@@ -5,6 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
 import icynote.note.Note;
 import icynote.noteproviders.NoteProvider;
 import icynote.noteproviders.templates.StorageTests;
@@ -13,7 +15,7 @@ import icynote.note.impl.NoteData;
 @RunWith(AndroidJUnit4.class)
 public class SQLiteStorageTests extends StorageTests<String, Note<String>> {
     private final String testUser = "testUSER_514307856140378641306406134";
-    private SQLiteNoteProvider instance =
+    private final SQLiteNoteProvider instance =
             new SQLiteNoteProvider(InstrumentationRegistry.getTargetContext(), testUser);
 
     @Override
@@ -25,7 +27,8 @@ public class SQLiteStorageTests extends StorageTests<String, Note<String>> {
     @Override
     protected NoteProvider<Note<String>> makeNewWith(Note<String> n1, Note<String> n2, Note<String> n3) {
         instance.deleteUser(testUser);
-        for( Note<String> n : new Note[]{n1, n2, n3}){
+        ArrayList<Note<String>> list = new ArrayList<>(); list.add(n1);list.add(n2);list.add(n3);
+        for( Note<String> n : list ){
             Note<String> c = instance.createNote().get();
             n.setId(c.getId());
             instance.persist(n);

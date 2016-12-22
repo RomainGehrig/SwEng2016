@@ -9,14 +9,26 @@ import icynote.ui.contracts.NotesPresenter;
 import icynote.ui.fragments.NotesList;
 
 /**
- * Created by kl on 23.11.2016.
+ * The Mock notes list.
+ *
+ * @author Kim
+ * @version 1.0
  */
 public class MockNotesList extends BlankActivity implements NotesList.Contract {
 
+    /**
+     * true if the note is created.
+     */
     public boolean createNote = false;
-    public boolean openNote = false;
+    private boolean openNote = false;
+    /**
+     * true if the note is deleted.
+     */
     public boolean deleteNote = false;
 
+    /**
+     * Instantiates a new Mock notes list.
+     */
     public MockNotesList() {
 
     }

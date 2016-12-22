@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".loginactivities.LoginMenu">
+        <activity android:name=".login_activities.LoginMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -25,16 +25,24 @@
         </activity>
 
         <activity
-            android:name=".loginactivities.EmailPasswordLogin"
-            android:label="@string/label_emailpassword"
+            android:name=".login_activities.EmailPasswordLogin"
+            android:label="@string/label_email_password"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
-        <activity android:name=".loginactivities.GoogleSignIn"/>
-        <activity android:name=".loginactivities.SignOut"/>
-        <activity android:name=".loginactivities.GoogleLinkCredentials"/>
-        <activity android:name=".loginactivities.GoogleUnLinkCredentials"/>
+        <activity android:name=".BlankActivity"/>
+
+        <activity android:name=".ActivityWithProgressDialog"/>
+
+        <activity android:name=".login_activities.GoogleSignIn"/>
+        <activity android:name=".login_activities.SignOut"/>
+        <activity android:name=".login_activities.GoogleLinkCredentials"/>
+        <activity android:name=".login_activities.GoogleUnLinkCredentials"/>
+        <activity android:name=".login_activities.GoogleClient"/>
 
         <activity android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity android:name="icynote.plugins.PictureEditor"
             android:windowSoftInputMode="stateHidden" />
 
         <activity android:name=".Preferences"
@@ -55,14 +63,14 @@
             </intent-filter>
         </activity>
 
-
-
         <activity android:name=".view.MockNotesList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

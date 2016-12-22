@@ -22,9 +22,16 @@ import icynote.ui.contracts.NotesPresenter;
 import icynote.ui.utils.NotesAdapter;
 import icynote.ui.view.NotesListViewHolder;
 
+/**
+ * The fragment to list notes
+ *
+ * @author Julien Harbulot
+ * @author Diana Petrescu
+ * @version 1.0
+ */
 public class NotesList extends Fragment
         implements NotesPresenter {
-    private static final String LOG_TAG = NotesList.class.getSimpleName();
+    //private static final String LOG_TAG = NotesList.class.getSimpleName();
 
     /** Utility class to hold the view items such as the buttons, text fields, etc. */
     private NotesListViewHolder viewHolder;
@@ -40,13 +47,10 @@ public class NotesList extends Fragment
 
     //-------------------------------------------------------------------------------------
 
+    /**
+     * Required empty public constructor
+     */
     public NotesList() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -72,11 +76,6 @@ public class NotesList extends Fragment
         super.onResume();
         contractor = (Contract) getActivity();
         getOrCreateAdapter();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -206,7 +205,7 @@ public class NotesList extends Fragment
         contractor.createNote(this);
     }
     private void userDeletedNotesListener() {
-        ArrayList<Note<SpannableString>> toDelete = new ArrayList();
+        ArrayList<Note<SpannableString>> toDelete = new ArrayList<>();
 
         //first make a copy to avoid concurrency issues
         for (int i = 0; i < notesAdapter.getCount(); ++i) {

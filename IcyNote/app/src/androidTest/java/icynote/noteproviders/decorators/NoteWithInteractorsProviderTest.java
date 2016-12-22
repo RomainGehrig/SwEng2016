@@ -15,12 +15,12 @@ import icynote.noteproviders.templates.NoteProviderTests;
 public class NoteWithInteractorsProviderTest extends NoteProviderTests<String, Note<String>> {
 
     @Override
-    protected NoteProvider makeNew() {
+    protected NoteProvider<Note<String>> makeNew() {
         return new NoteWithInteractorsProvider<>(new ListNoteProvider());
     }
 
     @Override
-    protected NoteProvider makeNewWith(Note<String> n1, Note<String> n2, Note<String> n3) {
+    protected NoteProvider<Note<String>> makeNewWith(Note<String> n1, Note<String> n2, Note<String> n3) {
         List<Note<String>> list = new ArrayList<>();
         list.add(n1); list.add(n2); list.add(n3);
         ListNoteProvider listNoteProvider = new ListNoteProvider(list);
@@ -29,7 +29,7 @@ public class NoteWithInteractorsProviderTest extends NoteProviderTests<String, N
 
     @Override
     protected Note<String> makeNewNote() {
-        return new NoteData("","");
+        return new NoteData<>("","");
     }
 
     @Override

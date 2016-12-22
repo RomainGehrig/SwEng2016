@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 
 /*
 * Blank Activity used for fragment tests
-* */
-
+*
+* @author Julien Harbulot
+* @version 1.0
+*/
 public class BlankActivity extends AppCompatActivity {
 
     @Override

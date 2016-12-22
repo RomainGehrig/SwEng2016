@@ -22,6 +22,12 @@ import icynote.ui.contracts.TrashedNotesPresenter;
 import icynote.ui.utils.NotesAdapter;
 import icynote.ui.view.TrashedNotesViewHolder;
 
+/**
+ * The fragment to list the Trashed notes.
+ *
+ * @author Diana Petrescu
+ * @version 1.0
+ */
 public class TrashedNotes extends Fragment
         implements TrashedNotesPresenter {
     private static final String LOG_TAG = TrashedNotes.class.getSimpleName();
@@ -40,13 +46,10 @@ public class TrashedNotes extends Fragment
 
     //-------------------------------------------------------------------------------------
 
+    /**
+     * Instantiates a new Trashed notes. Required empty public constructor
+     */
     public TrashedNotes() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -74,11 +77,6 @@ public class TrashedNotes extends Fragment
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         viewHolder = null;
@@ -100,6 +98,7 @@ public class TrashedNotes extends Fragment
         log("Received list of notes " + ((notes == null) ? "null" : notes.iterator().hasNext()));
         //need to create if notes received before fragment is resumed.
 
+        assert notes != null;
         notesReceived = new ArrayList<>(notes);
         enableViewIfNeeded();
     }
@@ -195,7 +194,7 @@ public class TrashedNotes extends Fragment
     }
     ////
     private void userRestoreNotesListener() {
-        ArrayList<Note<SpannableString>> toDelete = new ArrayList();
+        ArrayList<Note<SpannableString>> toDelete = new ArrayList<>();
 
         //first make a copy to avoid concurrency issues
         for (int i = 0; i < notesAdapter.getCount(); ++i) {

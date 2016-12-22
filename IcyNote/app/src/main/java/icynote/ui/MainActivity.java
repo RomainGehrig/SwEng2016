@@ -54,6 +54,12 @@ import icynote.ui.utils.PreferencesHolder;
 import util.Callback;
 import util.Optional;
 
+/**
+ * Main activity used for fragments
+ *
+ * @author Julien Harbulot
+ * @version 1.0
+ */
 @SuppressWarnings("TryWithIdenticalCatches") //we don't have API high enough for this.
 public class MainActivity  extends AppCompatActivity implements
         NotesList.Contract,
@@ -169,11 +175,6 @@ public class MainActivity  extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onBackPressed() {
         toggleMenu(null);
     }
@@ -183,7 +184,11 @@ public class MainActivity  extends AppCompatActivity implements
     //*  MENU
     //**
 
-    /** on click listener that opens the dawer menu or closes it */
+    /**
+     * on click listener that opens the drawer menu or closes it
+     *
+     * @param view the view
+     */
     public void toggleMenu(View view) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -194,13 +199,21 @@ public class MainActivity  extends AppCompatActivity implements
         hideKeyboard(this);
     }
 
-    /** menu's on click listener that opens the list of notes */
+    /**
+     * menu's on click listener that opens the list of notes
+     *
+     * @param item the item
+     */
     public void openListOfNotes(MenuItem item) {
-        listOfNotesPresenter = openFragment(NotesList.class, null);
+        listOfNotesPresenter = openFragment(NotesList.class);
         loadListOfNotes();
     }
 
-    /** menu's on click listener that opens the list of notes */
+    /**
+     * menu's on click listener that opens the list of notes  @param item the item
+     *
+     * @param item the item
+     */
     public void openLastOpenedNote(MenuItem item) {
         Log.e(TAG, "openLastOpenedNote menu item");
         if (lastOpenedNoteId == null) {
@@ -208,30 +221,47 @@ public class MainActivity  extends AppCompatActivity implements
                     Toast.LENGTH_SHORT).show();
             toggleMenu(null);
         } else {
-            singleNotePresenter = openFragment(EditNote.class, null);
+            singleNotePresenter = openFragment(EditNote.class);
             lastOpenedNoteMenuItem.setChecked(true);
             reloadNote();
         }
     }
-    /** menu's on click listener that opens the list of tags */
+
+    /**
+     * menu's on click listener that opens the list of tags
+     *
+     * @param item the item
+     */
     public void openListOfTags(MenuItem item) {
-        openFragment(EditTags.class, null);
+        openFragment(EditTags.class);
     }
 
-    /** menu's on click listener that opens the list of deleted notes */
+    /**
+     * menu's on click listener that opens the list of deleted notes
+     *
+     * @param item the item
+     */
     public void openListOfTrashedNotes(MenuItem item) {
-        TrashedNotesPresenter trashedNotesPresenter = openFragment(TrashedNotes.class, null);
+        TrashedNotesPresenter trashedNotesPresenter = openFragment(TrashedNotes.class);
         trashedNotesPresenter.receiveNotes(trashedNotes);
     }
 
-    /** menu's on click listener that opens the settings */
+    /**
+     * menu's on click listener that opens the settings
+     *
+     * @param item the item
+     */
     public void openSettings(MenuItem item) {
         Intent i = new Intent(this, Preferences.class);
         startActivity(i);
         //Toast.makeText(this, "We don't have settings, yet !", Toast.LENGTH_SHORT).show();
     }
 
-    /** menu's on click listener that logs the current user out */
+    /**
+     * menu's on click listener that logs the current user out
+     *
+     * @param item the item
+     */
     public void logout(MenuItem item) {
         loginManager.logout();
     }
@@ -243,7 +273,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void openNote(int id, NoteOpenerBase requester) {
-        singleNotePresenter = openFragment(EditNote.class, null);
+        singleNotePresenter = openFragment(EditNote.class);
         lastOpenedNoteMenuItem.setChecked(true);
         loadNote(id);
     }
@@ -258,7 +288,7 @@ public class MainActivity  extends AppCompatActivity implements
     /** fragment contract */
     @Override
     public void createNote(NotesPresenter requester) {
-        singleNotePresenter = openFragment(EditNote.class, null);
+        singleNotePresenter = openFragment(EditNote.class);
         lastOpenedNoteMenuItem.setChecked(true);
         loadNewNote();
     }
@@ -327,14 +357,15 @@ public class MainActivity  extends AppCompatActivity implements
             }
         } else {
             requester.onTrashedNoteRestoredFailure(note,
-                    getString(R.string.error_main_activiy_unable_to_create_new_holder));
+                    getString(R.string.error_main_activity_unable_to_create_new_holder));
         }
     }
 
     /** fragment contract */
     @Override
     public void openOptionalPresenter(NotePresenter requester) {
-        MetadataNote n = openFragment(MetadataNote.class, null);
+        findViewById(R.id.noteDisplayBodyText).clearFocus();
+        MetadataNote n = openFragment(MetadataNote.class);
         singleNotePresenter = n;
 
         ArrayList<View> buttons = new ArrayList<>();
@@ -364,7 +395,7 @@ public class MainActivity  extends AppCompatActivity implements
     //*  FRAGMENTS
     //**
 
-    private <F extends Fragment> F openFragment(Class<F> toOpen, Bundle bundle) {
+    private <F extends Fragment> F openFragment(Class<F> toOpen) {
         F f = getFragment(toOpen);
         listOfNotesPresenter = null;
         singleNotePresenter = null;
@@ -506,7 +537,7 @@ public class MainActivity  extends AppCompatActivity implements
                 public void onLoaderReset(Loader<Iterable<Note<SpannableString>>> loader) { }
             };
 
-    public static void hideKeyboard(Activity activity) {
+    private static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
