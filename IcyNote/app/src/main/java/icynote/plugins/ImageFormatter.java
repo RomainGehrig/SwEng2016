@@ -424,7 +424,7 @@ public class ImageFormatter implements FormatterPlugin {
             return name;
         }
     }
-    protected static ImageSpanWithId getImageSpan(Resources r, Bitmap image, String name) {
+    public static ImageSpanWithId getImageSpan(Resources r, Bitmap image, String name) {
         Drawable d = new BitmapDrawable(r, image);
 
         d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
