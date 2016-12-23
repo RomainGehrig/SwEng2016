@@ -1,12 +1,8 @@
 package icynote.exporters;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.provider.MediaStore;
 import android.support.test.rule.ActivityTestRule;
 import android.text.SpannableString;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,19 +12,13 @@ import icynote.note.Note;
 import icynote.note.impl.NoteData;
 import icynote.plugins.ImageFormatter;
 import icynote.ui.MainActivity;
-import icynote.ui.R;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class HTMLExporterTest {
 
     private static final String NON_EXISTING_IMAGE_URI = "I_DO_NOT_EXIST";
-    private static Activity mActivity;
+    private Activity mActivity;
 
     @Rule
     public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
